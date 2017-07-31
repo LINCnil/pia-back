@@ -11,6 +11,7 @@ class Pia < ApplicationRecord
     duplicate_comments
     duplicate_evaluations
     duplicate_measures
+    @clone
   end
 
   private

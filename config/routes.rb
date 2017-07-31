@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   resources :comments
   resources :evaluations
   resources :measures
+
+  # Non CRUD routes
+  post '/pias/duplicate/:id', to: 'pias#duplicate'
 end

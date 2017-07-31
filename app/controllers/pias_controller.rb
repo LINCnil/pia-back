@@ -1,5 +1,5 @@
 class PiasController < ApplicationController
-  before_action :set_pia, only: [:show, :update, :destroy]
+  before_action :set_pia, only: [:show, :update, :destroy, :duplicate]
   before_action :set_serializer, only: :index
 
   # GET /pias
@@ -43,6 +43,11 @@ class PiasController < ApplicationController
     @pia.destroy
   end
 
+  def duplicate
+    @clone = @pia.duplicate
+
+    render json: @clone
+  end
   private
 
   # Set seralizer for pias index
