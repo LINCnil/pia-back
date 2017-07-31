@@ -1,11 +1,16 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: [:show, :update, :destroy]
+  before_action :set_serializer, only: :index
 
   # GET /pias
   def index
+    sorting = sorting_params
+    sorting = nil unless Pia.attribute_names.include?(sorting[:column])
+    sorting[:direction] = 'asc' if sorting && sorting[:direction] != 'desc'
     @pias = Pia.all
+    @pias = @pias.order("#{sorting[:column]} #{sorting[:direction]}") if sorting.present?
 
-    render json: @pias
+    render json: @pias, each_serializer: @index_serializer
   end
 
   # GET /pias/1
@@ -39,9 +44,20 @@ class PiasController < ApplicationController
   end
 
   private
+
+  # Set seralizer for pias index
+  def set_serializer
+    @index_serializer = params[:export].present? ? ExportPiaSerializer : PiaSerializer
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_pia
     @pia = Pia.find(params[:id])
+  end
+
+  # Only allow trusted sorting parameters
+  def sorting_params
+    params.fetch(:sort, {}).permit(:column, :direction)
   end
 
   # Only allow a trusted parameter "white list" through.

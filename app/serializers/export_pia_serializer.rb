@@ -1,4 +1,4 @@
-class PiaSerializer < ActiveModel::Serializer
+class ExportPiaSerializer < ActiveModel::Serializer
   attributes :id,
              :status,
              :name,
@@ -13,4 +13,8 @@ class PiaSerializer < ActiveModel::Serializer
              :applied_adjustments,
              :created_at,
              :updated_at
+  has_many :answers
+  has_many :evaluations
+  has_many :comments
+  has_many :measures
 end
