@@ -8,4 +8,5 @@ Rails.application.routes.draw do
 
   # Non CRUD routes
   post '/pias/duplicate/:id', to: 'pias#duplicate'
+  post '/pias/import', to: 'pias#import'
 end

@@ -48,7 +48,19 @@ class PiasController < ApplicationController
 
     render json: @clone
   end
+
+  def import
+    @import_params = import_params
+    import_data_io = @import_params[:data]
+    json_str = import_data_io.read
+    Pia.import(json_str)
+  end
+
   private
+
+  def import_params
+    params.fetch(:import, {}).permit(:data)
+  end
 
   # Set seralizer for pias index
   def set_serializer
