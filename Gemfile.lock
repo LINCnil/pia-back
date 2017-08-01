@@ -46,6 +46,10 @@ GEM
     arel (7.1.4)
     builder (3.2.3)
     byebug (9.0.6)
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.0.5)
@@ -130,6 +134,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   byebug
+  carrierwave (~> 1.0)
   listen (~> 3.0.5)
   pg
   puma (~> 3.0)
