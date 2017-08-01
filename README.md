@@ -1,24 +1,33 @@
-# README
+Getting started
+===============
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Requirements
+------------
 
-Things you may want to cover:
+- [Ruby](http://www.ruby-lang.org) 2.3.x
+- [Rails](http://rubyonrails.org) 5.0.x
 
-* Ruby version
+Clone the repository
+--------------------
 
-* System dependencies
+`git clone https://github.com/atnos/pia-back.git`
 
-* Configuration
+Create and fill the file database.yml
+-------------------------------------
 
-* Database creation
+`cp config/database.example.yml config/database.yml`
 
-* Database initialization
+Create database
+---------------
 
-* How to run the test suite
+`bin/rake db:create`
 
-* Services (job queues, cache servers, search engines, etc.)
+Create tables
+-------------
 
-* Deployment instructions
+`bin/rake db:migrate`
 
-* ...
+Run the application
+-------------------
+
+`bin/rails s`
