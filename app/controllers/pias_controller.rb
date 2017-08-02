@@ -86,6 +86,8 @@ class PiasController < ApplicationController
                                   :validator_name,
                                   :dpo_status,
                                   :dpo_opinion,
+                                  :dpos_name,
+                                  :people_names,
                                   :concerned_people_opinion,
                                   :concerned_people_status,
                                   :rejection_reason,

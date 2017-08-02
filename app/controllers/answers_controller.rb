@@ -26,6 +26,7 @@ class AnswersController < ApplicationController
 
   # PATCH/PUT /answers/1
   def update
+    p answer_params
     if @answer.update(answer_params)
       render json: @answer
     else
@@ -47,6 +48,10 @@ class AnswersController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def answer_params
-    params.fetch(:answer, {}).permit(:reference_to, :data, :pia_id)
+    params.fetch(:answer, {}).permit(
+      :reference_to,
+      :pia_id,
+      data: [:text, :gauge, :list]
+    )
   end
 end
