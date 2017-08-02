@@ -734,6 +734,10 @@ definitions:
         type: integer
       dpo_option:
         type: string
+      dpos_name:
+        type: string
+      people_name:
+        type: string
       concerned_people_opinion:
         type: string
       concerned_people_status:
@@ -800,7 +804,7 @@ definitions:
       pia_id:
         type: integer
       data:
-        type: string
+        type: object
       
   Attachment:
     required:
