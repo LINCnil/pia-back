@@ -17,6 +17,13 @@ Create and fill the file database.yml
 
 `cp config/database.example.yml config/database.yml`
 
+Create and fill the file application.yml
+-------------------------------------
+
+`cp config/application.example.yml config/application.yml`
+
+Generate the SECRET_KEY_BASE with: `rake secret` and paste the secret key in the file.
+
 Create database
 ---------------
 

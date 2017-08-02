@@ -13,6 +13,7 @@ gem 'rails', '~> 5.0.4'
 gem 'puma', '~> 3.0'
 gem 'pg'
 gem 'carrierwave', '~> 1.0'
+gem 'figaro'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'

@@ -26,3 +26,6 @@ config/database.yml
 # Ignore vim swap files
 *.swp
 *.swo
+
+# Ignore application configuration
+/config/application.yml
