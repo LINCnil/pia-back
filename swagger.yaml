@@ -1,0 +1,842 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: "PIA back"
+  description: An API to manage PIA (Privacy Impact Assesment)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Atnos API Team
+    email: contact@atnos.com 
+    url: https://www.atnos.com
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+host: pia-back.atnosapp.com
+basePath: /
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /pias:
+    get:
+      description: Returns all PIAs.
+      operationId: listPias
+      parameters:
+        - name: export 
+          in: query
+          description: if set make a full export of all pias with all answers, measures, evaluations and comments
+          required: false
+          type: boolean
+        - name: sorting[column]
+          in: query
+          type: string
+          description: Set sort column
+        - name: sorting[direction]
+          in: query
+          type: string
+          description: Set sort direction
+      responses:
+        200:
+          description: all PIAs index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new PIA
+      operationId: addPia
+      parameters:
+        - name: body
+          in: body
+          description: PIA to add
+          required: true
+          schema:
+            $ref: '#/definitions/SamplePia'
+      responses:
+        200:
+          description: pia response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pias/{id}:
+    get:
+      description: Returns a PIA
+      operationId: find PIA by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of PIA to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: pia response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a PIA
+      operationId: updatePia
+      parameters:
+        - name: id
+          in: path
+          description: ID of PIA to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SamplePia'
+      responses:
+        200:
+          description: pia response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single PIA based on the ID supplied
+      operationId: deletePia
+      parameters:
+        - name: id
+          in: path
+          description: ID of PIA to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: pia deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pias/duplicate/{id}:
+    post:
+      description: Duplicate a PIA
+      operationId: duplicateId
+      parameters:
+        - name: id
+          in: path
+          description: ID of PIA to duplicate
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: pia response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pias/import:
+    post:
+      description: Import pias from a json export
+      operationId: importPias
+      consumes:
+         - multipart/form-data
+      parameters:
+        - name: data
+          in: formData
+          type: file
+          description: A JSON export file
+      responses:
+        200:
+          description: pia response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /answers:
+    get:
+      description: |
+        Returns all answers.
+      operationId: listAnswers
+      responses:
+        200:
+          description: all answers index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new answer
+      operationId: addAnswer
+      parameters:
+        - name: body
+          in: body
+          description: answer to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleAnswer'
+      responses:
+        200:
+          description: answer response
+          schema:
+            $ref: '#/definitions/Answer'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /answers/{id}:
+    get:
+      description: Returns an answer
+      operationId: find an answer by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of answer to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: answer response
+          schema:
+            $ref: '#/definitions/Answer'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a answer
+      operationId: updateAnswer
+      parameters:
+        - name: id
+          in: path
+          description: ID of answer to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleAnswer'
+      responses:
+        200:
+          description: answer response
+          schema:
+            $ref: '#/definitions/Answer'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single answer based on the ID supplied
+      operationId: deleteAnswer
+      parameters:
+        - name: id
+          in: path
+          description: ID of answer to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: answer deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /comments:
+    get:
+      description: |
+        Returns all comments.
+      operationId: listComments
+      responses:
+        200:
+          description: all comments index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new comment
+      operationId: addComment
+      parameters:
+        - name: body
+          in: body
+          description: comment to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleComment'
+      responses:
+        200:
+          description: comment response
+          schema:
+            $ref: '#/definitions/Comment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /comments/{id}:
+    get:
+      description: Returns an comment
+      operationId: find an comment by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of comment to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: comment response
+          schema:
+            $ref: '#/definitions/Comment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a comment
+      operationId: updatecomment
+      parameters:
+        - name: id
+          in: path
+          description: ID of comment to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleComment'
+      responses:
+        200:
+          description: comment response
+          schema:
+            $ref: '#/definitions/Comment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single comment based on the ID supplied
+      operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          description: ID of comment to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: comment deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /evaluations:
+    get:
+      description: |
+        Returns all evaluations.
+      operationId: listEvaluations
+      responses:
+        200:
+          description: all evaluations index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Evaluation'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new evaluation
+      operationId: addEvaluation
+      parameters:
+        - name: body
+          in: body
+          description: evaluation to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleEvaluation'
+      responses:
+        200:
+          description: evaluation response
+          schema:
+            $ref: '#/definitions/Evaluation'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /evaluations/{id}:
+    get:
+      description: Returns an evaluation
+      operationId: find an evaluation by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of evaluation to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: evaluation response
+          schema:
+            $ref: '#/definitions/Evaluation'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a evaluation
+      operationId: updateevaluation
+      parameters:
+        - name: id
+          in: path
+          description: ID of evaluation to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleEvaluation'
+      responses:
+        200:
+          description: evaluation response
+          schema:
+            $ref: '#/definitions/Evaluation'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single evaluation based on the ID supplied
+      operationId: deleteEvaluation
+      parameters:
+        - name: id
+          in: path
+          description: ID of evaluation to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: evaluation deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /measures:
+    get:
+      description: |
+        Returns all measures.
+      operationId: listMeasures
+      responses:
+        200:
+          description: all measures index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Measure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new measure
+      operationId: addMeasure
+      parameters:
+        - name: body
+          in: body
+          description: measure to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleMeasure'
+      responses:
+        200:
+          description: measure response
+          schema:
+            $ref: '#/definitions/Measure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /measures/{id}:
+    get:
+      description: Returns an measure
+      operationId: find an measure by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of measure to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: measure response
+          schema:
+            $ref: '#/definitions/Measure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a measure
+      operationId: updatemeasure
+      parameters:
+        - name: id
+          in: path
+          description: ID of measure to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleMeasure'
+      responses:
+        200:
+          description: measure response
+          schema:
+            $ref: '#/definitions/Measure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single measure based on the ID supplied
+      operationId: deleteMeasure
+      parameters:
+        - name: id
+          in: path
+          description: ID of measure to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: measure deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /attachments:
+    get:
+      description: |
+        Returns all attachments.
+      operationId: listAttachments
+      responses:
+        200:
+          description: all attachments index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Attachment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new attachment
+      operationId: addAttachment
+      parameters:
+        - name: body
+          in: body
+          description: attachment to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleAttachment'
+      responses:
+        200:
+          description: attachment response
+          schema:
+            $ref: '#/definitions/Attachment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /attachments/{id}:
+    get:
+      description: Returns an attachment
+      operationId: find an attachment by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of attachment to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: attachment response
+          schema:
+            $ref: '#/definitions/Attachment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a comment
+      operationId: updatecomment
+      parameters:
+        - name: id
+          in: path
+          description: ID of comment to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleAttachment'
+      responses:
+        200:
+          description: comment response
+          schema:
+            $ref: '#/definitions/Attachment'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single attachment based on the ID supplied
+      operationId: deleteAttachment
+      parameters:
+        - name: id
+          in: path
+          description: ID of attachment to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: attachment deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  SamplePia:
+    type: object
+    required:
+      - pia
+    properties:
+      pia:
+        type: object
+        description: test
+        $ref: '#/definitions/Pia'
+  SampleComment:
+    type: object
+    required:
+      - comment
+    properties:
+      comment:
+        type: object
+        description: test
+        $ref: '#/definitions/Comment'
+  SampleEvaluation:
+    type: object
+    required:
+      - evaluation 
+    properties:
+      evaluation:
+        type: object
+        description: test
+        $ref: '#/definitions/Evaluation'
+  SampleMeasure:
+    type: object
+    required:
+      - measure
+    properties:
+      measure:
+        type: object
+        description: test
+        $ref: '#/definitions/Measure'
+  SampleAnswer:
+    type: object
+    required:
+      - answer 
+    properties:
+      answer:
+        type: object
+        description: test
+        $ref: '#/definitions/Answer'
+  SampleAttachment:
+    type: object
+    required:
+      - attachment 
+    properties:
+      attachment:
+        type: object
+        description: test
+        $ref: '#/definitions/Attachment'
+  Pia:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      status:
+        type: integer
+      author_name:
+        type: string
+      evaluator_name:
+        type: string
+      validator_name:
+        type: string
+      dpo_status:
+        type: integer
+      dpo_option:
+        type: string
+      concerned_people_opinion:
+        type: string
+      concerned_people_status:
+        type: integer
+      rejection_reason:
+        type: string
+      applied_adjustments:
+        type: string
+  Comment:
+    required:
+      - pia_id
+      - reference_to
+    properties:
+      pia_id:
+        type: integer
+      description:
+        type: string
+      reference_to:
+        type: string
+      for_measure:
+        type: boolean
+
+  Evaluation:
+    required:
+      - pia_id
+      - reference_to
+    properties:
+      pia_id:
+        type: integer
+      status:
+        type: integer
+      reference_to:
+        type: string
+      action_plan_comment:
+        type: string
+      evaluation_comment:
+        type: string
+      evaluation_date:
+        type: string
+        format: dateTime
+      gauges:
+        type: string
+      estimated_implementation_date:
+        type: string
+        format: dateTime
+      person_in_charge:
+         type: string
+  Measure:
+    properties:
+      pia_id:
+        type: integer
+      title:
+        type: string
+      content:
+        type: string
+      placeholder:
+        type: string
+        
+  Answer:
+    required:
+      - pia_id
+      - reference_to
+    properties:
+      pia_id:
+        type: integer
+      data:
+        type: string
+      
+  Attachment:
+    required:
+      - pia_id
+      - reference_to
+    properties:
+      pia_id:
+        type: integer
+      description:
+        type: string
+      reference_to:
+        type: string
+      for_measure:
+        type: boolean
+      attached_file:
+        $ref: '#/definitions/AttachedFile'
+        
+  AttachedFile:
+    required:
+      - pia_id
+    properties:
+      pia_id:
+        type: integer
+      url:
+        type: string
+      name:
+        type: string
+      content_type:
+        type: string
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
