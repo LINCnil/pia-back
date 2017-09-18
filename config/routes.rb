@@ -6,7 +6,11 @@ Rails.application.routes.draw do
       resources :comments
       resources :evaluations
       resources :measures
-      resources :attachments
+      resources :attachments do
+        collection do
+          get '/signed', to: 'attachments#signed'
+        end
+      end
     end
     collection do
       post '/import', to: 'pias#import'
