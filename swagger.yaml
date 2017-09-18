@@ -6,7 +6,7 @@ info:
   termsOfService: http://swagger.io/terms/
   contact:
     name: Atnos API Team
-    email: contact@atnos.com 
+    email: contact@atnos.com
     url: https://www.atnos.com
   license:
     name: MIT
@@ -25,7 +25,7 @@ paths:
       description: Returns all PIAs.
       operationId: listPias
       parameters:
-        - name: export 
+        - name: export
           in: query
           description: if set make a full export of all pias with all answers, measures, evaluations and comments
           required: false
@@ -130,7 +130,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /pias/duplicate/{id}:
+  /pias/{id}/duplicate:
     post:
       description: Duplicate a PIA
       operationId: duplicateId
@@ -682,7 +682,7 @@ definitions:
   SampleEvaluation:
     type: object
     required:
-      - evaluation 
+      - evaluation
     properties:
       evaluation:
         type: object
@@ -700,7 +700,7 @@ definitions:
   SampleAnswer:
     type: object
     required:
-      - answer 
+      - answer
     properties:
       answer:
         type: object
@@ -709,7 +709,7 @@ definitions:
   SampleAttachment:
     type: object
     required:
-      - attachment 
+      - attachment
     properties:
       attachment:
         type: object
@@ -795,7 +795,7 @@ definitions:
         type: string
       placeholder:
         type: string
-        
+
   Answer:
     required:
       - pia_id
@@ -805,7 +805,7 @@ definitions:
         type: integer
       data:
         type: object
-      
+
   Attachment:
     required:
       - pia_id
@@ -821,7 +821,7 @@ definitions:
         type: boolean
       attached_file:
         $ref: '#/definitions/AttachedFile'
-        
+
   AttachedFile:
     required:
       - pia_id
