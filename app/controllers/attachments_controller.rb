@@ -3,13 +3,18 @@ class AttachmentsController < ApplicationController
 
   # GET /attachments
   def index
-    @attachments = Attachment.all
+    @attachments = Attachment.where(pia_id: params[:pia_id])
 
     render json: @attachments
   end
 
   # GET /attachments/1
   def show
+    render json: @attachment
+  end
+
+  def show_signed
+    @attachment = Attachment.where(pia_signed: true, pia_id: params[:pia_id]).first
     render json: @attachment
   end
 
@@ -42,7 +47,7 @@ class AttachmentsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_attachment
-    @attachment = Attachment.find(params[:id])
+    @attachment = Attachment.where(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.
