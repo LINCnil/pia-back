@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
 
   # GET /answers
   def index
-    @answers = Answer.all
+    @answers = Answer.where(pia_id: params[:pia_id])
 
     render json: @answers
   end
@@ -26,7 +26,6 @@ class AnswersController < ApplicationController
 
   # PATCH/PUT /answers/1
   def update
-    p answer_params
     if @answer.update(answer_params)
       render json: @answer
     else
@@ -43,7 +42,7 @@ class AnswersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.where(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.

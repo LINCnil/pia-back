@@ -3,7 +3,7 @@ class EvaluationsController < ApplicationController
 
   # GET /evaluations
   def index
-    @evaluations = Evaluation.all
+    @evaluations = Evaluation.where(pia_id: params[:pia_id])
 
     render json: @evaluations
   end
@@ -41,7 +41,7 @@ class EvaluationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_evaluation
-      @evaluation = Evaluation.find(params[:id])
+      @evaluation = Evaluation.where(id: params[:id], pia_id: params[:pia_id])
     end
 
     # Only allow a trusted parameter "white list" through.

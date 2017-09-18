@@ -3,7 +3,7 @@ class MeasuresController < ApplicationController
 
   # GET /measures
   def index
-    @measures = Measure.all
+    @measures = Measure.where(pia_id: params[:pia_id])
 
     render json: @measures
   end
@@ -42,7 +42,7 @@ class MeasuresController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_measure
-    @measure = Measure.find(params[:id])
+    @measure = Measure.where(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.
