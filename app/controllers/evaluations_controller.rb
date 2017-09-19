@@ -41,7 +41,7 @@ class EvaluationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_evaluation
-      @evaluation = Evaluation.where(id: params[:id], pia_id: params[:pia_id])
+      @evaluation = Evaluation.find_by(id: params[:id], pia_id: params[:pia_id])
     end
 
     # Only allow a trusted parameter "white list" through.

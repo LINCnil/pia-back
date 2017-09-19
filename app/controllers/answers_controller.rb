@@ -42,7 +42,7 @@ class AnswersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_answer
-    @answer = Answer.where(id: params[:id], pia_id: params[:pia_id])
+    @answer = Answer.find_by(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.
