@@ -3,7 +3,11 @@ class AnswersController < ApplicationController
 
   # GET /answers
   def index
-    @answers = Answer.where(pia_id: params[:pia_id])
+    if params[:reference_to]
+      @answers = Answer.find_by({ pia_id: params[:pia_id], reference_to: params[:reference_to] })
+    else
+      @answers = Answer.where(pia_id: params[:pia_id])
+    end
 
     render json: @answers
   end
@@ -18,7 +22,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
-      render json: @answer, status: :created, location: @answer
+      render json: @answer, status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -42,7 +46,7 @@ class AnswersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_answer
-    @answer = Answer.where(id: params[:id], pia_id: params[:pia_id])
+    @answer = Answer.find_by(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.

@@ -23,7 +23,7 @@ class PiasController < ApplicationController
     @pia = Pia.new(pia_params)
 
     if @pia.save
-      render json: @pia, status: :created, location: @pia
+      render json: @pia, status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
     end

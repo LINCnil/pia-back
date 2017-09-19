@@ -3,7 +3,11 @@ class MeasuresController < ApplicationController
 
   # GET /measures
   def index
-    @measures = Measure.where(pia_id: params[:pia_id])
+    if params[:reference_to]
+      @measures = Measure.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
+    else
+      @measures = Measure.where(pia_id: params[:pia_id])
+    end
 
     render json: @measures
   end
@@ -18,7 +22,7 @@ class MeasuresController < ApplicationController
     @measure = Measure.new(measure_params)
 
     if @measure.save
-      render json: @measure, status: :created, location: @measure
+      render json: @measure, status: :created
     else
       render json: @measure.errors, status: :unprocessable_entity
     end
@@ -42,7 +46,7 @@ class MeasuresController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_measure
-    @measure = Measure.where(id: params[:id], pia_id: params[:pia_id])
+    @measure = Measure.find_by(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.

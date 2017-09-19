@@ -23,7 +23,7 @@ class AttachmentsController < ApplicationController
     @attachment = Attachment.new(attachment_params)
 
     if @attachment.save
-      render json: @attachment, status: :created, location: @attachment
+      render json: @attachment, status: :created
     else
       render json: @attachment.errors, status: :unprocessable_entity
     end
@@ -47,7 +47,7 @@ class AttachmentsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_attachment
-    @attachment = Attachment.where(id: params[:id], pia_id: params[:pia_id])
+    @attachment = Attachment.find_by(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.

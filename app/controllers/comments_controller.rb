@@ -3,7 +3,11 @@ class CommentsController < ApplicationController
 
   # GET /comments
   def index
-    @comments = Comment.where(pia_id: params[:pia_id])
+    if params[:reference_to]
+      @comments = Comment.where(pia_id: params[:pia_id], reference_to: params[:reference_to])
+    else
+      @comments = Comment.where(pia_id: params[:pia_id])
+    end
 
     render json: @comments
   end
@@ -18,7 +22,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     if @comment.save
-      render json: @comment, status: :created, location: @comment
+      render json: @comment, status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -42,7 +46,7 @@ class CommentsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment
-    @comment = Comment.where(id: params[:id], pia_id: params[:pia_id])
+    @comment = Comment.find_by(id: params[:id], pia_id: params[:pia_id])
   end
 
   # Only allow a trusted parameter "white list" through.

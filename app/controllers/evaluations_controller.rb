@@ -3,7 +3,11 @@ class EvaluationsController < ApplicationController
 
   # GET /evaluations
   def index
-    @evaluations = Evaluation.where(pia_id: params[:pia_id])
+    if params[:reference_to]
+      @evaluations = Evaluation.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
+    else
+      @evaluations = Evaluation.where(pia_id: params[:pia_id])
+    end
 
     render json: @evaluations
   end
@@ -18,7 +22,7 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
 
     if @evaluation.save
-      render json: @evaluation, status: :created, location: @evaluation
+      render json: @evaluation, status: :created
     else
       render json: @evaluation.errors, status: :unprocessable_entity
     end
@@ -41,7 +45,7 @@ class EvaluationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_evaluation
-      @evaluation = Evaluation.where(id: params[:id], pia_id: params[:pia_id])
+      @evaluation = Evaluation.find_by(id: params[:id], pia_id: params[:pia_id])
     end
 
     # Only allow a trusted parameter "white list" through.

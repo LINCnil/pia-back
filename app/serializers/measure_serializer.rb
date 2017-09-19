@@ -1,3 +1,3 @@
 class MeasureSerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :placeholder
+  attributes :id, :pia_id, :title, :content, :placeholder
 end

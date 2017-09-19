@@ -1,5 +1,6 @@
 class EvaluationSerializer < ActiveModel::Serializer
   attributes :id,
+             :pia_id,
              :status,
              :reference_to,
              :action_plan_comment,

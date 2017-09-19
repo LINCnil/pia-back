@@ -1,5 +1,5 @@
 class AttachmentSerializer < ActiveModel::Serializer
-  attributes :id, :attached_file, :created_at, :updated_at
+  attributes :id, :pia_id, :attached_file, :created_at, :updated_at
 
   def attached_file
     {
