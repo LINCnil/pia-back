@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PiasControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @pia = pias(:one)
+    @pia = create(:pia)
   end
 
   test "should get index" do
@@ -11,8 +11,9 @@ class PiasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create pia" do
+    pia_build = build(:pia)
     assert_difference('Pia.count') do
-      post pias_url, params: { pia: {  } }, as: :json
+      post pias_url, params: { pia: { name: 'PIA' } }, as: :json
     end
 
     assert_response 201

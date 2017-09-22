@@ -54,6 +54,11 @@ GEM
       activesupport
     concurrent-ruby (1.0.5)
     erubis (2.7.0)
+    factory_girl (4.8.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.8.0)
+      factory_girl (~> 4.8.0)
+      railties (>= 3.0.0)
     ffi (1.9.18)
     figaro (1.1.1)
       thor (~> 0.14)
@@ -137,6 +142,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   byebug
   carrierwave (~> 1.0)
+  factory_girl_rails (~> 4.0)
   figaro
   listen (~> 3.0.5)
   pg

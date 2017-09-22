@@ -15,6 +15,7 @@ gem 'pg'
 gem 'carrierwave', '~> 1.0'
 gem 'figaro'
 
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -31,6 +32,7 @@ gem 'rack-cors'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem "factory_girl_rails", "~> 4.0"
 end
 
 group :development do

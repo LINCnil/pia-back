@@ -2,17 +2,18 @@ require 'test_helper'
 
 class EvaluationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @evaluation = evaluations(:one)
+    @evaluation = create(:evaluation)
+    @pia = @evaluation.pia
   end
 
   test "should get index" do
-    get evaluations_url, as: :json
+    get evaluations_url(@pia), as: :json
     assert_response :success
   end
 
   test "should create evaluation" do
     assert_difference('Evaluation.count') do
-      post evaluations_url, params: { evaluation: {  } }, as: :json
+      post evaluations_url(@pia), params: { evaluation: { pia_id: @pia.id, reference_to: '1.1.2' } }, as: :json
     end
 
     assert_response 201
@@ -24,13 +25,13 @@ class EvaluationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update evaluation" do
-    patch evaluation_url(@evaluation), params: { evaluation: {  } }, as: :json
+    patch evaluation_url(id: @evaluation.id, pia_id: @pia.id), params: { evaluation: {  } }, as: :json
     assert_response 200
   end
 
-  test "should destroy evaluation" do
+  test "should destroy eva" do
     assert_difference('Evaluation.count', -1) do
-      delete evaluation_url(@evaluation), as: :json
+      delete evaluation_url(id: @evaluation.id, pia_id: @pia.id), as: :json
     end
 
     assert_response 204
