@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :pias do
-    post '/duplicate', to: 'pias#duplicate'
+    member do
+      post 'duplicate'
+    end
     resources :answers
     resources :comments
     resources :evaluations

@@ -36,4 +36,10 @@ class PiasControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 204
   end
+
+  test "should duplicate pia" do
+    assert_difference('Pia.where(name: "PIA ONE").count') do
+      post duplicate_pia_url(@pia)
+    end
+  end
 end
