@@ -54,8 +54,7 @@ class CommentsController < ApplicationController
     params.fetch(:comment, {}).permit(
       :description,
       :reference_to,
-      :for_measure,
-      :pia_id
-    )
+      :for_measure
+    ).merge(params.permit(:pia_id))
   end
 end

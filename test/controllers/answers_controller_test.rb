@@ -13,7 +13,7 @@ class AnswersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create answer" do
     assert_difference('Answer.count') do
-      post pia_answers_url(@pia), params: { answer: { pia_id: @pia.id, reference_to: '1.1.2' } }, as: :json
+      post pia_answers_url(@pia), params: { answer: { reference_to: '1.1.2' } }, as: :json
     end
 
     assert_response 201

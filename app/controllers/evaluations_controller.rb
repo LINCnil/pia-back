@@ -58,8 +58,7 @@ class EvaluationsController < ApplicationController
         :evaluation_date,
         :gauges,
         :estimated_implementation_date,
-        :person_in_charge,
-        :pia_id
-      )
+        :person_in_charge
+      ).merge(params.permit(:pia_id))
     end
 end

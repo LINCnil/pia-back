@@ -13,7 +13,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create comment" do
     assert_difference('Comment.count') do
-      post pia_comments_url(@pia), params: { comment: { pia_id: @pia.id, reference_to: "1.1.2" } }, as: :json
+      post pia_comments_url(@pia), params: { comment: { reference_to: "1.1.2" } }, as: :json
     end
 
     assert_response 201

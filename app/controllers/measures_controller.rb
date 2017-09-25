@@ -54,8 +54,7 @@ class MeasuresController < ApplicationController
     params.fetch(:measure, {}).permit(
       :title,
       :content,
-      :placeholder,
-      :pia_id
-    )
+      :placeholder
+    ).merge(params.permit(:pia_id))
   end
 end

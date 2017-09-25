@@ -52,6 +52,6 @@ class AttachmentsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def attachment_params
-    params.fetch(:attachment, {}).permit(:attached_file, :pia_signed, :pia_id)
+    params.fetch(:attachment, {}).permit(:attached_file, :pia_signed).merge(params.permit(:pia_id))
   end
 end

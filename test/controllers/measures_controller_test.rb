@@ -13,7 +13,7 @@ class MeasuresControllerTest < ActionDispatch::IntegrationTest
 
   test "should create measure" do
     assert_difference('Measure.count') do
-      post pia_measures_url(@pia), params: { measure: { pia_id: @pia.id } }, as: :json
+      post pia_measures_url(@pia), params: { measure: { } }, as: :json
     end
 
     assert_response 201
