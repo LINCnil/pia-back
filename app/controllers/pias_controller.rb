@@ -1,6 +1,6 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: [:show, :update, :destroy, :duplicate]
-  before_action :set_serializer, only: :index
+  before_action :set_serializer, only: [:index, :show]
 
   # GET /pias
   def index
@@ -15,7 +15,7 @@ class PiasController < ApplicationController
 
   # GET /pias/1
   def show
-    render json: @pia
+    render json: @pia, serializer: @index_serializer
   end
 
   # POST /pias

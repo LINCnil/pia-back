@@ -27,7 +27,7 @@ paths:
       parameters:
         - name: export
           in: query
-          description: if set make a full export of all pias with all answers, measures, evaluations and comments
+          description: if set make a full export of all PIA with all answers, measures, evaluations and comments
           required: false
           type: boolean
         - name: sorting[column]
@@ -61,7 +61,7 @@ paths:
             $ref: '#/definitions/SamplePia'
       responses:
         200:
-          description: pia response
+          description: PIA response
           schema:
             $ref: '#/definitions/Pia'
         default:
@@ -79,6 +79,11 @@ paths:
           required: true
           type: integer
           format: int64
+        - name: export
+          in: query
+          description: if set make an export of the current PIA with all answers, measures, evaluations and comments
+          required: false
+          type: boolean
       responses:
         200:
           description: pia response
@@ -106,7 +111,7 @@ paths:
             $ref: '#/definitions/SamplePia'
       responses:
         200:
-          description: pia response
+          description: PIA response
           schema:
             $ref: '#/definitions/Pia'
         default:
@@ -125,7 +130,7 @@ paths:
           format: int64
       responses:
         204:
-          description: pia deleted
+          description: PIA deleted
         default:
           description: unexpected error
           schema:
@@ -143,7 +148,7 @@ paths:
           format: int64
       responses:
         200:
-          description: pia response
+          description: PIA response
           schema:
             $ref: '#/definitions/Pia'
         default:
@@ -152,7 +157,7 @@ paths:
             $ref: '#/definitions/Error'
   /pias/import:
     post:
-      description: Import pias from a json export
+      description: Import PIA from a json export
       operationId: importPias
       consumes:
          - multipart/form-data
@@ -163,18 +168,25 @@ paths:
           description: A JSON export file
       responses:
         200:
-          description: pia response
+          description: PIA response
           schema:
             $ref: '#/definitions/Pia'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /answers:
+  /pias/{pia_id}/answers:
     get:
       description: |
         Returns all answers.
       operationId: listAnswers
+      parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: all answers index
@@ -190,6 +202,12 @@ paths:
       description: Creates a new answer
       operationId: addAnswer
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: body
           in: body
           description: answer to add
@@ -205,11 +223,17 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /answers/{id}:
+  /pias/{pia_id}/answers/{id}:
     get:
       description: Returns an answer
       operationId: find an answer by id
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of answer to fetch
@@ -229,6 +253,12 @@ paths:
       description: Update a answer
       operationId: updateAnswer
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of answer to update
@@ -254,6 +284,12 @@ paths:
       description: deletes a single answer based on the ID supplied
       operationId: deleteAnswer
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of answer to delete
@@ -268,11 +304,18 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /comments:
+  /pias/{pia_id}/comments:
     get:
       description: |
         Returns all comments.
       operationId: listComments
+      parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: all comments index
@@ -288,6 +331,12 @@ paths:
       description: Creates a new comment
       operationId: addComment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: body
           in: body
           description: comment to add
@@ -303,11 +352,17 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /comments/{id}:
+  /pias/{pia_id}/comments/{id}:
     get:
       description: Returns an comment
       operationId: find an comment by id
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of comment to fetch
@@ -327,6 +382,12 @@ paths:
       description: Update a comment
       operationId: updatecomment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of comment to update
@@ -352,6 +413,12 @@ paths:
       description: deletes a single comment based on the ID supplied
       operationId: deleteComment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of comment to delete
@@ -366,11 +433,18 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /evaluations:
+  /pias/{pia_id}/evaluations:
     get:
       description: |
         Returns all evaluations.
       operationId: listEvaluations
+      parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: all evaluations index
@@ -386,6 +460,12 @@ paths:
       description: Creates a new evaluation
       operationId: addEvaluation
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: body
           in: body
           description: evaluation to add
@@ -401,11 +481,17 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /evaluations/{id}:
+  /pias/{pia_id}/evaluations/{id}:
     get:
       description: Returns an evaluation
       operationId: find an evaluation by id
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of evaluation to fetch
@@ -425,6 +511,12 @@ paths:
       description: Update a evaluation
       operationId: updateevaluation
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of evaluation to update
@@ -450,6 +542,12 @@ paths:
       description: deletes a single evaluation based on the ID supplied
       operationId: deleteEvaluation
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of evaluation to delete
@@ -464,11 +562,18 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /measures:
+  /pias/{pia_id}/measures:
     get:
       description: |
         Returns all measures.
       operationId: listMeasures
+      parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: all measures index
@@ -484,6 +589,12 @@ paths:
       description: Creates a new measure
       operationId: addMeasure
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: body
           in: body
           description: measure to add
@@ -499,11 +610,17 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /measures/{id}:
+  /pias/{pia_id}/measures/{id}:
     get:
       description: Returns an measure
       operationId: find an measure by id
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of measure to fetch
@@ -523,6 +640,12 @@ paths:
       description: Update a measure
       operationId: updatemeasure
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of measure to update
@@ -548,6 +671,12 @@ paths:
       description: deletes a single measure based on the ID supplied
       operationId: deleteMeasure
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of measure to delete
@@ -562,11 +691,18 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /attachments:
+  /pias/{pia_id}/attachments:
     get:
       description: |
         Returns all attachments.
       operationId: listAttachments
+      parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
       responses:
         200:
           description: all attachments index
@@ -582,6 +718,12 @@ paths:
       description: Creates a new attachment
       operationId: addAttachment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: body
           in: body
           description: attachment to add
@@ -597,11 +739,17 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /attachments/{id}:
+  /pias/{pia_id}/attachments/{id}:
     get:
       description: Returns an attachment
       operationId: find an attachment by id
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of attachment to fetch
@@ -621,6 +769,12 @@ paths:
       description: Update a comment
       operationId: updatecomment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of comment to update
@@ -646,6 +800,12 @@ paths:
       description: deletes a single attachment based on the ID supplied
       operationId: deleteAttachment
       parameters:
+        - name: pia_id
+          in: path
+          description: ID of the PIA
+          required: true
+          type: integer
+          format: int64
         - name: id
           in: path
           description: ID of attachment to delete
