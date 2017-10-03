@@ -38,3 +38,8 @@ Run the application
 -------------------
 
 `bin/rails s`
+
+Run the test
+------------
+
+`bin/rake`
