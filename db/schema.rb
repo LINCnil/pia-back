@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20170801073152) do
     t.text     "action_plan_comment",           default: ""
     t.text     "evaluation_comment",            default: ""
     t.datetime "evaluation_date"
-    t.text     "gauges",                        default: ""
+    t.jsonb    "gauges",                        default: {}
     t.datetime "estimated_implementation_date"
     t.string   "person_in_charge",              default: ""
     t.integer  "pia_id"

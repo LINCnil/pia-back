@@ -53,9 +53,7 @@ class AnswersController < ApplicationController
   def answer_params
     params.fetch(:answer, {}).permit(
       :reference_to,
-      :pia_id,
-      data: [:text, :gauge, :list]
+      data: [:text, :gauge, list: []]
     ).merge(params.permit(:pia_id))
-    #params.permit(:pia_id, answer: [:reference_to, { data: [:text, :gauge, :list] }])
   end
 end
