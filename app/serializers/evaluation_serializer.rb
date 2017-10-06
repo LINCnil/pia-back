@@ -9,6 +9,7 @@ class EvaluationSerializer < ActiveModel::Serializer
              :gauges,
              :estimated_implementation_date,
              :person_in_charge,
+             :global_status,
              :created_at,
              :updated_at
 end

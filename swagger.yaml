@@ -939,12 +939,14 @@ definitions:
         type: string
         format: dateTime
       gauges:
-        type: string
+        type: object
       estimated_implementation_date:
         type: string
         format: dateTime
       person_in_charge:
-         type: string
+        type: string
+      global_status:
+        type: integer
   Measure:
     properties:
       pia_id:
