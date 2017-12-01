@@ -13,6 +13,7 @@ gem 'rails', '~> 5.0.6'
 gem 'puma', '~> 3.0'
 gem 'pg'
 gem 'carrierwave', '~> 1.0'
+gem 'carrierwave-base64', '~> 2.6.1'
 gem 'figaro'
 
 

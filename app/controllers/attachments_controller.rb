@@ -21,6 +21,11 @@ class AttachmentsController < ApplicationController
   # POST /attachments
   def create
     @attachment = Attachment.new(attachment_params)
+    @attachment.filename = params[:attachment][:name]
+    file = params[:attachment][:file]
+    mime_type = params[:attachment][:mime_type]
+    file = file.gsub('data:application/octet-stream;base64', "data:#{mime_type};base64")
+    @attachment.attached_file = file
 
     if @attachment.save
       render json: @attachment, status: :created
@@ -52,6 +57,8 @@ class AttachmentsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def attachment_params
-    params.fetch(:attachment, {}).permit(:attached_file, :pia_signed).merge(params.permit(:pia_id))
+    params.fetch(:attachment, {})
+          .permit(:pia_signed)
+          .merge(params.permit(:pia_id))
   end
 end

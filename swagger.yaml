@@ -16,7 +16,7 @@ basePath: /
 schemes:
   - https
 consumes:
-  - application/json
+  - multipart/form-data
 produces:
   - application/json
 paths:

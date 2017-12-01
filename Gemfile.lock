@@ -50,6 +50,9 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    carrierwave-base64 (2.6.1)
+      carrierwave (>= 0.8.0)
+      mime-types (~> 3.0)
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.0.5)
@@ -142,6 +145,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   byebug
   carrierwave (~> 1.0)
+  carrierwave-base64 (~> 2.6.1)
   factory_girl_rails (~> 4.0)
   figaro
   listen (~> 3.0.5)
@@ -154,4 +158,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.14.6
+   1.16.0
