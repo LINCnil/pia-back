@@ -765,37 +765,6 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-    patch:
-      description: Update a comment
-      operationId: updatecomment
-      parameters:
-        - name: pia_id
-          in: path
-          description: ID of the PIA
-          required: true
-          type: integer
-          format: int64
-        - name: id
-          in: path
-          description: ID of comment to update
-          required: true
-          type: integer
-          format: integer64
-        - name: body
-          in: body
-          description: fields to update
-          required: true
-          schema:
-            $ref: '#/definitions/SampleAttachment'
-      responses:
-        200:
-          description: comment response
-          schema:
-            $ref: '#/definitions/Attachment'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/Error'
     delete:
       description: deletes a single attachment based on the ID supplied
       operationId: deleteAttachment
@@ -990,11 +959,11 @@ definitions:
     properties:
       pia_id:
         type: integer
-      url:
+      file:
         type: string
       name:
         type: string
-      content_type:
+      mime_type:
         type: string
   Error:
     required:

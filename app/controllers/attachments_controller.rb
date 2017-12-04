@@ -4,7 +4,6 @@ class AttachmentsController < ApplicationController
   # GET /attachments
   def index
     @attachments = Attachment.where(pia_id: params[:pia_id])
-
     render json: @attachments
   end
 
@@ -20,24 +19,17 @@ class AttachmentsController < ApplicationController
 
   # POST /attachments
   def create
-    @attachment = Attachment.new(attachment_params)
-    @attachment.filename = params[:attachment][:name]
     file = params[:attachment][:file]
-    mime_type = params[:attachment][:mime_type]
-    file = file.gsub('data:application/octet-stream;base64', "data:#{mime_type};base64")
+    @attachment = Attachment.new(attachment_params)
+
+    filename = params[:attachment][:name]
+    @attachment.name = filename.chomp(File.extname(filename))
+
+    file = file.gsub('data:;base64', "data:#{@attachment.mime_type};base64")
     @attachment.attached_file = file
 
     if @attachment.save
       render json: @attachment, status: :created
-    else
-      render json: @attachment.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /attachments/1
-  def update
-    if @attachment.update(attachment_params)
-      render json: @attachment
     else
       render json: @attachment.errors, status: :unprocessable_entity
     end
@@ -58,7 +50,7 @@ class AttachmentsController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def attachment_params
     params.fetch(:attachment, {})
-          .permit(:pia_signed)
+          .permit(:pia_signed, :mime_type)
           .merge(params.permit(:pia_id))
   end
 end

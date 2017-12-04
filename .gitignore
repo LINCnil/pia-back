@@ -32,3 +32,5 @@ config/database.yml
 
 # Others
 /public/uploads/*
+/data
+.ruby-version
