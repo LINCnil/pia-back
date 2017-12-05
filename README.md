@@ -69,8 +69,7 @@ Run the application in production mode
 1. Fill the `production` section in the `database.yml`file.
 2. Create the database: `RAILS_ENV=production bin/rake db:create`
 3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
-4. Precompile the assets: `RAILS_ENV=production rake assets:precompile`
-5. Run the server: `RAILS_ENV=production bin/rails s`
+4. Run the server: `RAILS_ENV=production bin/rails s`
 
 Run the test
 ------------
