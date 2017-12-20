@@ -24,11 +24,6 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should update attachment" do
-    patch pia_attachment_url(id: @attachment.id, pia_id: @pia.id), params: { attachment: {  } }, as: :json
-    assert_response 200
-  end
-
   test "should destroy attachment" do
     assert_difference('Attachment.count', -1) do
       delete pia_attachment_url(id: @attachment.id, pia_id: @pia.id), as: :json
