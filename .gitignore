@@ -34,3 +34,5 @@ config/database.yml
 /public/uploads/*
 /data
 .ruby-version
+
+/.idea
