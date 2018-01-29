@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+  - 2.3
+services:
+  - postgresql
+before_script:
+  - cp config/database.example.yml config/database.yml
+  - psql -c 'create database pia_test;' -U postgres
+script:
+  - RAILS_ENV=test bin/rake db:migrate --trace
+  - bin/rake db:test:prepare
+  - bin/rake
