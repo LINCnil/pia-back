@@ -3,7 +3,7 @@ language: ruby
 rvm:
   - 2.3
 services:
-  - postgresql
+  - postgresql: "9.4"
 before_script:
   - cp config/database.example.yml config/database.yml
   - psql -c 'create database pia_test;' -U postgres
