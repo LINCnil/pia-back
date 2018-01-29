@@ -7,6 +7,7 @@ before_script:
   - cp config/database.example.yml config/database.yml
   - psql -c 'create database pia_test;' -U postgres
 script:
-  - RAILS_ENV=test bin/rake db:migrate --trace
-  - bin/rake db:test:prepare
+  - bin/rails db:environment:set RAILS_ENV=test
+  - bin/rails db:migrate RAILS_ENV=test --trace
+  - bin/rails db:test:prepare
   - bin/rake
