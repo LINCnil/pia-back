@@ -1,7 +1,7 @@
 version: '3'
 services:
   cnil-pia-back:
-    image: lrqdo/cnil-pia-back
+    build: docker/cnil-pia-back
     restart: always
     environment:
       DATABASE_HOST: 'database'
@@ -16,13 +16,13 @@ services:
       - 3000:3000
 
   cnil-pia-front:
-    image: lrqdo/cnil-pia-front
+    build: docker/cnil-pia-front
     restart: always
     ports:
       - 0.0.0.0:8080:80
 
   database:
-    restart: always
     image: postgres:10.1
+    restart: always
     environment:
       POSTGRES_PASSWORD: 'somepassword'
