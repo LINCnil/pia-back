@@ -1,0 +1,28 @@
+version: '3'
+services:
+  cnil-pia-back:
+    image: lrqdo/cnil-pia-back
+    restart: always
+    environment:
+      DATABASE_HOST: 'database'
+      DATABASE_USERNAME: 'postgres'
+      DATABASE_PASSWORD: 'somepassword'
+      SECRET_KEY_BASE: 'somesecret'
+    links:
+      - database
+    depends_on:
+      - database
+    ports:
+      - 3000:3000
+
+  cnil-pia-front:
+    image: lrqdo/cnil-pia-front
+    restart: always
+    ports:
+      - 0.0.0.0:8080:80
+
+  database:
+    restart: always
+    image: postgres:10.1
+    environment:
+      POSTGRES_PASSWORD: 'somepassword'
