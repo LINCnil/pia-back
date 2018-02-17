@@ -5,7 +5,7 @@ rvm:
 services:
   - postgresql
 addons:
-  postgresql: "9.4"
+  postgresql: "10.1"
 before_script:
   - cp config/database.example.yml config/database.yml
   - psql -c 'create database pia_test;' -U postgres
