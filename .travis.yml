@@ -8,7 +8,7 @@ addons:
   postgresql: "10.1"
 before_script:
   - cp config/database.example.yml config/database.yml
-  - psql -c 'create database pia_test;' -U postgres
+  - psql -c 'create database pia_test;' -U pia_user
 script:
   - bin/rails db:environment:set RAILS_ENV=test
   - bin/rails db:migrate RAILS_ENV=test --trace
