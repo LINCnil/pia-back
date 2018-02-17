@@ -4,7 +4,7 @@ development:
   encoding: unicode
   database: pia_development
   pool:     5
-  username: pia-user
+  username: postgres
   password: pia-test
   template: template0
 
@@ -14,7 +14,7 @@ test:
   encoding: unicode
   database: pia_test
   pool:     5
-  username: pia-user
+  username: postgres
   password: pia-test
   template: template0
 
