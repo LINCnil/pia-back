@@ -1,5 +1,5 @@
 class MeasuresController < ApplicationController
-  before_action :set_measure, only: [:show, :update, :destroy]
+  before_action :set_measure, only: %i[show update destroy]
 
   # GET /measures
   def index

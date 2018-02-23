@@ -7,3 +7,4 @@
 attachment_one:
   reference_to: '1.1.2'
   pia: pia_one
+  comment: 'New history comment'
