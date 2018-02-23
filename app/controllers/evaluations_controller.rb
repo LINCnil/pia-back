@@ -1,5 +1,5 @@
 class EvaluationsController < ApplicationController
-  before_action :set_evaluation, only: [:show, :update, :destroy]
+  before_action :set_evaluation, only: %i[show update destroy]
 
   # GET /evaluations
   def index
@@ -43,23 +43,24 @@ class EvaluationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_evaluation
-      @evaluation = Evaluation.find_by(id: params[:id], pia_id: params[:pia_id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def evaluation_params
-      params.fetch(:evaluation, {}).permit(
-        :status,
-        :reference_to,
-        :action_plan_comment,
-        :evaluation_comment,
-        :evaluation_date,
-        :estimated_implementation_date,
-        :person_in_charge,
-        :global_status,
-        gauges: [:x, :y]
-      ).merge(params.permit(:pia_id))
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_evaluation
+    @evaluation = Evaluation.find_by(id: params[:id], pia_id: params[:pia_id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def evaluation_params
+    params.fetch(:evaluation, {}).permit(
+      :status,
+      :reference_to,
+      :action_plan_comment,
+      :evaluation_comment,
+      :evaluation_date,
+      :estimated_implementation_date,
+      :person_in_charge,
+      :global_status,
+      gauges: %i[x y]
+    ).merge(params.permit(:pia_id))
+  end
 end
