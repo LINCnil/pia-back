@@ -1,5 +1,5 @@
 class AttachmentsController < ApplicationController
-  before_action :set_attachment, only: [:show, :update, :destroy]
+  before_action :set_attachment, only: %i[show update destroy]
 
   # GET /attachments
   def index
@@ -50,7 +50,7 @@ class AttachmentsController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def attachment_params
     params.fetch(:attachment, {})
-          .permit(:pia_signed, :mime_type)
+          .permit(:pia_signed, :mime_type, :comment)
           .merge(params.permit(:pia_id))
   end
 end

@@ -4,9 +4,15 @@ Getting started
 Requirements
 ------------
 
+- [pia (front-end) application](https://github.com/LINCnil/pia) and/or [pia (stand-alone) application](https://github.com/LINCnil/pia-app)
 - [Ruby](http://www.ruby-lang.org) 2.3.x
 - [Rails](http://rubyonrails.org) 5.0.x
 - [PostgreSQL](https://www.postgresql.org) 9.4+
+
+Installation
+------------
+
+You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank">this runbook</a> for a full installation of pia (back-end) and pia (front-end) applications on a ubuntu 17.10 server.
 
 PostgreSQL installation
 ------------------
@@ -14,7 +20,7 @@ PostgreSQL installation
 Basic installation on Debian you can use the following documentation: [wiki.debian.org/PostgreSql](https://wiki.debian.org/PostgreSql)
 on Ubuntu you can use: [help.ubuntu.com/community/PostgreSQL](https://help.ubuntu.com/community/PostgreSQL)
 
-Also, you need to create a new user with password
+Also, you need to create a new user with password.
 
 Clone the repository
 --------------------
@@ -53,13 +59,15 @@ Create tables
 Run the application
 -------------------
 
-`bin/rails s` your server will be accessible with the URL `localhost:3000`
+- `bin/rails s` your server will be accessible with the URL `localhost:3000`
 
-You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a différent port.
+- You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a différent port.
 
-For example: `bin/rails s -b 123.456.789.101 -p 8080` your server will be accessible with the URL `123.456.789.101:8080`
+    For example: `bin/rails s -b 123.456.789.101 -p 8080` your server will be accessible with the URL `123.456.789.101:8080`
 
-Then, in the PIA application use this URL to activate the server mode. Fill the field in Tools > Settings
+- Then, in [the pia (front-end) application](https://github.com/LINCnil/pia), use this URL to enable the server mode. 
+
+- Fill the field in "Tools" > "Settings"
 
 ![PIA Settings](public/pia-settings.png)
 
@@ -75,3 +83,11 @@ Run the test
 ------------
 
 `bin/rake`
+
+Acknowledgments
+---------------
+
+Contributor : [ylachgar](https://github.com/ylachgar)
+
+    provided the runbook to install pia front-end & back-end applications.
+
