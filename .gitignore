@@ -34,3 +34,7 @@ config/database.yml
 /public/uploads/*
 /data
 .ruby-version
+
+# Docker files
+docker-compose.yml
+Dockerfile
