@@ -32,8 +32,10 @@ config/database.yml
 
 # Others
 /public/uploads/*
-/data
+/data/
 .ruby-version
+
+/.idea
 
 # Docker files
 docker-compose.yml
