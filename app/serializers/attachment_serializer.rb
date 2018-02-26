@@ -1,5 +1,5 @@
 class AttachmentSerializer < ActiveModel::Serializer
-  attributes :id, :pia_id, :file, :name, :mime_type, :created_at, :updated_at
+  attributes :id, :pia_id, :file, :name, :mime_type, :comment, :created_at, :updated_at
 
   def file
     file = object.attached_file

@@ -1,10 +1,10 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :update, :destroy]
+  before_action :set_answer, only: %i[show update destroy]
 
   # GET /answers
   def index
     if params[:reference_to]
-      @answers = Answer.find_by({ pia_id: params[:pia_id], reference_to: params[:reference_to] })
+      @answers = Answer.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
     else
       @answers = Answer.where(pia_id: params[:pia_id])
     end

@@ -1,6 +1,6 @@
 class PiasController < ApplicationController
-  before_action :set_pia, only: [:show, :update, :destroy, :duplicate]
-  before_action :set_serializer, only: [:index, :show]
+  before_action :set_pia, only: %i[show update destroy duplicate]
+  before_action :set_serializer, only: %i[index show]
 
   # GET /pias
   def index
