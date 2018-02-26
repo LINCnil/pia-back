@@ -38,3 +38,4 @@ config/database.yml
 # Docker files
 docker-compose.yml
 Dockerfile
+.travis.yml
