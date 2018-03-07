@@ -79,6 +79,13 @@ Run the application in production mode
 3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
 4. Run the server: `RAILS_ENV=production bin/rails s`
 
+Update the application
+----------------------
+
+Update the repository : `git pull`
+
+Update the database : `bin/rake db:migrate`
+
 Run the test
 ------------
 
