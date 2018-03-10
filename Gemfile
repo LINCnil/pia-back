@@ -8,7 +8,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'active_model_serializers', '~> 0.10.0'
-gem 'rails', '~> 5.0.6'
+gem 'rails', '~> 5.1.5'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 gem 'pg'
@@ -33,7 +33,7 @@ gem 'rack-cors'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem "factory_girl_rails", "~> 4.0"
+  gem "factory_bot_rails"
 end
 
 group :development do
