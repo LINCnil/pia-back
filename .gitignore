@@ -44,8 +44,6 @@ config/database.yml
 /data/
 .ruby-version
 
-/.idea
-
 # Docker files
 docker-compose.yml
 Dockerfile
