@@ -7,6 +7,15 @@
 # Ignore bundler config.
 /.bundle
 
+# IDEs and editors
+/.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
