@@ -43,10 +43,3 @@ config/database.yml
 /public/uploads/*
 /data/
 .ruby-version
-
-/.idea
-
-# Docker files
-docker-compose.yml
-Dockerfile
-.travis.yml
