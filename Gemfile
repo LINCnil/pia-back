@@ -8,14 +8,13 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'active_model_serializers', '~> 0.10.0'
-gem 'rails', '~> 5.1.5'
+gem 'rails', '5.1.5'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 gem 'pg'
 gem 'carrierwave', '~> 1.0'
 gem 'carrierwave-base64', '~> 2.6.1'
 gem 'figaro'
-
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
