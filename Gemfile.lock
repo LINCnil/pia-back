@@ -171,7 +171,7 @@ DEPENDENCIES
   carrierwave-base64 (~> 2.6.1)
   factory_bot_rails
   figaro
-  i18n!
+  i18n (~> 1.0)!
   listen (~> 3.0.5)
   pg
   puma (~> 3.0)

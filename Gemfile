@@ -22,7 +22,7 @@ gem 'figaro'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7', :git => "https://github.com/codahale/bcrypt-ruby.git"
-gem 'i18n', :git => "https://github.com/svenfuchs/i18n.git"
+gem 'i18n', '~> 1.0', :git => "https://github.com/svenfuchs/i18n.git"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
