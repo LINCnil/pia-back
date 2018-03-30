@@ -22,7 +22,7 @@ gem 'figaro'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7', :git => "https://github.com/codahale/bcrypt-ruby.git"
-gem 'i18n', :git => "https://github.com/svenfuchs/i18n.git"
+gem 'i18n', '~> 1.0', :git => "https://github.com/svenfuchs/i18n.git"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -39,8 +39,8 @@ end
 group :development do
   gem 'listen', '~> 3.0.5'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  # gem 'spring'
+  # gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
