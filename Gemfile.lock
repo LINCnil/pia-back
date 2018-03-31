@@ -1,16 +1,3 @@
-GIT
-  remote: https://github.com/codahale/bcrypt-ruby.git
-  revision: f2db689ba567d1a018f4dacb1ccf909adc93e887
-  specs:
-    bcrypt (3.1.11)
-
-GIT
-  remote: https://github.com/svenfuchs/i18n.git
-  revision: 274ed8accd53a573d839617de2dd16b1b01d864b
-  specs:
-    i18n (1.0.0)
-      concurrent-ruby (~> 1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -57,6 +44,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (8.0.0)
+    bcrypt (3.1.11)
     builder (3.2.3)
     byebug (10.0.1)
     carrierwave (1.2.2)
@@ -82,6 +70,8 @@ GEM
       thor (~> 0.14)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    i18n (1.0.0)
+      concurrent-ruby (~> 1.0)
     jsonapi-renderer (0.2.0)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -160,13 +150,13 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
-  bcrypt (~> 3.1.7)!
+  bcrypt (~> 3.1.7)
   byebug
   carrierwave (~> 1.0)
   carrierwave-base64 (~> 2.6.1)
   factory_bot_rails
   figaro
-  i18n (~> 1.0)!
+  i18n (~> 1.0)
   listen (~> 3.0.5)
   pg
   puma (~> 3.0)
