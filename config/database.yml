@@ -84,5 +84,5 @@ test:
 production:
   <<: *default
   database: pia_production
-  username: pia-auth-back
-  password: <%= ENV['PIA-AUTH-BACK_DATABASE_PASSWORD'] %>
+  username: pia-user
+  password: <%= ENV['PIA-BACK_DATABASE_PASSWORD'] %>
