@@ -135,6 +135,19 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /pias/example:
+    get:
+      description: Get the PIA example
+      operationId: Find the first PIA example
+      responses:
+        200:
+          description: PIA response
+          schema:
+            $ref: '#/definitions/Pia'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /pias/{id}/duplicate:
     post:
       description: Duplicate a PIA
