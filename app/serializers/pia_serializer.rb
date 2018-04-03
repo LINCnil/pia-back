@@ -11,6 +11,7 @@ class PiaSerializer < ActiveModel::Serializer
              :concerned_people_status,
              :rejection_reason,
              :applied_adjustments,
+             :is_example,
              :created_at,
              :updated_at
 end

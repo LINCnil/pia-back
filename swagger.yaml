@@ -875,6 +875,8 @@ definitions:
         type: string
       applied_adjustments:
         type: string
+      is_example:
+        type: boolean
   Comment:
     required:
       - pia_id

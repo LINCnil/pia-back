@@ -10,6 +10,7 @@ FactoryGirl.define do
     concerned_people_opinion 'Beat too hard'
     rejection_reason 'Lack of coherency'
     applied_adjustments 'Cut up method'
+    is_example false
     dpos_names 'Pierre, Paul, Jacques, Daniel'
     people_names 'Lise, Bloody, Marie'
   end

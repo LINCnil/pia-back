@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180223064141) do
+ActiveRecord::Schema.define(version: 20180403152239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20180223064141) do
 
   create_table "pias", force: :cascade do |t|
     t.integer  "status",                   default: 0
-    t.string   "name",                                  null: false
+    t.string   "name",                                     null: false
     t.string   "author_name",              default: ""
     t.string   "evaluator_name",           default: ""
     t.string   "validator_name",           default: ""
@@ -82,10 +82,11 @@ ActiveRecord::Schema.define(version: 20180223064141) do
     t.integer  "concerned_people_status",  default: 0
     t.text     "rejection_reason",         default: ""
     t.text     "applied_adjustments",      default: ""
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "dpos_names",               default: ""
     t.string   "people_names",             default: ""
+    t.boolean  "is_example",               default: false
   end
 
   add_foreign_key "answers", "pias"

@@ -91,6 +91,7 @@ class PiasController < ApplicationController
                                   :concerned_people_opinion,
                                   :concerned_people_status,
                                   :rejection_reason,
-                                  :applied_adjustments)
+                                  :applied_adjustments,
+                                  :is_example)
   end
 end
