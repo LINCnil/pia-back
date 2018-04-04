@@ -43,9 +43,3 @@
 /public/uploads/*
 /data/
 .ruby-version
-
-# Docker files
-.dockerignore
-docker-compose.yml
-Dockerfile
-.travis.yml
