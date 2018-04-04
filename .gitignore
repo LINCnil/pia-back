@@ -30,7 +30,7 @@
 .byebug_history
 
 # Ignore database configuration
-#config/database.yml
+# config/database.yml
 
 # Ignore vim swap files
 *.swp
@@ -43,3 +43,9 @@
 /public/uploads/*
 /data/
 .ruby-version
+
+# Docker files
+.dockerignore
+docker-compose.yml
+Dockerfile
+.travis.yml
