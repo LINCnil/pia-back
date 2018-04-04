@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   resources :pias do
+    collection do
+      get 'example'
+    end
     member do
       post 'duplicate'
     end
