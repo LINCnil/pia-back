@@ -13,6 +13,12 @@ class PiasController < ApplicationController
     render json: @pias, each_serializer: @index_serializer
   end
 
+  # GET /pias/example
+  def example
+    pia = Pia.find_by(is_example: true)
+    render json: pia, serializer: @index_serializer
+  end
+
   # GET /pias/1
   def show
     render json: @pia, serializer: @index_serializer
@@ -91,6 +97,7 @@ class PiasController < ApplicationController
                                   :concerned_people_opinion,
                                   :concerned_people_status,
                                   :rejection_reason,
-                                  :applied_adjustments)
+                                  :applied_adjustments,
+                                  :is_example)
   end
 end
