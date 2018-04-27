@@ -32,7 +32,7 @@ Fill the fields `username` and `password` with the PostgreSQL username and passw
 ### Create and fill the file application.yml
 `cp config/application.example.yml config/application.yml`
 
-Generate the SECRET_KEY_BASE with: `rake secret` and paste the secret key in the file.
+Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in the file.
 
 ### Install all dependencies
 `bundle install`
