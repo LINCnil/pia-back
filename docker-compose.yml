@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     container_name: pia-develop-db
-    image: postgres:10.1
+    image: postgres:10.3
     restart: always
     environment:
       POSTGRES_USER: pia-user
