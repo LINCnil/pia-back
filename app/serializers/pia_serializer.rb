@@ -13,5 +13,7 @@ class PiaSerializer < ActiveModel::Serializer
              :applied_adjustments,
              :is_example,
              :created_at,
-             :updated_at
+             :updated_at,
+             :concerned_people_searched_opinion,
+             :concerned_people_searched_content
 end
