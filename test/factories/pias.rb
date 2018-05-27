@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :pia do
     status 0
     name 'PIA ONE'
