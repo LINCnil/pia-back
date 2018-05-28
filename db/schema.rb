@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403152239) do
+ActiveRecord::Schema.define(version: 20180525222420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,22 +71,24 @@ ActiveRecord::Schema.define(version: 20180403152239) do
   end
 
   create_table "pias", force: :cascade do |t|
-    t.integer  "status",                   default: 0
-    t.string   "name",                                     null: false
-    t.string   "author_name",              default: ""
-    t.string   "evaluator_name",           default: ""
-    t.string   "validator_name",           default: ""
-    t.integer  "dpo_status",               default: 0
-    t.text     "dpo_opinion",              default: ""
-    t.text     "concerned_people_opinion", default: ""
-    t.integer  "concerned_people_status",  default: 0
-    t.text     "rejection_reason",         default: ""
-    t.text     "applied_adjustments",      default: ""
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.string   "dpos_names",               default: ""
-    t.string   "people_names",             default: ""
-    t.boolean  "is_example",               default: false
+    t.integer  "status",                            default: 0
+    t.string   "name",                                              null: false
+    t.string   "author_name",                       default: ""
+    t.string   "evaluator_name",                    default: ""
+    t.string   "validator_name",                    default: ""
+    t.integer  "dpo_status",                        default: 0
+    t.text     "dpo_opinion",                       default: ""
+    t.text     "concerned_people_opinion",          default: ""
+    t.integer  "concerned_people_status",           default: 0
+    t.text     "rejection_reason",                  default: ""
+    t.text     "applied_adjustments",               default: ""
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.string   "dpos_names",                        default: ""
+    t.string   "people_names",                      default: ""
+    t.integer  "is_example",                        default: 0
+    t.boolean  "concerned_people_searched_opinion", default: false
+    t.string   "concerned_people_searched_content"
   end
 
   add_foreign_key "answers", "pias"
