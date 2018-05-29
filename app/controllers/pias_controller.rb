@@ -15,7 +15,7 @@ class PiasController < ApplicationController
 
   # GET /pias/example
   def example
-    pia = Pia.find_by(is_example: true)
+    pia = Pia.find_by(is_example: 1)
     render json: pia, serializer: @index_serializer
   end
 

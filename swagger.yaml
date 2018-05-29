@@ -889,7 +889,11 @@ definitions:
       applied_adjustments:
         type: string
       is_example:
-        type: boolean
+        type: integer
+      concerned_people_searched_opinion:
+        type: boolea
+      concerned_people_searched_content:
+        type: string
   Comment:
     required:
       - pia_id
