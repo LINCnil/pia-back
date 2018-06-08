@@ -17,7 +17,7 @@ You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank
 ### System requirements
 - CPU : i5
 - Ram: 4Go
-- Disk Space : 20Go ça suffit
+- Disk Space : 20Go 
 - OS : preferably Linux but other OS works as well
 
 ### PostgreSQL installation
