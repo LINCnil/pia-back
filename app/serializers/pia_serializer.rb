@@ -7,6 +7,8 @@ class PiaSerializer < ActiveModel::Serializer
              :validator_name,
              :dpo_status,
              :dpo_opinion,
+             :dpos_names,
+             :people_names,
              :concerned_people_opinion,
              :concerned_people_status,
              :rejection_reason,

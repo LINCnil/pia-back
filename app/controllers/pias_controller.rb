@@ -92,10 +92,12 @@ class PiasController < ApplicationController
                                   :validator_name,
                                   :dpo_status,
                                   :dpo_opinion,
-                                  :dpos_name,
+                                  :dpos_names,
                                   :people_names,
                                   :concerned_people_opinion,
                                   :concerned_people_status,
+                                  :concerned_people_searched_content,
+                                  :concerned_people_searched_opinion,
                                   :rejection_reason,
                                   :applied_adjustments,
                                   :is_example)
