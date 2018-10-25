@@ -26,7 +26,9 @@ class PiasController < ApplicationController
 
   # POST /pias
   def create
-    @pia = Pia.new(pia_params)
+    pia_parameters = pia_params
+    pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
+    @pia = Pia.new(pia_parameters)
 
     if @pia.save
       render json: @pia, status: :created
@@ -37,7 +39,10 @@ class PiasController < ApplicationController
 
   # PATCH/PUT /pias/1
   def update
-    if @pia.update(pia_params)
+    pia_parameters = pia_params
+    pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
+
+    if @pia.update(pia_parameters)
       render json: @pia
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -100,6 +105,10 @@ class PiasController < ApplicationController
                                   :concerned_people_searched_opinion,
                                   :rejection_reason,
                                   :applied_adjustments,
-                                  :is_example)
+                                  :is_example,
+                                  :structure_id,
+                                  :structure_name,
+                                  :structure_sector_name,
+                                  :structure_data)
   end
 end

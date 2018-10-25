@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180525222420) do
+ActiveRecord::Schema.define(version: 20181008150920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,19 @@ ActiveRecord::Schema.define(version: 20180525222420) do
     t.integer  "is_example",                        default: 0
     t.boolean  "concerned_people_searched_opinion", default: false
     t.string   "concerned_people_searched_content"
+    t.integer  "structure_id"
+    t.string   "structure_name"
+    t.string   "structure_sector_name"
+    t.jsonb    "structure_data"
+    t.index ["structure_id"], name: "index_pias_on_structure_id", using: :btree
+  end
+
+  create_table "structures", force: :cascade do |t|
+    t.string   "name",                     null: false
+    t.string   "sector_name",              null: false
+    t.jsonb    "data",        default: {}, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_foreign_key "answers", "pias"
@@ -96,4 +109,5 @@ ActiveRecord::Schema.define(version: 20180525222420) do
   add_foreign_key "comments", "pias"
   add_foreign_key "evaluations", "pias"
   add_foreign_key "measures", "pias"
+  add_foreign_key "pias", "structures"
 end
