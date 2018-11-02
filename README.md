@@ -51,7 +51,7 @@ Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in
 ### Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
 
-- You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a différent port.
+- You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a different port.
 
     For example: `bin/rails s -b 123.456.789.101 -p 8080` your server will be accessible with the URL `123.456.789.101:8080`
 
