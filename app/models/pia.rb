@@ -4,6 +4,7 @@ class Pia < ApplicationRecord
   has_many :evaluations, inverse_of: :pia, dependent: :destroy
   has_many :measures, inverse_of: :pia, dependent: :destroy
   has_many :attachments, inverse_of: :pia, dependent: :destroy
+  belongs_to :structure, optional: true
   validates :name, presence: true
 
   def self.import(json_string)

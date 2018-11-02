@@ -17,5 +17,9 @@ class PiaSerializer < ActiveModel::Serializer
              :created_at,
              :updated_at,
              :concerned_people_searched_opinion,
-             :concerned_people_searched_content
+             :concerned_people_searched_content,
+             :structure_id,
+             :structure_name,
+             :structure_sector_name,
+             :structure_data
 end

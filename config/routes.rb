@@ -19,4 +19,5 @@ Rails.application.routes.draw do
       post '/import', to: 'pias#import'
     end
   end
+  resources :structures
 end

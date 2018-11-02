@@ -801,7 +801,111 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-
+  /structures:
+    get:
+      description: Returns all STRUCTURES.
+      operationId: listStructures
+      parameters:
+        - name: sorting[column]
+          in: query
+          type: string
+          description: Set sort column
+        - name: sorting[direction]
+          in: query
+          type: string
+          description: Set sort direction
+      responses:
+        200:
+          description: All STRUCTURES index
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Structure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Creates a new STRUCTURE
+      operationId: addStructure
+      parameters:
+        - name: body
+          in: body
+          description: STRUCTURE to add
+          required: true
+          schema:
+            $ref: '#/definitions/SampleStructure'
+      responses:
+        200:
+          description: STRUCTURE response
+          schema:
+            $ref: '#/definitions/Structure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /structures/{id}:
+    get:
+      description: Returns a STRUCTURE
+      operationId: find STRUCTURE by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of STRUCTURE to fetch
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: structure response
+          schema:
+            $ref: '#/definitions/Structure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Update a STRUCTURE
+      operationId: updateStructure
+      parameters:
+        - name: id
+          in: path
+          description: ID of STRUCTURE to update
+          required: true
+          type: integer
+          format: integer64
+        - name: body
+          in: body
+          description: fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/SampleStructure'
+      responses:
+        200:
+          description: STRUCTURE response
+          schema:
+            $ref: '#/definitions/Structure'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single STRUCTURE based on the ID supplied
+      operationId: deleteStructure
+      parameters:
+        - name: id
+          in: path
+          description: ID of STRUCTURE to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: STRUCTURE deleted
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   SamplePia:
     type: object
@@ -857,6 +961,15 @@ definitions:
         type: object
         description: test
         $ref: '#/definitions/Attachment'
+  SampleStructure:
+    type: object
+    required:
+      - structure
+    properties:
+      structure:
+        type: object
+        description: test
+        $ref: '#/definitions/Structure'
   Pia:
     type: object
     required:
@@ -891,8 +1004,16 @@ definitions:
       is_example:
         type: integer
       concerned_people_searched_opinion:
-        type: boolea
+        type: boolean
       concerned_people_searched_content:
+        type: string
+      structure_id:
+        type: integer
+      structure_name:
+        type: string
+      structure_sector_name:
+        type: string
+      structure_data:
         type: string
   Comment:
     required:
@@ -993,4 +1114,15 @@ definitions:
         type: integer
         format: int32
       message:
+        type: string
+  Structure:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      sector_name:
+        type: string
+      data:
         type: string
