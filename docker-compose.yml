@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    container_name: pia-develop-db
+    container_name: pia-master-db
     image: postgres:10.5
     restart: always
     environment:
@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
   web:
-    container_name: pia-develop-back
+    container_name: pia-master-web
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
