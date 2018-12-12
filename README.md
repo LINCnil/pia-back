@@ -73,7 +73,7 @@ Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in
 ### Update the application
 Update the repository : `git pull`
 
-Update the database : `bin/rake db:migrate`
+Update the database : `RAILS_ENV=production bin/rake db:migrate`
 
 ### Run the test
 `bin/rake`
