@@ -29,18 +29,21 @@ Also, you need to create a new user with password.
 ### Clone the repository
 `git clone https://github.com/atnos/pia-back.git`
 
+### Go to the folder pia-back
+`cd pia-back`
+
 ### Create and fill the file database.yml
 `cp config/database.example.yml config/database.yml`
 
-Fill the fields `username` and `password` with the PostgreSQL username and password created in the previous step.
+Fill the fields `username` and `password` for each environment with the PostgreSQL username and password created in the step "PostgreSQL installation".
+
+### Install all dependencies
+`bundle install`
 
 ### Create and fill the file application.yml
 `cp config/application.example.yml config/application.yml`
 
 Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in the file.
-
-### Install all dependencies
-`bundle install`
 
 ### Create database
 `bin/rake db:create`
@@ -70,7 +73,7 @@ Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in
 ### Update the application
 Update the repository : `git pull`
 
-Update the database : `bin/rake db:migrate`
+Update the database : `RAILS_ENV=production bin/rake db:migrate`
 
 ### Run the test
 `bin/rake`
