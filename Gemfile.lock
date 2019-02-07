@@ -147,6 +147,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
+  bundler (~> 2.0.1)
   byebug
   carrierwave (~> 1.0)
   carrierwave-base64 (~> 2.6.1)
@@ -161,5 +162,8 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
 
+RUBY VERSION
+   ruby 2.5.3p105
+
 BUNDLED WITH
-   1.16.2
+   2.0.1
