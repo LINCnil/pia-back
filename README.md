@@ -70,8 +70,13 @@ Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in
 3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
 4. Run the server: `RAILS_ENV=production bin/rails s`
 
-### Update the application
+### How to update to the latest version
+
+Go to the folder pia-back : `cd pia-back`
+
 Update the repository : `git pull`
+
+Update the dependencies : `bundle install`
 
 Update the database : `RAILS_ENV=production bin/rake db:migrate`
 
