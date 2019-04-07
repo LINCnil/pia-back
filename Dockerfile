@@ -1,4 +1,4 @@
-FROM ruby:2.5.3-stretch
+FROM ruby:2.5.5-stretch
 
 # Set local timezone
 ENV TZ=Europe/Berlin

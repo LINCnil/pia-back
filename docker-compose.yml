@@ -17,6 +17,7 @@ services:
       - .:/pia-back
     environment:
       REDIS_URL: "redis://localhost:6379/1"
+      ALLOWED_CORS_ORIGINS: "*"
     ports:
       - "3000:3000"
     depends_on:
