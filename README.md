@@ -10,7 +10,7 @@ You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank
 
 ### Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia) and/or [pia (stand-alone) application](https://github.com/LINCnil/pia-app)
-- [Ruby](http://www.ruby-lang.org) 2.5.5
+- [Ruby](http://www.ruby-lang.org) 2.6.2
 - [Rails](http://rubyonrails.org) 5.2.3
 - [PostgreSQL](https://www.postgresql.org) 11.0+
 
@@ -70,8 +70,13 @@ Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in
 3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
 4. Run the server: `RAILS_ENV=production bin/rails s`
 
-### Update the application
+### How to update to the latest version
+
+Go to the folder pia-back : `cd pia-back`
+
 Update the repository : `git pull`
+
+Update the dependencies : `bundle install`
 
 Update the database : `RAILS_ENV=production bin/rake db:migrate`
 
