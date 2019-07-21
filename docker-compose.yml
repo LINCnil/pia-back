@@ -18,6 +18,7 @@ services:
     environment:
       REDIS_URL: "redis://localhost:6379/1"
       ALLOWED_CORS_ORIGINS: "*"
+      RAILS_SERVE_STATIC_FILES: 'true'
     ports:
       - "3000:3000"
     depends_on:
