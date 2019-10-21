@@ -25,7 +25,7 @@ class AttachmentsController < ApplicationController
     filename = params[:attachment][:name]
     @attachment.name = filename.chomp(File.extname(filename))
 
-    file = file.gsub('data:;base64', "data:#{@attachment.mime_type};base64")
+    file = file.gsub('data:application/octet-stream;base64', "data:#{@attachment.mime_type};base64")
     @attachment.attached_file = file
 
     if @attachment.save
