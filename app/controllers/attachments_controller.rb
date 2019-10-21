@@ -35,6 +35,13 @@ class AttachmentsController < ApplicationController
     end
   end
 
+  def update
+    @attachment = Attachment.find params[:id]
+    @attachment.comment = attachment_params[:comment]
+    @attachment.remove_attached_file!
+    @attachment.save
+  end
+
   # DELETE /attachments/1
   def destroy
     @attachment.destroy
