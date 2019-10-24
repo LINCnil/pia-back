@@ -38,8 +38,11 @@
 
 # Ignore application configuration
 /config/application.yml
+/config/master.key
 
 # Others
 /public/uploads/*
 /data/
 .ruby-version
+.idea
+.DS_Store
