@@ -25,7 +25,7 @@ class AttachmentsController < ApplicationController
     filename = params[:attachment][:name]
     @attachment.name = filename.chomp(File.extname(filename))
 
-    file = file.gsub('data:;base64', "data:#{@attachment.mime_type};base64")
+    file = file.gsub('data:application/octet-stream;base64', "data:#{@attachment.mime_type};base64")
     @attachment.attached_file = file
 
     if @attachment.save
@@ -33,6 +33,13 @@ class AttachmentsController < ApplicationController
     else
       render json: @attachment.errors, status: :unprocessable_entity
     end
+  end
+
+  def update
+    @attachment = Attachment.find params[:id]
+    @attachment.comment = attachment_params[:comment]
+    @attachment.remove_attached_file!
+    @attachment.save
   end
 
   # DELETE /attachments/1

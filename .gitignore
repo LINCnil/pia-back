@@ -44,3 +44,5 @@
 /public/uploads/*
 /data/
 .ruby-version
+.idea
+.DS_Store
