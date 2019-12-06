@@ -92,7 +92,7 @@ GEM
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     pg (1.1.4)
-    puma (3.12.1)
+    puma (3.12.2)
     rack (2.0.7)
     rack-cors (1.0.5)
       rack (>= 1.6.0)
@@ -157,7 +157,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   mime-types (= 3.2.2)
   pg
-  puma (~> 3.0)
+  puma (~> 3.12)
   rack-cors
   rails (~> 5.0.7)
   spring
