@@ -11,7 +11,7 @@ ruby '~> 2.5.5'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'rails', '~> 5.0.7'
 # Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.12'
 gem 'pg'
 gem 'mime-types', '3.2.2'
 gem 'carrierwave'
