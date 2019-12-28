@@ -209,12 +209,12 @@ DEPENDENCIES
   carrierwave-base64 (~> 2.8.0)
   dotenv-rails
   factory_bot_rails
-  listen (~> 3.2.0)
+  listen (~> 3.2.1)
   mime-types (~> 3.3)
   pg (>= 0.18, < 2.0)
   puma (~> 4.3)
   rack-cors
-  rails (~> 6.0.1)
+  rails (~> 6.0.2)
   rubocop
   tzinfo-data
 
