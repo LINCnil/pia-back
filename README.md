@@ -11,7 +11,7 @@ You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank
 ### Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia) and/or [pia (stand-alone) application](https://github.com/LINCnil/pia-app)
 - [Ruby](http://www.ruby-lang.org) 2.6.5
-- [Rails](http://rubyonrails.org) 6.0.1
+- [Rails](http://rubyonrails.org) 6.0.2
 - [PostgreSQL](https://www.postgresql.org) 12.0+
 
 ### System requirements
