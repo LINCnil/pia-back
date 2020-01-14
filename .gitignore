@@ -30,7 +30,7 @@
 .byebug_history
 
 # Ignore database configuration
-# config/database.yml
+/config/database.yml
 
 # Ignore vim swap files
 *.swp
@@ -40,9 +40,15 @@
 /config/application.yml
 /config/master.key
 
+# Docker files
+.dockerignore
+docker-compose.yml
+Dockerfile
+
 # Others
 /public/uploads/*
 /data/
 .ruby-version
-.idea
+.env
 .DS_Store
+
