@@ -7,6 +7,15 @@
 # Ignore bundler config.
 /.bundle
 
+# IDEs and editors
+/.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -21,7 +30,7 @@
 .byebug_history
 
 # Ignore database configuration
-config/database.yml
+/config/database.yml
 
 # Ignore vim swap files
 *.swp
@@ -29,10 +38,17 @@ config/database.yml
 
 # Ignore application configuration
 /config/application.yml
+/config/master.key
+
+# Docker files
+.dockerignore
+docker-compose.yml
+Dockerfile
 
 # Others
 /public/uploads/*
-/data
+/data/
 .ruby-version
-.idea
+.env
 .DS_Store
+
