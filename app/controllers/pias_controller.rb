@@ -1,27 +1,26 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
-  before_action :set_serializer, only: %i[index show]
 
   # GET /pias
   def index
-    sorting = sorting_params
-    sorting = nil unless Pia.attribute_names.include?(sorting[:column])
-    sorting[:direction] = 'asc' if sorting && sorting[:direction] != 'desc'
-    @pias = Pia.all
-    @pias = @pias.order("#{sorting[:column]} #{sorting[:direction]}") if sorting.present?
-
-    render json: @pias, each_serializer: @index_serializer
+    pias = []
+    Pia.where(is_archive: params[:is_archive].present?)
+        .order(query_order)
+        .find_each do |pia|
+      pias << serialize(pia)
+    end
+    render json: pias
   end
 
   # GET /pias/example
   def example
     pia = Pia.find_by(is_example: 1)
-    render json: pia, serializer: @index_serializer
+    render json: serialize(pia)
   end
 
   # GET /pias/1
   def show
-    render json: @pia, serializer: @index_serializer
+    render json: serialize(@pia)
   end
 
   # POST /pias
@@ -31,7 +30,7 @@ class PiasController < ApplicationController
     @pia = Pia.new(pia_parameters)
 
     if @pia.save
-      render json: @pia, status: :created
+      render json: serialize(@pia), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
@@ -41,9 +40,8 @@ class PiasController < ApplicationController
   def update
     pia_parameters = pia_params
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
-
     if @pia.update(pia_parameters)
-      render json: @pia
+      render json: serialize(@pia)
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
@@ -56,8 +54,7 @@ class PiasController < ApplicationController
 
   def duplicate
     @clone = @pia.duplicate
-
-    render json: @clone
+    render json: serialize(@clone)
   end
 
   def import
@@ -73,14 +70,24 @@ class PiasController < ApplicationController
     params.fetch(:import, {}).permit(:data)
   end
 
-  # Set seralizer for pias index
-  def set_serializer
-    @index_serializer = params[:export].present? ? ExportPiaSerializer : PiaSerializer
+  def serialize(pia)
+    if params[:export].present?
+      ExportPiaSerializer.new(pia).serializable_hash.dig(:data, :attributes)
+    else
+      PiaSerializer.new(pia).serializable_hash.dig(:data, :attributes)
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_pia
     @pia = Pia.find(params[:id])
+  end
+
+  def query_order
+    sorting = sorting_params
+    sorting = nil unless Pia.attribute_names.include?(sorting[:column])
+    sorting[:direction] = 'asc' if sorting && sorting[:direction] != 'desc'
+    sorting.present? ? "#{sorting[:column]} #{sorting[:direction]}" : nil
   end
 
   # Only allow trusted sorting parameters
@@ -109,6 +116,7 @@ class PiasController < ApplicationController
                                   :structure_id,
                                   :structure_name,
                                   :structure_sector_name,
-                                  :structure_data)
+                                  :structure_data,
+                                  :is_archive)
   end
 end

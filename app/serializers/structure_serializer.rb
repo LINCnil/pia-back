@@ -1,4 +1,5 @@
-class StructureSerializer < ActiveModel::Serializer
+class StructureSerializer
+  include FastJsonapi::ObjectSerializer
   attributes :id,
              :name,
              :sector_name,

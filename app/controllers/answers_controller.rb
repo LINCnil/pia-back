@@ -4,17 +4,20 @@ class AnswersController < ApplicationController
   # GET /answers
   def index
     if params[:reference_to]
-      @answers = Answer.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
+      answers = serialize Answer.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
     else
-      @answers = Answer.where(pia_id: params[:pia_id])
+      answers = []
+      Answer.where(pia_id: params[:pia_id]).find_each do |answer|
+        answers << serialize(answer)
+      end
     end
 
-    render json: @answers
+    render json: answers
   end
 
   # GET /answers/1
   def show
-    render json: @answer
+    render json: serialize(@answer)
   end
 
   # POST /answers
@@ -22,7 +25,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
-      render json: @answer, status: :created
+      render json: serialize(@answer), status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -31,7 +34,7 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   def update
     if @answer.update(answer_params)
-      render json: @answer
+      render json: serialize(@answer)
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -43,6 +46,10 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def serialize(answer)
+    AnswerSerializer.new(answer).serializable_hash.dig(:data, :attributes)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_answer

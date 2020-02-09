@@ -1,4 +1,5 @@
-class ExportPiaSerializer < ActiveModel::Serializer
+class ExportPiaSerializer
+  include FastJsonapi::ObjectSerializer
   attributes :id,
              :status,
              :name,

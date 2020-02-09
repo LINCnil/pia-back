@@ -3,18 +3,23 @@ class CommentsController < ApplicationController
 
   # GET /comments
   def index
+    comments = []
     if params[:reference_to]
-      @comments = Comment.where(pia_id: params[:pia_id], reference_to: params[:reference_to])
+      Comment.where(pia_id: params[:pia_id], reference_to: params[:reference_to]).find_each do |comment|
+        comments << serialize(comment)
+      end
     else
-      @comments = Comment.where(pia_id: params[:pia_id])
+      Comment.where(pia_id: params[:pia_id]).find_each do |comment|
+        comments << serialize(comment)
+      end
     end
 
-    render json: @comments
+    render json: comments
   end
 
   # GET /comments/1
   def show
-    render json: @comment
+    render json: serialize(@comment)
   end
 
   # POST /comments
@@ -22,7 +27,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     if @comment.save
-      render json: @comment, status: :created
+      render json: serialize(@comment), status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -31,7 +36,7 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1
   def update
     if @comment.update(comment_params)
-      render json: @comment
+      render json: serialize(@comment)
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -43,6 +48,10 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def serialize(comment)
+    CommentSerializer.new(comment).serializable_hash.dig(:data, :attributes)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment

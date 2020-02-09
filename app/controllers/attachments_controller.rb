@@ -3,18 +3,20 @@ class AttachmentsController < ApplicationController
 
   # GET /attachments
   def index
-    @attachments = Attachment.where(pia_id: params[:pia_id])
-    render json: @attachments
+    attachments = []
+    Attachment.where(pia_id: params[:pia_id]).find_each do |attachment|
+      attachments << serialize(attachment)
+    end
+    render json: attachments
   end
 
   # GET /attachments/1
   def show
-    render json: @attachment
+    render json: serialize(@attachment)
   end
 
   def show_signed
-    @attachment = Attachment.where(pia_signed: true, pia_id: params[:pia_id]).first
-    render json: @attachment
+    render json: serialize(Attachment.find_by(pia_signed: true, pia_id: params[:pia_id]))
   end
 
   # POST /attachments
@@ -29,7 +31,7 @@ class AttachmentsController < ApplicationController
     @attachment.attached_file = file
 
     if @attachment.save
-      render json: @attachment, status: :created
+      render json: serialize(attachment), status: :created
     else
       render json: @attachment.errors, status: :unprocessable_entity
     end
@@ -52,6 +54,10 @@ class AttachmentsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_attachment
     @attachment = Attachment.find_by(id: params[:id], pia_id: params[:pia_id])
+  end
+
+  def serialize(attachment)
+    AttachmentSerializer.new(attachment).serializable_hash.dig(:data, :attributes)
   end
 
   # Only allow a trusted parameter "white list" through.
