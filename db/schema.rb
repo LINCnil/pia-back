@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_160928) do
+ActiveRecord::Schema.define(version: 2020_02_12_135402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_160928) do
     t.string "structure_sector_name"
     t.jsonb "structure_data"
     t.boolean "is_archive", default: false, null: false
+    t.string "category"
     t.index ["structure_id"], name: "index_pias_on_structure_id"
   end
 
