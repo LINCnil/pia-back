@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :comments
     resources :evaluations
     resources :measures
+    resources :revisions, except: :update
     resources :attachments do
       collection do
         get '/signed', to: 'attachments#signed'
