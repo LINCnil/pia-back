@@ -1,4 +1,5 @@
-class PiaSerializer < ActiveModel::Serializer
+class PiaSerializer
+  include FastJsonapi::ObjectSerializer
   attributes :id,
              :status,
              :name,
@@ -21,5 +22,10 @@ class PiaSerializer < ActiveModel::Serializer
              :structure_id,
              :structure_name,
              :structure_sector_name,
-             :structure_data
+             :structure_data,
+             :category
+
+  attribute :is_archive do |pia|
+    pia.is_archive ? 1 : 0
+  end
 end

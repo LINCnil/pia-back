@@ -4,17 +4,20 @@ class EvaluationsController < ApplicationController
   # GET /evaluations
   def index
     if params[:reference_to]
-      @evaluations = Evaluation.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
+      evaluations = serialize Evaluation.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
     else
-      @evaluations = Evaluation.where(pia_id: params[:pia_id])
+      evaluations = []
+      Evaluation.where(pia_id: params[:pia_id]).find_each do |evaluation|
+        evaluations << serialize(evaluation)
+      end
     end
 
-    render json: @evaluations
+    render json: evaluations
   end
 
   # GET /evaluations/1
   def show
-    render json: @evaluation
+    render json: serialize(@evaluation)
   end
 
   # POST /evaluations
@@ -22,7 +25,7 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
 
     if @evaluation.save
-      render json: @evaluation, status: :created
+      render json: serialize(@evaluation), status: :created
     else
       render json: @evaluation.errors, status: :unprocessable_entity
     end
@@ -31,7 +34,7 @@ class EvaluationsController < ApplicationController
   # PATCH/PUT /evaluations/1
   def update
     if @evaluation.update(evaluation_params)
-      render json: @evaluation
+      render json: serialize(@evaluation)
     else
       render json: @evaluation.errors, status: :unprocessable_entity
     end
@@ -43,6 +46,10 @@ class EvaluationsController < ApplicationController
   end
 
   private
+
+  def serialize(evaluation)
+    EvaluationSerializer.new(evaluation).serializable_hash.dig(:data, :attributes)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_evaluation

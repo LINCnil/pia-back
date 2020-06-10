@@ -1,4 +1,5 @@
-class EvaluationSerializer < ActiveModel::Serializer
+class EvaluationSerializer
+  include FastJsonapi::ObjectSerializer
   attributes :id,
              :pia_id,
              :status,

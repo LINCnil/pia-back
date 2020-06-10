@@ -4,17 +4,20 @@ class MeasuresController < ApplicationController
   # GET /measures
   def index
     if params[:reference_to]
-      @measures = Measure.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
+      measures = serialize Measure.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
     else
-      @measures = Measure.where(pia_id: params[:pia_id])
+      measures = []
+      Measure.where(pia_id: params[:pia_id]).find_each do |measure|
+        measures << serialize(measure)
+      end
     end
 
-    render json: @measures
+    render json: measures
   end
 
   # GET /measures/1
   def show
-    render json: @measure
+    render json: serialize(@measure)
   end
 
   # POST /measures
@@ -22,7 +25,7 @@ class MeasuresController < ApplicationController
     @measure = Measure.new(measure_params)
 
     if @measure.save
-      render json: @measure, status: :created
+      render json: serialize(@measure), status: :created
     else
       render json: @measure.errors, status: :unprocessable_entity
     end
@@ -31,7 +34,7 @@ class MeasuresController < ApplicationController
   # PATCH/PUT /measures/1
   def update
     if @measure.update(measure_params)
-      render json: @measure
+      render json: serialize(@measure)
     else
       render json: @measure.errors, status: :unprocessable_entity
     end
@@ -43,6 +46,10 @@ class MeasuresController < ApplicationController
   end
 
   private
+
+  def serialize(measure)
+    MeasureSerializer.new(measure).serializable_hash.dig(:data, :attributes)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_measure
