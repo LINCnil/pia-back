@@ -27,7 +27,7 @@ on Ubuntu you can use: [help.ubuntu.com/community/PostgreSQL](https://help.ubunt
 Also, you need to create a new user with password.
 
 ### Clone the repository
-`git clone https://github.com/atnos/pia-back.git`
+`git clone https://github.com/LINCnil/pia-back.git`
 
 ### Go to the folder pia-back
 `cd pia-back`
