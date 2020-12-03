@@ -10,8 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      db:
+      postgres:
         image: postgres:11
+        end:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: pia_test
+          POSTGRES_PASSWORD: postgres
         ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
@@ -27,7 +31,7 @@ jobs:
           ruby-version: 2.6.x
       - name: Build and run tests
         env:
-          DATABASE_URL: postgres://postgres:@localhost:5432/test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/pia_test
           RAILS_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
