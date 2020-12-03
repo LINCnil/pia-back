@@ -5,13 +5,13 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '~> 2.5.5'
+ruby '~> 2.5.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'rails', '~> 5.0.7'
 # Use Puma as the app server
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 5.1.0'
 gem 'pg'
 gem 'mime-types', '3.2.2'
 gem 'carrierwave'
