@@ -34,6 +34,8 @@ class EvaluationsController < ApplicationController
   # PATCH/PUT /evaluations/1
   def update
     if @evaluation.update(evaluation_params)
+      @evaluation.global_status = 0 if @evaluation.status == 1
+      @evaluation.save
       render json: serialize(@evaluation)
     else
       render json: @evaluation.errors, status: :unprocessable_entity
