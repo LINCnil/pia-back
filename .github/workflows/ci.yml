@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master, community, upgrade-dependencies ]
+    branches: [ master, community ]
   pull_request:
     branches: [ master, community ]
 
