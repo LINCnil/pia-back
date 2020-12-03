@@ -31,7 +31,7 @@ class AttachmentsController < ApplicationController
     @attachment.attached_file = file
 
     if @attachment.save
-      render json: serialize(attachment), status: :created
+      render json: serialize(@attachment), status: :created
     else
       render json: @attachment.errors, status: :unprocessable_entity
     end
