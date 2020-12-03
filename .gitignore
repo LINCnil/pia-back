@@ -48,7 +48,6 @@ Dockerfile
 # Others
 /public/uploads/*
 /data/
-.ruby-version
 .env
 .DS_Store
 

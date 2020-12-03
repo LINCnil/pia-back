@@ -5,6 +5,8 @@ PIA-BACK est développé avec le framework RubyOnRails mettant à disposition un
 The PIA software is a free tool published by the [CNIL](https://www.cnil.fr/en/open-source-pia-software-helps-carry-out-data-protection-impact-assesment) which aims to help data controllers build and demonstrate compliance to the GDPR. 
 PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and PIA-APP applications. 
 
+![Rails tests](https://github.com/lincnil/pia-back/workflows/CI/badge.svg?branch=master)
+
 ## Installation
 You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank">this runbook</a> for a full installation of pia (back-end) and pia (front-end) applications on a ubuntu 17.10 server.
 
