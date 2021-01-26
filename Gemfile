@@ -36,6 +36,9 @@ gem 'bootsnap', '>= 1.4.5', require: false
 # gem 'rack-cors'
 gem 'rack-cors', :require => 'rack/cors'
 
+gem 'devise'
+gem 'doorkeeper'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform:  [:mri, :mingw, :x64_mingw]
