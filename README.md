@@ -42,10 +42,16 @@ Fill the fields `username` and `password` for each environment with the PostgreS
 ### Install all dependencies
 `bundle install`
 
-### Create and fill the file application.yml
-`cp config/application.example.yml config/application.yml`
+### Create and fill the file `.env` file
+`cp .env-example .env`
 
-Generate the SECRET_KEY_BASE with: `bin/rake secret` and paste the secret key in the file.
+Generate the SECRET_KEY_BASE with `bin/rake secret` and paste the secret key in the file.
+Generate the DEVISE_SECRET_KEY with `bin/rake secret` and paste the secret key in the file.
+Generate the DEVISE_PEPPER with `bin/rake secret` and paste the secret key in the file.
+Fill MAILER_SENDER with the default address email sender
+Fill DEFAULT_URL with the URL of your server 
+If needed, fill DEFAULT_PORT to the PORT you use
+
 
 ### Create database
 `bin/rake db:create`
