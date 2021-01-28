@@ -59,6 +59,18 @@ If needed, fill DEFAULT_PORT to the PORT you use
 ### Create tables
 `bin/rake db:migrate`
 
+### Enable the authentication mode
+
+Set `ENABLE_AUTHENTICATION=true` inside your `.env` file
+
+Enter the rails console with `bin/rails c`
+
+Launch the command `Doorkeeper::Application.create(name: "PIA", redirect_uri: "urn:ietf:wg:oauth:2.0:oob", scopes: ["read", "write"])`
+
+Find your UID and SECRET information `Doorkeeper::Application.select(:uid, :secret).first`
+
+Use these credentials into your PIA application
+
 ### Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
 
