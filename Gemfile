@@ -14,7 +14,7 @@ gem 'mime-types', '~> 3.3'
 
 gem 'carrierwave', '~> 2.1.1'
 gem 'carrierwave-base64', '~> 2.8.0'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
