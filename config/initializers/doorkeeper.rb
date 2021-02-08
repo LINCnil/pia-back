@@ -495,3 +495,5 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default: "Doorkeeper").
   realm "PIA Authorization"
 end
+
+Doorkeeper::OAuth::TokenResponse.send :prepend, CustomTokenResponse
