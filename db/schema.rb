@@ -187,8 +187,22 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "firstname"
+    t.string "lastname"
+    t.boolean "is_technical_admin", default: false
+    t.boolean "is_functional_admin", default: false
+    t.boolean "is_user", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_pias", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "pia_id", null: false
+    t.integer "role", default: 0, null: false
+    t.index ["pia_id"], name: "index_users_pias_on_pia_id"
+    t.index ["user_id", "pia_id", "role"], name: "index_users_pias_on_user_id_and_pia_id_and_role", unique: true
+    t.index ["user_id"], name: "index_users_pias_on_user_id"
   end
 
   add_foreign_key "answers", "pias"
@@ -203,4 +217,6 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "pias", "structures"
   add_foreign_key "revisions", "pias"
+  add_foreign_key "users_pias", "pias"
+  add_foreign_key "users_pias", "users"
 end
