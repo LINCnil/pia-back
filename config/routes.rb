@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   use_doorkeeper if ENV['ENABLE_AUTHENTICATION'].present?
   get '/info', to: 'application#info'
+  resources :users
   resources :pias do
     collection do
       get 'example'
