@@ -38,6 +38,7 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'devise'
 gem 'doorkeeper'
+gem 'pundit'
 
 # i18n gems
 gem 'devise-i18n'
