@@ -52,6 +52,8 @@ class KnowledgesController < ApplicationController
   end
 
   def knowledge_params
-    params.fetch(:knowledge, {}).permit(:name, :slug, :filters, :category, :placeholder, :description, items: [])
+    data = params.fetch(:knowledge, {}).permit(:name, :slug, :filters, :category, :placeholder, :description, :items)
+    data[:items] = JSON.parse(data[:items]) if data[:items].present?
+    data
   end
 end
