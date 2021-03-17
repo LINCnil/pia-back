@@ -1,4 +1,6 @@
 class KnowledgeBasesController < ApplicationController
+  before_action :get_knowledge_base, only: %w[show update destroy]
+
   def index
     knowledge_bases = []
     KnowledgeBase.all.find_each do |knowledge_base|
@@ -13,19 +15,16 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def show
-    knowledge_base = KnowledgeBase.find(params[:id])
-    render json: serialize(knowledge_base)
+    render json: serialize(@knowledge_base)
   end
 
   def update
-    knowledge_base = KnowledgeBase.find(params[:id])
-    knowledge_base.update(knowledge_base_params)
-    render json: serialize(knowledge_base)
+    @knowledge_base.update(knowledge_base_params)
+    render json: serialize(@knowledge_base)
   end
 
   def destroy
-    knowledge_base = KnowledgeBase.find(params[:id])
-    knowledge_base.destroy
+    @knowledge_base.destroy
     head 204
   end
 
@@ -33,6 +32,10 @@ class KnowledgeBasesController < ApplicationController
 
   def serialize(knowledge_base)
     KnowledgeBaseSerializer.new(knowledge_base).serializable_hash.dig(:data, :attributes)
+  end
+
+  def get_knowledge_base
+    @knowledge_base = KnowledgeBase.find(params[:id])
   end
 
   def knowledge_base_params
