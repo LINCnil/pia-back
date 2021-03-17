@@ -14,7 +14,7 @@ gem 'mime-types', '~> 3.3'
 
 gem 'carrierwave', '~> 2.1.1'
 gem 'carrierwave-base64', '~> 2.8.0'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -35,6 +35,14 @@ gem 'bootsnap', '>= 1.4.5', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'devise'
+gem 'doorkeeper'
+gem 'pundit'
+
+# i18n gems
+gem 'devise-i18n'
+gem 'doorkeeper-i18n'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
