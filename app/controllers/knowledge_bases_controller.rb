@@ -1,5 +1,5 @@
 class KnowledgeBasesController < ApplicationController
-  before_action :get_knowledge_base, only: %w[show update destroy]
+  before_action :set_knowledge_base, only: %w[show update destroy]
 
   def index
     knowledge_bases = []
@@ -10,8 +10,13 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def create
-    knowledge_base = KnowledgeBase.create(knowledge_base_params)
-    render json: serialize(knowledge_base)
+    knowledge_base = KnowledgeBase.new(knowledge_base_params)
+
+    if knowledge_base.save
+      render json: serialize(knowledge_base), status: :created
+    else
+      render json: knowledge_base.errors, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -19,8 +24,11 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def update
-    @knowledge_base.update(knowledge_base_params)
-    render json: serialize(@knowledge_base)
+    if @knowledge_base.update(knowledge_base_params)
+      render json: serialize(@knowledge_base)
+    else
+      render json: @knowledge_base.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -34,7 +42,7 @@ class KnowledgeBasesController < ApplicationController
     KnowledgeBaseSerializer.new(knowledge_base).serializable_hash.dig(:data, :attributes)
   end
 
-  def get_knowledge_base
+  def set_knowledge_base
     @knowledge_base = KnowledgeBase.find(params[:id])
   end
 

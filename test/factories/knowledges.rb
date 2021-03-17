@@ -6,7 +6,7 @@ FactoryBot.define do
     category { "MyString" }
     placeholder { "MyString" }
     description { "MyText" }
-    items { "" }
-    knowledge_base { nil }
+    items { [1,2,3] }
+    knowledge_base
   end
 end
