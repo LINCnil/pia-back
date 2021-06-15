@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_135402) do
+ActiveRecord::Schema.define(version: 2021_06_15_182326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,13 @@ ActiveRecord::Schema.define(version: 2020_02_12_135402) do
     t.index ["pia_id"], name: "index_measures_on_pia_id"
   end
 
+  create_table "parameters_sites", force: :cascade do |t|
+    t.string "code_param", null: false
+    t.string "value_param", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "pias", id: :serial, force: :cascade do |t|
     t.integer "status", default: 0
     t.string "name", null: false
@@ -104,6 +111,12 @@ ActiveRecord::Schema.define(version: 2020_02_12_135402) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["pia_id"], name: "index_revisions_on_pia_id"
+  end
+
+  create_table "role_utilisateurs", force: :cascade do |t|
+    t.integer "CategorieRole", null: false
+    t.string "CodeRole", null: false
+    t.string "NomRole", null: false
   end
 
   create_table "structures", id: :serial, force: :cascade do |t|
