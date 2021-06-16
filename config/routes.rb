@@ -21,4 +21,7 @@ Rails.application.routes.draw do
     end
   end
   resources :structures
+  resources :knowledge_bases do
+    resources :knowledges
+  end
 end

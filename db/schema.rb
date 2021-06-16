@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_135402) do
+ActiveRecord::Schema.define(version: 2021_03_16_210416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,29 @@ ActiveRecord::Schema.define(version: 2020_02_12_135402) do
     t.datetime "updated_at", null: false
     t.integer "global_status", default: 0
     t.index ["pia_id"], name: "index_evaluations_on_pia_id"
+  end
+
+  create_table "knowledge_bases", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "author", null: false
+    t.string "contributors", null: false
+    t.boolean "is_example", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "knowledges", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug"
+    t.string "filters"
+    t.string "category"
+    t.string "placeholder"
+    t.text "description"
+    t.integer "items", default: [], array: true
+    t.bigint "knowledge_base_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["knowledge_base_id"], name: "index_knowledges_on_knowledge_base_id"
   end
 
   create_table "measures", id: :serial, force: :cascade do |t|
@@ -118,6 +141,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_135402) do
   add_foreign_key "attachments", "pias"
   add_foreign_key "comments", "pias"
   add_foreign_key "evaluations", "pias"
+  add_foreign_key "knowledges", "knowledge_bases", column: "knowledge_base_id"
   add_foreign_key "measures", "pias"
   add_foreign_key "pias", "structures"
   add_foreign_key "revisions", "pias"
