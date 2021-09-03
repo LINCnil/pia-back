@@ -12,8 +12,8 @@ You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank
 
 ### Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia) and/or [pia (stand-alone) application](https://github.com/LINCnil/pia-app)
-- [Ruby](http://www.ruby-lang.org) 2.6.5
-- [Rails](http://rubyonrails.org) 6.0.2
+- [Ruby](http://www.ruby-lang.org) 2.6.x or 2.7.x
+- [Rails](http://rubyonrails.org) 6.0.x
 - [PostgreSQL](https://www.postgresql.org) 12.0+
 
 ### System requirements
@@ -70,6 +70,12 @@ Launch the command `Doorkeeper::Application.create(name: "PIA", redirect_uri: "u
 Find your UID and SECRET information `Doorkeeper::Application.select(:uid, :secret).first`
 
 Use these credentials into your PIA application
+
+### Create admin account
+
+Enter the rails console with `bin/rails c`
+
+Launch the command `User.create(email: 'YOUR_EMAIL', password: 'azeazeaze', password_confirmation: 'azeazeaze')`
 
 ### Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
