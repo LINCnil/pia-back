@@ -209,7 +209,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
   add_foreign_key "attachments", "pias"
   add_foreign_key "comments", "pias"
   add_foreign_key "evaluations", "pias"
-  add_foreign_key "knowledges", "knowledge_bases", column: "knowledge_base_id"
+  add_foreign_key "knowledges", "knowledge_bases"
   add_foreign_key "measures", "pias"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
