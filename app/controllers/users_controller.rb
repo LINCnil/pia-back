@@ -10,7 +10,32 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.create(user_params)
+    user = User.new(user_params)
+    password = SecureRandom.hex(16)
+
+    user.password = password
+    user.password_confirmation = password
+
+    if params["user"]["access_type"]
+      if params["user"]["access_type"].include? "technical"
+        user.is_technical_admin = true
+      end
+
+      if params["user"]["access_type"].include? "functional"
+        user.is_functional_admin = true
+      end
+
+      if params["user"]["access_type"].include? "user"
+        user.is_user = true
+      end
+    end
+
+    if user.valid?
+      user.save
+    else
+      return head 406 # Not acceptable
+    end
+
     render json: serialize(user)
   end
 
@@ -37,6 +62,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit( :firstname, :lastname, :email, :password, :password_confirmation)
+    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation)
   end
 end
