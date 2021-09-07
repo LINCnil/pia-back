@@ -42,6 +42,26 @@ class UsersController < ApplicationController
   def update
     user = User.find(params[:id])
     user.update(user_params)
+
+    if params["user"]["access_type"]
+      if params["user"]["access_type"].include? "technical"
+        user.is_technical_admin = true
+      end
+
+      if params["user"]["access_type"].include? "functional"
+        user.is_functional_admin = true
+      end
+
+      if params["user"]["access_type"].include? "user"
+        user.is_user = true
+      end
+    end
+
+    if user.valid?
+      user.save
+    else
+      return head 406 # Not acceptable
+    end
     render json: serialize(user)
   end
 
