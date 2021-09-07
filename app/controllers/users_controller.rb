@@ -52,13 +52,11 @@ class UsersController < ApplicationController
   end
 
   def check_uuid
-    user = User.find(params[:id])
-    if user && user.uuid == params[:uuid]
-      user.unlock_access!
-      return head 200
-    else
-      return head 401
-    end
+    user = User.find_by(id: params[:id].to_i, uuid: params[:uuid])
+    return head 401 unless user
+
+    user.unlock_access!
+    head 200
   end
 
   def destroy
