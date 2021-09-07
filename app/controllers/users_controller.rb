@@ -17,17 +17,9 @@ class UsersController < ApplicationController
     user.password_confirmation = password
 
     if params["user"]["access_type"]
-      if params["user"]["access_type"].include? "technical"
-        user.is_technical_admin = true
-      end
-
-      if params["user"]["access_type"].include? "functional"
-        user.is_functional_admin = true
-      end
-
-      if params["user"]["access_type"].include? "user"
-        user.is_user = true
-      end
+      user.is_technical_admin = params["user"]["access_type"].include? "technical"
+      user.is_functional_admin = params["user"]["access_type"].include? "functional"
+      user.is_user = params["user"]["access_type"].include? "user"
     end
 
     if user.valid?
@@ -44,17 +36,9 @@ class UsersController < ApplicationController
     user.update(user_params)
 
     if params["user"]["access_type"]
-      if params["user"]["access_type"].include? "technical"
-        user.is_technical_admin = true
-      end
-
-      if params["user"]["access_type"].include? "functional"
-        user.is_functional_admin = true
-      end
-
-      if params["user"]["access_type"].include? "user"
-        user.is_user = true
-      end
+      user.is_technical_admin = params["user"]["access_type"].include? "technical"
+      user.is_functional_admin = params["user"]["access_type"].include? "functional"
+      user.is_user = params["user"]["access_type"].include? "user"
     end
 
     if user.valid?
