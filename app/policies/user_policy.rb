@@ -11,6 +11,10 @@ class UserPolicy < ApplicationPolicy
     user.is_technical_admin?
   end
 
+  def check_uuid?
+    user.is_technical_admin?
+  end
+
   def destroy?
     user.is_technical_admin?
   end
