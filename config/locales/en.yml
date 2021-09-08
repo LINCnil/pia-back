@@ -32,4 +32,5 @@
 en:
   hello: "Hello world"
   mail:
+    uuid_subject: "Your PIA account"
     uuid_created: "Your pia account was created, your uuid is: "
