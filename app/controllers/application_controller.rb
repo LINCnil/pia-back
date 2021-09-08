@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   include Pundit if ENV['ENABLE_AUTHENTICATION'].present?
-  before_action :doorkeeper_authorize!, except: :info if ENV['ENABLE_AUTHENTICATION'].present?
+  before_action :doorkeeper_authorize!, except: %i[info check_uuid] if ENV['ENABLE_AUTHENTICATION'].present?
 
   def info
     render json: { valid: true, auth: ENV['ENABLE_AUTHENTICATION'].present? }
