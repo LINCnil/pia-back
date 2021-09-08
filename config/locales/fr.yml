@@ -1,0 +1,4 @@
+fr:
+  hello: "Hello world"
+  mail:
+    uuid_created: "Votre compte à été créé, voilà votre uuid: "
