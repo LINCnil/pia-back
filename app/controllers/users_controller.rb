@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authorize_user
+  before_action :authorize_user, except: :check_uuid
 
   def index
     users = []
@@ -15,6 +15,7 @@ class UsersController < ApplicationController
 
     user.password = password
     user.password_confirmation = password
+    user.uuid = SecureRandom.uuid
 
     if params["user"]["access_type"]
       user.is_technical_admin = params["user"]["access_type"].include? "technical"
@@ -23,6 +24,7 @@ class UsersController < ApplicationController
     end
 
     if user.valid?
+      user.lock_access!
       user.save
     else
       return head 406 # Not acceptable
@@ -49,6 +51,14 @@ class UsersController < ApplicationController
     render json: serialize(user)
   end
 
+  def check_uuid
+    user = User.find_by(id: params[:id].to_i, uuid: params[:uuid])
+    return head 401 unless user
+
+    user.unlock_access!
+    head 200
+  end
+
   def destroy
     user = User.find(params[:id])
     user.destroy
@@ -66,6 +76,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation)
+    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
   end
 end
