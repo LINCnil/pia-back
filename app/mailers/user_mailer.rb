@@ -1,5 +1,5 @@
-class UuidMailer < ApplicationMailer
-    def send_email
+class UserMailer < ApplicationMailer
+    def uuid_created
       @user = params[:user]
   
       mail(to: @user.email, subject: "Votre compte Pia à été créé")
