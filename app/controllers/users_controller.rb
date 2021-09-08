@@ -25,6 +25,7 @@ class UsersController < ApplicationController
 
     if user.valid?
       user.lock_access!
+      UuidMailer.with(user: user).send_email.deliver_later
       user.save
     else
       return head 406 # Not acceptable
