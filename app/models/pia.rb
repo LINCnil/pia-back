@@ -5,6 +5,8 @@ class Pia < ApplicationRecord
   has_many :measures, inverse_of: :pia, dependent: :destroy
   has_many :attachments, inverse_of: :pia, dependent: :destroy
   has_many :revisions, inverse_of: :pia, dependent: :destroy
+  has_many :user_pias
+
   belongs_to :structure, optional: true
   validates :name, presence: true
 
