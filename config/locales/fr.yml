@@ -1,5 +1,4 @@
 fr:
-  hello: "Hello world"
   mail:
     uuid_subject: "Votre compte PIA"
-    uuid_created: "Votre compte a été créé, voilà votre uuid: "
+    uuid_created: "Votre compte PIA a été créé, voilà votre uuid: "
