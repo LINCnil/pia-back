@@ -59,13 +59,13 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {
-    address: ENV['SMTP_ADDRESS'],
-    port: ENV['SMTP_PORT'],
-    domain: ENV['SMTP_DOMAIN'],
-    user_name: ENV['SMTP_USER_NAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: ENV['SMTP_AUTHENTICATION'],
-    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO']
+    address: Rails.application.credentials.smtp_address,
+    port: Rails.application.credentials.smtp_port,
+    domain: Rails.application.credentials.smtp_domain,
+    user_name: Rails.application.credentials.smtp_user_name,
+    password: Rails.application.credentials.smtp_password,
+    authentication: Rails.application.credentials.smtp_authentication,
+    enable_starttls_auto: Rails.application.credentials.smtp_enable_starttls_auto
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
