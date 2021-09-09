@@ -30,4 +30,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  mail:
+    uuid_subject: "Your PIA account"
+    uuid_created: "Your PIA account was created, your uuid is: "
