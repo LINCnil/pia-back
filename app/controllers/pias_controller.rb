@@ -31,20 +31,20 @@ class PiasController < ApplicationController
 
     # Replace author, evaluator and validator value by user info if is user_id
 
-    if testUserId(pia_parameters[:author_name]).is_a?(User)
-      user = testUserId(pia_parameters[:author_name])
+    if check_user_id(pia_parameters[:author_name]).is_a?(User)
+      user = check_user_id(pia_parameters[:author_name])
       @pia.author_name = user.firstname + " " + user.lastname
       @pia.user_pias << UserPia.new(user_id: user.id, role: 1)
     end
 
-    if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
-      user = testUserId(pia_parameters[:evaluator_name])
+    if check_user_id(pia_parameters[:evaluator_name]).is_a?(User)
+      user = check_user_id(pia_parameters[:evaluator_name])
       @pia.evaluator_name = user.firstname + " " + user.lastname
       @pia.user_pias << UserPia.new(user_id: user.id, role: 2)
     end
 
-    if testUserId(pia_parameters[:validator_name]).is_a?(User)
-      user = testUserId(pia_parameters[:validator_name])
+    if check_user_id(pia_parameters[:validator_name]).is_a?(User)
+      user = check_user_id(pia_parameters[:validator_name])
       @pia.validator_name = user.firstname + " " + user.lastname
       @pia.user_pias << UserPia.new(user_id: user.id, role: 3)
     end
@@ -63,8 +63,8 @@ class PiasController < ApplicationController
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     
     if @pia.update(pia_parameters)
-      if testUserId(pia_parameters[:author_name]).is_a?(User)
-        user = testUserId(pia_parameters[:author_name])
+      if check_user_id(pia_parameters[:author_name]).is_a?(User)
+        user = check_user_id(pia_parameters[:author_name])
                 
         # update relation
         relation = @pia.user_pias.find_by(role: "author")
@@ -77,8 +77,8 @@ class PiasController < ApplicationController
         @pia.author_name = user.firstname + " " + user.lastname
       end
   
-      if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
-        user = testUserId(pia_parameters[:evaluator_name])
+      if check_user_id(pia_parameters[:evaluator_name]).is_a?(User)
+        user = check_user_id(pia_parameters[:evaluator_name])
                         
         # update relation
         relation = @pia.user_pias.find_by(role: "evaluator")
@@ -90,8 +90,8 @@ class PiasController < ApplicationController
         @pia.evaluator_name = user.firstname + " " + user.lastname
       end
   
-      if testUserId(pia_parameters[:validator_name]).is_a?(User)
-        user = testUserId(pia_parameters[:validator_name])   
+      if check_user_id(pia_parameters[:validator_name]).is_a?(User)
+        user = check_user_id(pia_parameters[:validator_name])   
 
         # update relation
         relation = @pia.user_pias.find_by(role: "validator")
@@ -99,8 +99,8 @@ class PiasController < ApplicationController
           relation.user_id = user.id
           relation.save
         end
-        
-        @pia.validator_name = user.firstname + " " + user.lastname
+
+        @pia.validator_name ="#{user.firstname} #{user.lastname}"
       end
 
       @pia.save
@@ -130,11 +130,11 @@ class PiasController < ApplicationController
   private
 
   # return the params if it's not a user
-  def testUserId(user_id)
+  def check_user_id(user_id)
     if user_id.to_i.positive?
-      return User.find(user_id.to_i)
+      User.find(user_id.to_i)
     else
-      return user_id
+      user_id
     end
   end
 
