@@ -32,18 +32,18 @@ class PiasController < ApplicationController
     # Replace author, evaluator and validator value by user info if is user_id
 
     if testUserId(pia_parameters[:author_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:author_name])
-      @pia.author_name = validator.firstname + " " + validator.lastname
+      user = testUserId(pia_parameters[:author_name])
+      @pia.author_name = user.firstname + " " + user.lastname
     end
 
     if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:evaluator_name])
-      @pia.evaluator_name = validator.firstname + " " + validator.lastname
+      user = testUserId(pia_parameters[:evaluator_name])
+      @pia.evaluator_name = user.firstname + " " + user.lastname
     end
 
     if testUserId(pia_parameters[:validator_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:validator_name])
-      @pia.validator_name = validator.firstname + " " + validator.lastname
+      user = testUserId(pia_parameters[:validator_name])
+      @pia.validator_name = user.firstname + " " + user.lastname
     end
 
     
@@ -58,23 +58,23 @@ class PiasController < ApplicationController
   def update
     pia_parameters = pia_params
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
-
-    if testUserId(pia_parameters[:author_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:author_name])
-      @pia.author_name = validator.firstname + " " + validator.lastname
-    end
-
-    if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:evaluator_name])
-      @pia.evaluator_name = validator.firstname + " " + validator.lastname
-    end
-
-    if testUserId(pia_parameters[:validator_name]).is_a?(User)
-      validator = testUserId(pia_parameters[:validator_name])
-      @pia.validator_name = validator.firstname + " " + validator.lastname
-    end
     
     if @pia.update(pia_parameters)
+      if testUserId(pia_parameters[:author_name]).is_a?(User)
+        user = testUserId(pia_parameters[:author_name])
+        @pia.author_name = user.firstname + " " + user.lastname
+      end
+  
+      if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
+        user = testUserId(pia_parameters[:evaluator_name])
+        @pia.evaluator_name = user.firstname + " " + user.lastname
+      end
+  
+      if testUserId(pia_parameters[:validator_name]).is_a?(User)
+        user = testUserId(pia_parameters[:validator_name])
+        @pia.validator_name = user.firstname + " " + user.lastname
+      end
+      @pia.save
       render json: serialize(@pia)
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -102,8 +102,11 @@ class PiasController < ApplicationController
 
   # return the params if it's not a user
   def testUserId(user_id)
-    user_id unless Float(user_id) != nil
-    User.find(user_id.to_i)
+    if user_id.to_i.positive?
+      return User.find(user_id.to_i)
+    else
+      return user_id
+    end
   end
 
   def import_params
