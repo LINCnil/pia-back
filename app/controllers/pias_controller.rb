@@ -34,16 +34,22 @@ class PiasController < ApplicationController
     if testUserId(pia_parameters[:author_name]).is_a?(User)
       user = testUserId(pia_parameters[:author_name])
       @pia.author_name = user.firstname + " " + user.lastname
+
+      @pia.user_pias << UserPia.new(user_id: user.id, role: 1)
     end
 
     if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
       user = testUserId(pia_parameters[:evaluator_name])
       @pia.evaluator_name = user.firstname + " " + user.lastname
+      
+      @pia.user_pias << UserPia.new(user_id: user.id, role: 2)
     end
 
     if testUserId(pia_parameters[:validator_name]).is_a?(User)
       user = testUserId(pia_parameters[:validator_name])
       @pia.validator_name = user.firstname + " " + user.lastname
+
+      @pia.user_pias << UserPia.new(user_id: user.id, role: 3)
     end
 
     
