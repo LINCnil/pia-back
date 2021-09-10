@@ -34,21 +34,18 @@ class PiasController < ApplicationController
     if testUserId(pia_parameters[:author_name]).is_a?(User)
       user = testUserId(pia_parameters[:author_name])
       @pia.author_name = user.firstname + " " + user.lastname
-
       @pia.user_pias << UserPia.new(user_id: user.id, role: 1)
     end
 
     if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
       user = testUserId(pia_parameters[:evaluator_name])
       @pia.evaluator_name = user.firstname + " " + user.lastname
-      
       @pia.user_pias << UserPia.new(user_id: user.id, role: 2)
     end
 
     if testUserId(pia_parameters[:validator_name]).is_a?(User)
       user = testUserId(pia_parameters[:validator_name])
       @pia.validator_name = user.firstname + " " + user.lastname
-
       @pia.user_pias << UserPia.new(user_id: user.id, role: 3)
     end
 
@@ -68,18 +65,44 @@ class PiasController < ApplicationController
     if @pia.update(pia_parameters)
       if testUserId(pia_parameters[:author_name]).is_a?(User)
         user = testUserId(pia_parameters[:author_name])
+                
+        # update relation
+        relation = @pia.user_pias.find_by(role: "author")
+        if relation.present?
+          relation.user_id = user.id
+          relation.save
+        end
+
+        # update author_name value
         @pia.author_name = user.firstname + " " + user.lastname
       end
   
       if testUserId(pia_parameters[:evaluator_name]).is_a?(User)
         user = testUserId(pia_parameters[:evaluator_name])
+                        
+        # update relation
+        relation = @pia.user_pias.find_by(role: "evaluator")
+        if relation.present?
+          relation.user_id = user.id
+          relation.save
+        end
+
         @pia.evaluator_name = user.firstname + " " + user.lastname
       end
   
       if testUserId(pia_parameters[:validator_name]).is_a?(User)
-        user = testUserId(pia_parameters[:validator_name])
+        user = testUserId(pia_parameters[:validator_name])   
+
+        # update relation
+        relation = @pia.user_pias.find_by(role: "validator")
+        if relation.present?
+          relation.user_id = user.id
+          relation.save
+        end
+        
         @pia.validator_name = user.firstname + " " + user.lastname
       end
+
       @pia.save
       render json: serialize(@pia)
     else
