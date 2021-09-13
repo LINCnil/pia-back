@@ -30,9 +30,9 @@ class PiasController < ApplicationController
     @pia = Pia.new(pia_parameters)
     
     # Replace author, evaluator and validator value by user info if is user_id
-    update_pia_user_field(:author_name, 1) {}
-    update_pia_user_field(:evaluator_name, 2) {}
-    update_pia_user_field(:validator_name, 3) {}
+    update_pia_user_field(:author_name, 1) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
+    update_pia_user_field(:evaluator_name, 2) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
+    update_pia_user_field(:validator_name, 3) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
     
     if @pia.save
       render json: serialize(@pia), status: :created
@@ -90,9 +90,8 @@ class PiasController < ApplicationController
   def update_pia_user_field(field, role)
     user = check_user_id(pia_params[field])
     return unless user.is_a?(User)
-
     @pia.send("#{field}=", "#{user.firstname} #{user.lastname}")
-    @pia.user_pias << UserPia.new(user_id: user.id, role: role)
+    yield(user)
   end
 
   def update_user_pias(user, role)
