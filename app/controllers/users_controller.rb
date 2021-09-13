@@ -15,7 +15,6 @@ class UsersController < ApplicationController
 
     user.password = password
     user.password_confirmation = password
-    user.uuid = SecureRandom.uuid
 
     if params["user"]["access_type"]
       user.is_technical_admin = params["user"]["access_type"].include? "technical"

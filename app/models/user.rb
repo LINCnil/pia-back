@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :validatable, :lockable
   
   validates :uuid, presence: true
+
+  before_validation :generate_uuid
+
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
            foreign_key: :resource_owner_id,
@@ -13,4 +16,10 @@ class User < ApplicationRecord
            class_name: 'Doorkeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :destroy
+
+  private
+  
+  def generate_uuid
+    self.uuid = SecureRandom.uuid
+  end
 end
