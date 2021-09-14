@@ -26,6 +26,7 @@ class PiasController < ApplicationController
   # POST /pias
   def create
     pia_parameters = pia_params
+    pia_parameters.delete(:guest_name)
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
     
@@ -36,13 +37,15 @@ class PiasController < ApplicationController
     
 
     # Guest in userPia
-    if pia_parameters[:guest_name]
-      pia_parameters[:guest_name].split(',').each do |user_id|
+    if pia_params[:guest_name]
+      byebug
+      pia_params[:guest_name].split(',').each do |user_id|
         @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
       end
     end
 
     if @pia.save
+      byebug
       render json: serialize(@pia), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -52,6 +55,7 @@ class PiasController < ApplicationController
   # PATCH/PUT /pias/1
   def update
     pia_parameters = pia_params
+    pia_parameters.delete(:guest_name)
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     
     if @pia.update(pia_parameters)
@@ -60,6 +64,14 @@ class PiasController < ApplicationController
       update_pia_user_field(:author_name, 1) { |user| update_user_pias(user, 1) }
       update_pia_user_field(:evaluator_name, 1) { |user| update_user_pias(user, 2) }
       update_pia_user_field(:validator_name, 1) { |user| update_user_pias(user, 3) }
+      
+      # Guest in userPia
+      if pia_params[:guest_name]
+        @pia.user_pias = []
+        pia_params[:guest_name].split(',').each do |user_id|
+          @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
+        end
+      end
 
       @pia.save
       render json: serialize(@pia)
