@@ -29,11 +29,19 @@ class PiasController < ApplicationController
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
     
-    # Replace author, evaluator and validator value by user info if is user_id
+    # Update pia user fields and UserPia relations
     update_pia_user_field(:author_name, 1) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
     update_pia_user_field(:evaluator_name, 2) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
     update_pia_user_field(:validator_name, 3) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
     
+
+    # Guest in userPia
+    if pia_parameters[:guest_name]
+      pia_parameters[:guest_name].split(',').each do |user_id|
+        @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
+      end
+    end
+
     if @pia.save
       render json: serialize(@pia), status: :created
     else
@@ -48,6 +56,7 @@ class PiasController < ApplicationController
     
     if @pia.update(pia_parameters)
 
+      # Update pia user fields and UserPia relations
       update_pia_user_field(:author_name, 1) { |user| update_user_pias(user, 1) }
       update_pia_user_field(:evaluator_name, 1) { |user| update_user_pias(user, 2) }
       update_pia_user_field(:validator_name, 1) { |user| update_user_pias(user, 3) }
@@ -137,6 +146,7 @@ class PiasController < ApplicationController
                                   :author_name,
                                   :evaluator_name,
                                   :validator_name,
+                                  :guest_name,
                                   :dpo_status,
                                   :dpo_opinion,
                                   :dpos_names,
