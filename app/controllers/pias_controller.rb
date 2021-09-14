@@ -26,7 +26,9 @@ class PiasController < ApplicationController
   # POST /pias
   def create
     pia_parameters = pia_params
-    pia_parameters.delete(:guest_name)
+    # do not add this to pia
+    pia_parameters.delete(:guests)
+    pia_parameters.delete(:update_guests)
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
     
@@ -37,15 +39,13 @@ class PiasController < ApplicationController
     
 
     # Guest in userPia
-    if pia_params[:guest_name]
-      byebug
-      pia_params[:guest_name].split(',').each do |user_id|
+    if pia_params[:update_guests].present?
+      pia_params[:update_guests].split(',').each do |user_id|
         @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
       end
     end
 
     if @pia.save
-      byebug
       render json: serialize(@pia), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -55,7 +55,11 @@ class PiasController < ApplicationController
   # PATCH/PUT /pias/1
   def update
     pia_parameters = pia_params
-    pia_parameters.delete(:guest_name)
+
+    # do not add this to pia
+    pia_parameters.delete(:guests)
+    pia_parameters.delete(:update_guests)
+    
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     
     if @pia.update(pia_parameters)
@@ -66,10 +70,10 @@ class PiasController < ApplicationController
       update_pia_user_field(:validator_name, 1) { |user| update_user_pias(user, 3) }
       
       # Guest in userPia
-      if pia_params[:guest_name]
-        @pia.user_pias = []
-        pia_params[:guest_name].split(',').each do |user_id|
-          @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
+      if pia_params[:update_guests].present?
+        @pia.user_pias.where(role: 0).delete_all
+        pia_params[:update_guests].split(',').each do |user_id|
+          @pia.user_pias << UserPia.new(user_id: user_id, role: 0) if check_user_id(user_id).is_a?(User)
         end
       end
 
@@ -158,7 +162,8 @@ class PiasController < ApplicationController
                                   :author_name,
                                   :evaluator_name,
                                   :validator_name,
-                                  :guest_name,
+                                  :guests,
+                                  :update_guests,
                                   :dpo_status,
                                   :dpo_opinion,
                                   :dpos_names,

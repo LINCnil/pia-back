@@ -29,13 +29,14 @@ class PiaSerializer
     pia.is_archive ? 1 : 0
   end
   
-  attribute :guest_name do |pia|
+  attribute :guests do |pia|
     res = []
     guests = pia.user_pias.where(role: 0)
 
     if guests.present?
       guests.each do |up|
-        res << User.find(up.user_id)
+        user =  User.find(up.user_id)
+        res << "#{user.firstname} #{user.lastname}"
       end
     end
 
