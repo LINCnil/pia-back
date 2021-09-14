@@ -122,6 +122,7 @@ class PiasController < ApplicationController
   def update_user_pias(user, role)
       relation = @pia.user_pias.find_by(role: role)
       return unless relation.present?
+
       relation.user_id = user.id
       relation.save
   end
