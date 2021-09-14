@@ -115,6 +115,7 @@ class PiasController < ApplicationController
   def update_pia_user_field(field, role)
     user = check_user_id(pia_params[field])
     return unless user.is_a?(User)
+
     @pia.send("#{field}=", "#{user.firstname} #{user.lastname}")
     yield(user)
   end
