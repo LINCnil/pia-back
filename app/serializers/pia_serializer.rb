@@ -35,7 +35,7 @@ class PiaSerializer
 
     if guests.present?
       guests.each do |up|
-        user =  User.find(up.user_id)
+        user = User.find(up.user_id)
         res << "#{user.firstname} #{user.lastname}"
       end
     end
