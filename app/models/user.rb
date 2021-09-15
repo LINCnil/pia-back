@@ -5,7 +5,8 @@ class User < ApplicationRecord
   
   validates :uuid, presence: true
 
-  before_validation :generate_uuid
+  after_create :generate_uuid
+  # after_update :generate_uuid, if: self.changed.include?("password")
 
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',

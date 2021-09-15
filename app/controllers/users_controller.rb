@@ -56,6 +56,7 @@ class UsersController < ApplicationController
     return head 401 unless user
 
     user.unlock_access!
+    user.generate_uuid()
     head 200
   end
 
