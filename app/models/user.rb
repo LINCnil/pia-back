@@ -2,8 +2,6 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :validatable, :lockable
-  
-  validates :uuid, presence: true
 
   after_create :generate_uuid
   # after_update :generate_uuid, if: self.changed.include?("password")
