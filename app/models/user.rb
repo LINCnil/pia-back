@@ -18,8 +18,6 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :destroy
 
-  private
-  
   def generate_uuid
     self.uuid = SecureRandom.uuid
   end

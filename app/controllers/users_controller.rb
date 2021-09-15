@@ -57,6 +57,7 @@ class UsersController < ApplicationController
 
     user.unlock_access!
     user.generate_uuid()
+    user.save
     head 200
   end
 
