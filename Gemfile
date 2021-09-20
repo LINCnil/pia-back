@@ -41,6 +41,7 @@ gem 'doorkeeper'
 gem 'pundit'
 
 # i18n gems
+gem 'rails-i18n'
 gem 'devise-i18n'
 gem 'doorkeeper-i18n'
 
