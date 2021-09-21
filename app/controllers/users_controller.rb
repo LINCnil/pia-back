@@ -61,6 +61,17 @@ class UsersController < ApplicationController
     head 200
   end
 
+  def update_uuid
+    user = User.find_by(email: params[:email])
+    return head 404 unless user
+
+    
+    user.generate_uuid()
+    user.save
+    UserMailer.with(user: user).uuid_updated.deliver_now
+    head 200
+  end
+
   def destroy
     user = User.find(params[:id])
     user.destroy
