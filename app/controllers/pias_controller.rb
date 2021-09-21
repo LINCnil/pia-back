@@ -28,7 +28,7 @@ class PiasController < ApplicationController
     pia_parameters = pia_params
     # do not add this to pia
     pia_parameters.delete(:guests)
-    pia_parameters.delete(:update_guests)
+    
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
     
@@ -39,8 +39,8 @@ class PiasController < ApplicationController
     
 
     # Guest in userPia
-    if pia_params[:update_guests].present?
-      pia_params[:update_guests].split(',').each do |user_id|
+    if pia_params[:guests].present?
+      pia_params[:guests].split(',').each do |user_id|
         @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
       end
     end
@@ -58,7 +58,6 @@ class PiasController < ApplicationController
 
     # do not add this to pia
     pia_parameters.delete(:guests)
-    pia_parameters.delete(:update_guests)
     
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     
@@ -70,9 +69,9 @@ class PiasController < ApplicationController
       update_pia_user_field(:validator_name, 1) { |user| update_user_pias(user, 3) }
       
       # Guest in userPia
-      if pia_params[:update_guests].present?
+      if pia_params[:guests].present?
         @pia.user_pias.where(role: 0).delete_all
-        pia_params[:update_guests].split(',').each do |user_id|
+        pia_params[:guests].split(',').each do |user_id|
           @pia.user_pias << UserPia.new(user_id: user_id, role: 0) if check_user_id(user_id).is_a?(User)
         end
       end
@@ -165,7 +164,6 @@ class PiasController < ApplicationController
                                   :evaluator_name,
                                   :validator_name,
                                   :guests,
-                                  :update_guests,
                                   :dpo_status,
                                   :dpo_opinion,
                                   :dpos_names,
