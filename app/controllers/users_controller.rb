@@ -52,7 +52,7 @@ class UsersController < ApplicationController
   end
 
   def check_uuid
-    user = User.find_by(id: params[:id].to_i, uuid: params[:uuid])
+    user = User.find_by(uuid: params[:uuid])
     return head 401 unless user
 
     user.unlock_access!
