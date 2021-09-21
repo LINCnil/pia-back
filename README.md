@@ -77,6 +77,16 @@ Enter the rails console with `bin/rails c`
 
 Launch the command `User.create(email: 'YOUR_EMAIL', password: 'azeazeaze', password_confirmation: 'azeazeaze')`
 
+Unlock your user with the **unlock_access!** method
+
+```
+    a = User.last
+    a.is_technical_admin = true
+    a.is_functional_admin = true
+    a.is_user = true
+    a.unlock_access!
+```
+
 ### Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
 

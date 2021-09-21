@@ -1,4 +1,5 @@
 class UserPia < ApplicationRecord
+  self.table_name = "users_pias"
   belongs_to :user
   belongs_to :pia
 

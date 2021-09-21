@@ -15,7 +15,6 @@ class UsersController < ApplicationController
 
     user.password = password
     user.password_confirmation = password
-    user.uuid = SecureRandom.uuid
 
     if params["user"]["access_type"]
       user.is_technical_admin = params["user"]["access_type"].include? "technical"
@@ -53,11 +52,33 @@ class UsersController < ApplicationController
   end
 
   def check_uuid
-    user = User.find_by(id: params[:id].to_i, uuid: params[:uuid])
+    user = User.find_by(uuid: params[:uuid])
     return head 401 unless user
 
     user.unlock_access!
-    head 200
+    user.generate_uuid()
+
+    if user.valid?
+      user.save
+      render json: serialize(user)
+    else
+      return head 406 # Not acceptable
+    end
+  end
+
+  def update_uuid
+    user = User.find_by(email: params[:email])
+    return head 404 unless user
+
+    user.generate_uuid()
+    
+    if user.valid?
+      user.save
+      UserMailer.with(user: user).uuid_updated.deliver_now
+      head 200
+    else
+      return head 406 # Not acceptable
+    end
   end
 
   def destroy

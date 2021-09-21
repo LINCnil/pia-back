@@ -4,7 +4,8 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get ':id/unlock_access/:uuid', to: 'users#check_uuid'
+      get 'unlock_access/:uuid', to: 'users#check_uuid'
+      get 'password-forgotten/:email', to: 'users#update_uuid'
     end
   end
   
