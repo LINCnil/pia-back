@@ -57,8 +57,13 @@ class UsersController < ApplicationController
 
     user.unlock_access!
     user.generate_uuid()
-    user.save
-    render json: serialize(user)
+
+    if user.valid?
+      user.save
+      render json: serialize(user)
+    else
+      return head 406 # Not acceptable
+    end
   end
 
   def update_uuid
@@ -66,9 +71,14 @@ class UsersController < ApplicationController
     return head 404 unless user
 
     user.generate_uuid()
-    user.save
-    UserMailer.with(user: user).uuid_updated.deliver_now
-    head 200
+    
+    if user.valid?
+      user.save
+      UserMailer.with(user: user).uuid_updated.deliver_now
+      head 200
+    else
+      return head 406 # Not acceptable
+    end
   end
 
   def destroy
