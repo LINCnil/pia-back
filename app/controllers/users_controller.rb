@@ -58,14 +58,13 @@ class UsersController < ApplicationController
     user.unlock_access!
     user.generate_uuid()
     user.save
-    head 200
+    render json: serialize(user)
   end
 
   def update_uuid
     user = User.find_by(email: params[:email])
     return head 404 unless user
 
-    
     user.generate_uuid()
     user.save
     UserMailer.with(user: user).uuid_updated.deliver_now
