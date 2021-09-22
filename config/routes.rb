@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     collection do
       get 'unlock_access/:uuid', to: 'users#check_uuid'
       get 'password-forgotten/:email', to: 'users#update_uuid'
+      get ':id/password-test/:password', to: 'users#update_uuid'
     end
   end
   

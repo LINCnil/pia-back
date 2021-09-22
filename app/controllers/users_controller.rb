@@ -81,6 +81,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def change_password
+    user = User.find(params[:id])
+    return head 404 unless user
+
+    if user.valid_password?(params[:password])
+      return head 200
+    else
+      return head 500
+    end
+  end
+
   def destroy
     user = User.find(params[:id])
     user.destroy
