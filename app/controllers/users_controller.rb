@@ -75,7 +75,7 @@ class UsersController < ApplicationController
     if user.valid?
       user.save
       UserMailer.with(user: user).uuid_updated.deliver_now
-      head 200
+      render json: serialize(user)
     else
       return head 406 # Not acceptable
     end
