@@ -53,13 +53,14 @@ class UsersController < ApplicationController
 
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
-    return head 401 unless user
+    return head 404 unless user
     render json: serialize(user)
   end
 
   def password_forgotten
     user = User.find_by(email: params[:email])
-    return head 401 unless user
+    return head 404 unless user 
+    return head 423 if user.access_locked? # locked
     
     if user.valid?
       user.save
@@ -72,7 +73,7 @@ class UsersController < ApplicationController
 
   def change_password
     user = User.find(params[:id])
-    return head 401 unless user
+    return head 404 unless user
 
     user.password = params["password"]
     user.password_confirmation = params["password_confirmation"]
