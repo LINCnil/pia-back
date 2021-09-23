@@ -54,6 +54,7 @@ class UsersController < ApplicationController
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
     return head 404 unless user
+    
     render json: serialize(user)
   end
 
@@ -65,14 +66,14 @@ class UsersController < ApplicationController
     if user.valid?
       user.save
       UserMailer.with(user: user).uuid_updated.deliver_now
-      render json: serialize(user)
+      render json: {}
     else
       return head 406 # Not acceptable
     end
   end
 
   def change_password
-    user = User.find(params[:id])
+    user = User.find_by(id: params[:id], uuid: params[:uuid])
     return head 404 unless user
 
     user.password = params["password"]

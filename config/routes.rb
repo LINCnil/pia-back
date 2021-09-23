@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   resources :users do
     collection do
       get 'unlock_access/:uuid', to: 'users#check_uuid'
-      get 'password-forgotten/:email', to: 'users#password_forgotten', constraints: { email: /[^\/]+/} 
-      put ':id/change-password', to: 'users#change_password'
+      post 'password-forgotten', to: 'users#password_forgotten', constraints: { email: /[^\/]+/} 
+      put 'change-password', to: 'users#change_password'
     end
   end
   
