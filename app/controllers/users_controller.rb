@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authorize_user, except: :check_uuid
+  before_action :authorize_user, except: %i[check_uuid password_forgotten change_password]
 
   def index
     users = []
@@ -55,22 +55,18 @@ class UsersController < ApplicationController
     user = User.find_by(uuid: params[:uuid])
     return head 401 unless user
 
-    user.unlock_access!
-    user.generate_uuid()
-
+    # todo: remove to prevent uuid reset
     if user.valid?
       user.save
-      render json: serialize(user)
     else
       return head 406 # Not acceptable
     end
+    render json: serialize(user)
   end
 
-  def update_uuid
+  def password_forgotten
     user = User.find_by(email: params[:email])
-    return head 404 unless user
-
-    user.generate_uuid()
+    return head 401 unless user
     
     if user.valid?
       user.save
@@ -83,10 +79,19 @@ class UsersController < ApplicationController
 
   def change_password
     user = User.find(params[:id])
-    return head 404 unless user
+    return head 401 unless user
 
-    if user.valid_password?(params[:password])
-      return head 200
+    if user.valid_password?(params[:password]) && params[:password] == params[:password_confirmation]
+      user.password = params[:password]
+      user.password_confirmation = params[:password_confirmation]
+
+      user.unlock_access!
+      if user.valid?
+        user.save
+        return head 200
+      else
+        return head 500
+      end
     else
       return head 500
     end
