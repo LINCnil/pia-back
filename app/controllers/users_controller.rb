@@ -81,19 +81,15 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     return head 401 unless user
 
-    if user.valid_password?(params[:password]) && params[:password] == params[:password_confirmation]
-      user.password = params[:password]
-      user.password_confirmation = params[:password_confirmation]
+    user.password = params["password"]
+    user.password_confirmation = params["password_confirmation"]
 
-      user.unlock_access!
-      if user.valid?
-        user.save
-        return head 200
-      else
-        return head 500
-      end
+    user.unlock_access!
+    if user.valid?
+      user.save
+      return head 200
     else
-      return head 500
+      return head 406
     end
   end
 
