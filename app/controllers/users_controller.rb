@@ -54,13 +54,6 @@ class UsersController < ApplicationController
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
     return head 401 unless user
-
-    # todo: remove to prevent uuid reset
-    if user.valid?
-      user.save
-    else
-      return head 406 # Not acceptable
-    end
     render json: serialize(user)
   end
 
@@ -84,10 +77,10 @@ class UsersController < ApplicationController
     user.password = params["password"]
     user.password_confirmation = params["password_confirmation"]
 
-    user.unlock_access!
-    if user.valid?
+    if user.valid? # change uuid
       user.save
-      return head 200
+      user.unlock_access!
+      return head 204
     else
       return head 406
     end
