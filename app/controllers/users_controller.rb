@@ -60,15 +60,21 @@ class UsersController < ApplicationController
 
   def password_forgotten
     user = User.find_by(email: params[:email])
-    return head 404 unless user 
-    return head 423 if user.access_locked? # locked
     
-    if user.valid?
-      user.save
-      UserMailer.with(user: user).uuid_updated.deliver_now
-      render json: {}
+    if user.present?
+      if user.access_locked?
+        render json: {}, status: 423
+      else
+        if user.valid?
+          user.save
+          UserMailer.with(user: user).uuid_updated.deliver_now
+          render json: {}
+        else
+          render json: {}, status:  406 # Not acceptable
+        end
+      end
     else
-      return head 406 # Not acceptable
+      render json: {}, status:  404
     end
   end
 
