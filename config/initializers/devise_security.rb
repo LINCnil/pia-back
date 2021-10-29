@@ -8,7 +8,7 @@ Devise.setup do |config|
   # config.expire_password_after = false
 
   # Need 1 char of A-Z, a-z and 0-9
-  # config.password_complexity = { digit: 1, lower: 1, symbol: 1, upper: 1 }
+  config.password_complexity = { digit: 1, lower: 1, symbol: 1, upper: 1 }
 
   # How many passwords to keep in archive
   # config.password_archiving_count = 5
@@ -22,7 +22,7 @@ Devise.setup do |config|
 
   # enable email validation for :secure_validatable. (true, false, validation_options)
   # dependency: see https://github.com/devise-security/devise-security/blob/master/README.md#e-mail-validation
-  # config.email_validation = true
+  config.email_validation = false
 
   # captcha integration for recover form
   # config.captcha_for_recover = true
