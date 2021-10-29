@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
   validates :uuid, presence: true
   
-  validates :password, confirmation: true, :length => { :within => 12..128 }
+  validates :password, confirmation: true
   validates :password_confirmation, presence: true, on: :create
   validates :password_confirmation, presence: true, on: :update, unless: lambda {|user| user.password.blank? }
 
