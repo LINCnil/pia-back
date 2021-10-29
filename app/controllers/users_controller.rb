@@ -10,9 +10,14 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.new(user_params)
-    password = SecureRandom.hex(16)
+    user_parameters = user_params
+    # do not add this to user
+    user_parameters.delete(:access_type)
 
+    user = User.new(user_parameters)
+    # to match with password validation
+    
+    password = "-@A"+SecureRandom.base64(12)
     user.password = password
     user.password_confirmation = password
 
@@ -22,20 +27,22 @@ class UsersController < ApplicationController
       user.is_user = params["user"]["access_type"].include? "user"
     end
 
-    if user.valid?
-      user.lock_access!
-      user.save
+    if user.valid? # change uuid
+      user.lock_access! # save user
       UserMailer.with(user: user).uuid_created.deliver_now
+      render json: serialize(user)
     else
-      return head 406 # Not acceptable
+      render json: user.errors.to_json, status: 406
     end
-
-    render json: serialize(user)
   end
 
   def update
+    user_parameters = user_params
+    # do not add this to user
+    user_parameters.delete(:access_type)
+    
     user = User.find(params[:id])
-    user.update(user_params)
+    user.update(user_parameters)
 
     if params["user"]["access_type"]
       user.is_technical_admin = params["user"]["access_type"].include? "technical"
@@ -43,12 +50,15 @@ class UsersController < ApplicationController
       user.is_user = params["user"]["access_type"].include? "user"
     end
 
-    if user.valid?
+    if user.valid? # change uuid
       user.save
+      if user.access_locked? # send email for to locked users
+        UserMailer.with(user: user).uuid_updated.deliver_now
+      end
+      render json: serialize(user)
     else
-      return head 406 # Not acceptable
+      render json: user.errors.to_json, status: 406
     end
-    render json: serialize(user)
   end
 
   def check_uuid
@@ -65,7 +75,7 @@ class UsersController < ApplicationController
       if user.access_locked?
         render json: {}, status: 423
       else
-        if user.valid?
+        if user.valid? # change uuid
           user.save
           UserMailer.with(user: user).uuid_updated.deliver_now
           render json: {}
@@ -86,8 +96,7 @@ class UsersController < ApplicationController
     user.password_confirmation = params["password_confirmation"]
 
     if user.valid? # change uuid
-      user.save
-      user.unlock_access!
+      user.unlock_access! # save user
       return head 204
     else
       return head 406
@@ -111,6 +120,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
+    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid, :access_type)
   end
 end
