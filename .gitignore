@@ -39,6 +39,7 @@
 # Ignore application configuration
 /config/application.yml
 /config/master.key
+/config/credentials.yml.enc
 
 # Docker files
 .dockerignore
