@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validates :password, confirmation: true
   validates :uuid, presence: true
   validates :password_confirmation, presence: true, on: :create
-  validates :password_confirmation, presence: true, on: :update, :unless => lambda {|user| user.password.blank? }
+  validates :password_confirmation, presence: true, on: :update, unless: lambda {|user| user.password.blank? }
 
   validate :password_complexity
   
@@ -29,7 +29,6 @@ class User < ApplicationRecord
   private
   
   def password_complexity
-    # ??? peut être
     return if password.blank? || password =~ /\A(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,70}\z/
     
     errors.add :password, 'Complexity requirement not met. Length should be 8-70 characters and include: 1 uppercase, 1 lowercase, 1 digit and 1 special character'
