@@ -10,13 +10,9 @@ class UsersController < ApplicationController
   end
 
   def create
-    user_parameters = user_params
     # do not add this to user
-    user_parameters.delete(:access_type)
-
-    user = User.new(user_parameters)
-    # to match with password validation
-    
+    user = User.new(user_params)
+  
     password = "-@A"+SecureRandom.base64(12)
     user.password = password
     user.password_confirmation = password
@@ -37,12 +33,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    user_parameters = user_params
     # do not add this to user
-    user_parameters.delete(:access_type)
-    
+    user_params.delete(:access_type)
+
     user = User.find(params[:id])
-    user.update(user_parameters)
+    user.update(user_params)
 
     if params["user"]["access_type"]
       user.is_technical_admin = params["user"]["access_type"].include? "technical"
@@ -120,6 +115,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid, :access_type)
+    params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
+    .except("access_type")
   end
 end
