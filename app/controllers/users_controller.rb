@@ -112,6 +112,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
-    .except("access_type")
+                         .except("access_type")
   end
 end

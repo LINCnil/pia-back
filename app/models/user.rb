@@ -8,7 +8,6 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, on: :create
   validates :password_confirmation, presence: true, on: :update, unless: lambda { |user| user.password.blank? }
 
-
   before_validation :generate_uuid
   # after_update :generate_uuid, if: self.changed.include?("password")
 
