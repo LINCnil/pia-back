@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    # do not add this to user
     user = User.new(user_params)
   
     password = "-@A"+SecureRandom.base64(12)
@@ -33,9 +32,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    # do not add this to user
-    user_params.delete(:access_type)
-
     user = User.find(params[:id])
     user.update(user_params)
 
