@@ -75,7 +75,7 @@ class UsersController < ApplicationController
         end
       end
     else
-      render json: {}, status:  404
+      render json: {}, status: 404
     end
   end
 
