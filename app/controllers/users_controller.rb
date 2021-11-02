@@ -71,7 +71,7 @@ class UsersController < ApplicationController
           UserMailer.with(user: user).uuid_updated.deliver_now
           render json: {}
         else
-          render json: {}, status:  406 # Not acceptable
+          render json: {}, status: 406 # Not acceptable
         end
       end
     else
