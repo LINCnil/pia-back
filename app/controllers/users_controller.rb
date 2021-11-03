@@ -11,8 +11,8 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
-    password = SecureRandom.hex(16)
-
+  
+    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
     user.password = password
     user.password_confirmation = password
 
@@ -22,15 +22,13 @@ class UsersController < ApplicationController
       user.is_user = params["user"]["access_type"].include? "user"
     end
 
-    if user.valid?
-      user.lock_access!
-      user.save
+    if user.valid? # change uuid
+      user.lock_access! # save user
       UserMailer.with(user: user).uuid_created.deliver_now
+      render json: serialize(user)
     else
-      return head 406 # Not acceptable
+      render json: user.errors.to_json, status: 406
     end
-
-    render json: serialize(user)
   end
 
   def update
@@ -43,12 +41,15 @@ class UsersController < ApplicationController
       user.is_user = params["user"]["access_type"].include? "user"
     end
 
-    if user.valid?
+    if user.valid? # change uuid
       user.save
+      if user.access_locked? # send email for to locked users
+        UserMailer.with(user: user).uuid_updated.deliver_now
+      end
+      render json: serialize(user)
     else
-      return head 406 # Not acceptable
+      render json: user.errors.to_json, status: 406
     end
-    render json: serialize(user)
   end
 
   def check_uuid
@@ -60,15 +61,21 @@ class UsersController < ApplicationController
 
   def password_forgotten
     user = User.find_by(email: params[:email])
-    return head 404 unless user 
-    return head 423 if user.access_locked? # locked
     
-    if user.valid?
-      user.save
-      UserMailer.with(user: user).uuid_updated.deliver_now
-      render json: {}
+    if user.present?
+      if user.access_locked?
+        render json: {}, status: 423
+      else
+        if user.valid? # change uuid
+          user.save
+          UserMailer.with(user: user).uuid_updated.deliver_now
+          render json: {}
+        else
+          render json: {}, status: 406 # Not acceptable
+        end
+      end
     else
-      return head 406 # Not acceptable
+      render json: {}, status: 404
     end
   end
 
@@ -80,8 +87,7 @@ class UsersController < ApplicationController
     user.password_confirmation = params["password_confirmation"]
 
     if user.valid? # change uuid
-      user.save
-      user.unlock_access!
+      user.unlock_access! # save user
       return head 204
     else
       return head 406
@@ -106,5 +112,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
+                         .except("access_type")
   end
 end

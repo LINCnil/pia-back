@@ -86,6 +86,8 @@ GEM
       warden (~> 1.2.3)
     devise-i18n (1.10.0)
       devise (>= 4.8.0)
+    devise-security (0.16.0)
+      devise (>= 4.3.0, < 5.0)
     doorkeeper (5.5.2)
       railties (>= 5)
     doorkeeper-i18n (5.2.2)
@@ -128,9 +130,13 @@ GEM
       rake
     mini_magick (4.11.0)
     mini_mime (1.1.1)
+    mini_portile2 (2.6.1)
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
+    nokogiri (1.12.4)
+      mini_portile2 (~> 2.6.1)
+      racc (~> 1.4)
     nokogiri (1.12.4-x86_64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -223,6 +229,7 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
+  ruby
   x86_64-darwin-20
 
 DEPENDENCIES
@@ -233,6 +240,7 @@ DEPENDENCIES
   carrierwave-base64 (~> 2.8.0)
   devise
   devise-i18n
+  devise-security
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
