@@ -33,6 +33,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find(params[:id])
+    email = user.email
     user.update(user_params)
 
     if params["user"]["access_type"]
@@ -43,7 +44,7 @@ class UsersController < ApplicationController
 
     if user.valid? # change uuid
       user.save
-      if user.access_locked? # send email for to locked users
+      if user.access_locked? && user.email != email # send email for to locked users
         UserMailer.with(user: user).uuid_updated.deliver_now
       end
       render json: serialize(user)
