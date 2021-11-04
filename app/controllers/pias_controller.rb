@@ -33,9 +33,9 @@ class PiasController < ApplicationController
     @pia = Pia.new(pia_parameters)
     
     # Update pia user fields and UserPia relations
-    update_pia_user_field(:author_name, 1) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
-    update_pia_user_field(:evaluator_name, 2) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
-    update_pia_user_field(:validator_name, 3) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
+    update_pia_user_field(:author_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
+    update_pia_user_field(:evaluator_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
+    update_pia_user_field(:validator_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
     
 
     # Guest in userPia
@@ -64,9 +64,9 @@ class PiasController < ApplicationController
     if @pia.update(pia_parameters)
 
       # Update pia user fields and UserPia relations
-      update_pia_user_field(:author_name, 1) { |user| update_user_pias(user, 1) }
-      update_pia_user_field(:evaluator_name, 1) { |user| update_user_pias(user, 2) }
-      update_pia_user_field(:validator_name, 1) { |user| update_user_pias(user, 3) }
+      update_pia_user_field(:author_name) { |user| update_user_pias(user, 1) }
+      update_pia_user_field(:evaluator_name) { |user| update_user_pias(user, 2) }
+      update_pia_user_field(:validator_name) { |user| update_user_pias(user, 3) }
       
       # Guest in userPia
       if pia_params[:guests].present?
@@ -111,7 +111,7 @@ class PiasController < ApplicationController
     end
   end
 
-  def update_pia_user_field(field, role)
+  def update_pia_user_field(field)
     user = check_user_id(pia_params[field])
     return unless user.is_a?(User)
 
