@@ -26,19 +26,20 @@ class User < ApplicationRecord
   end
 
   def update_user_pias_infos
-    user_pias = UserPia.where({user: self.id})
+    user_pias = UserPia.where({user: id})
 
     user_pias.each do |user_pia|
-      new_value = "#{self.firstname} #{self.lastname}"
+      new_value = "#{firstname} #{lastname}"
+      pia = user_pia.pia
       case user_pia.role
       when "author"
-        user_pia.pia.author_name = new_value
+        pia.author_name = new_value
       when "evaluator"
-        user_pia.pia.evaluator_name = new_value
+        pia.evaluator_name = new_value
       when "validator"
-        user_pia.pia.validator_name = new_value
+        pia.validator_name = new_value
       end
-      user_pia.save
+      pia.save
     end
   end
 end
