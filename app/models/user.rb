@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, on: :update, unless: lambda { |user| user.password.blank? }
 
   before_validation :generate_uuid
-  # after_update :generate_uuid, if: self.changed.include?("password")
+  after_commit :update_user_pias_infos, on: :update
 
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
@@ -23,5 +23,23 @@ class User < ApplicationRecord
 
   def generate_uuid
     self.uuid = SecureRandom.uuid
+  end
+
+  def update_user_pias_infos
+    user_pias = UserPia.where(user_id: id)
+
+    user_pias.each do |user_pia|
+      new_value = "#{firstname} #{lastname}"
+      pia = user_pia.pia
+      case user_pia.role
+      when "author"
+        pia.author_name = new_value
+      when "evaluator"
+        pia.evaluator_name = new_value
+      when "validator"
+        pia.validator_name = new_value
+      end
+      pia.save
+    end
   end
 end
