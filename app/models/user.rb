@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :user_pias, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
@@ -10,7 +11,6 @@ class User < ApplicationRecord
 
   before_validation :generate_uuid
   after_commit :update_user_pias_infos, on: :update
-  after_destroy :delete_user_pias_relations
 
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
@@ -41,13 +41,6 @@ class User < ApplicationRecord
         pia.validator_name = new_value
       end
       pia.save
-    end
-  end
-
-  def delete_user_pias_relations
-    user_pias = UserPia.where(user_id: id)
-    user_pias.each do |user_pia|
-      user_pia.destroy
     end
   end
 end
