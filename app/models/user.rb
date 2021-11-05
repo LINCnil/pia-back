@@ -26,7 +26,7 @@ class User < ApplicationRecord
   end
 
   def update_user_pias_infos
-    user_pias = UserPia.where({user_id: id})
+    user_pias = UserPia.where(user_id: id)
 
     user_pias.each do |user_pia|
       new_value = "#{firstname} #{lastname}"
