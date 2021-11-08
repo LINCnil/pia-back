@@ -128,7 +128,7 @@ class PiasController < ApplicationController
 
   def update_user_pias(user, role)
       relation = @pia.user_pias.find_by(role: role)
-      if relation.nil?
+      if relation.blank?
         relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
       else
         relation.update(user_id: user.id)
