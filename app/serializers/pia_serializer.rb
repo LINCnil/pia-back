@@ -48,7 +48,7 @@ class PiaSerializer
 
     if user_pias.present?
       user_pias.each do |up|
-        user = { user: User.find(up.user_id), role: up.role }
+        user = { user: up.user, role: up.role }
         res << user
       end
     end
