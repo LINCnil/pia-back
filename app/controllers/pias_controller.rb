@@ -3,13 +3,20 @@ class PiasController < ApplicationController
 
   # GET /pias
   def index
-    pias = []
-    Pia.where(is_archive: params[:is_archive].present?)
+    res = []
+    # check if user is technical else his pias
+    if current_user.is_technical_admin || ENV['ENABLE_AUTHENTICATION'].nil?
+      pias = Pia.all
+    else
+      pias = Pia.joins(:user_pias).merge(UserPia.where(user_id: current_user.id))
+    end
+
+    pias.where(is_archive: params[:is_archive].present?)
         .order(query_order)
         .find_each do |pia|
-      pias << serialize(pia)
+      res << serialize(pia)
     end
-    render json: pias
+    render json: res
   end
 
   # GET /pias/example
