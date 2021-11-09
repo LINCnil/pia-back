@@ -9,7 +9,7 @@ class PiasController < ApplicationController
     if current_user.is_technical_admin || ENV['ENABLE_AUTHENTICATION'].nil?
       pias = Pia.all
     else
-      pias = Pia.joins(:user_pias).merge(UserPia.where(user_id: current_user.id))
+      pias = policy_scope(Pia)
     end
 
     pias.where(is_archive: params[:is_archive].present?)
