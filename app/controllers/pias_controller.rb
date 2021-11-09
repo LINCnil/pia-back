@@ -1,6 +1,6 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
-  before_action :authorize_pia
+  before_action :authorize_pia if ENV['ENABLE_AUTHENTICATION'].present?
 
   # GET /pias
   def index
