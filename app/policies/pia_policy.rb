@@ -1,12 +1,11 @@
 class PiaPolicy < ApplicationPolicy
-
   def index?
     user.present?
   end
 
   def show?
     # return true if user is admin or user owner.user_pias .find_by(pia_id: record.id)
-    return (user.present? && user.is_functional_admin?) || record.user_pias.find_by(pia_id: record.id)
+    return (user.present? && user.is_functional_admin?) || record.user_pias.find_by(user_id: user.id).present?
   end
 
   def example?

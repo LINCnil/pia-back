@@ -112,7 +112,7 @@ class PiasController < ApplicationController
   private
 
   def authorize_pia
-    authorize Pia
+    authorize @pia || Pia
   end
 
   # return the params if it's not a user
