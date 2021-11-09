@@ -1,15 +1,23 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
+  before_action :authorize_pia if ENV['ENABLE_AUTHENTICATION'].present?
 
   # GET /pias
   def index
-    pias = []
-    Pia.where(is_archive: params[:is_archive].present?)
+    res = []
+    # check if user is technical else his pias
+    if current_user.is_technical_admin || ENV['ENABLE_AUTHENTICATION'].blank?
+      pias = Pia.all
+    else
+      pias = policy_scope(Pia)
+    end
+
+    pias.where(is_archive: params[:is_archive].present?)
         .order(query_order)
         .find_each do |pia|
-      pias << serialize(pia)
+      res << serialize(pia)
     end
-    render json: pias
+    render json: res
   end
 
   # GET /pias/example
@@ -100,7 +108,12 @@ class PiasController < ApplicationController
     Pia.import(json_str)
   end
 
+
   private
+
+  def authorize_pia
+    authorize @pia || Pia
+  end
 
   # return the params if it's not a user
   def check_user_id(user_id)
@@ -121,9 +134,11 @@ class PiasController < ApplicationController
 
   def update_user_pias(user, role)
       relation = @pia.user_pias.find_by(role: role)
-      return unless relation.present?
-
-      relation.user_id = user.id
+      if relation.blank?
+        relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
+      else
+        relation.update(user_id: user.id)
+      end
       relation.save
   end
 

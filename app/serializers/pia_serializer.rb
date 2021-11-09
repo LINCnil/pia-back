@@ -39,7 +39,20 @@ class PiaSerializer
         res << user
       end
     end
-
     res
   end
+
+  attribute :user_pias do |pia|
+    res = []
+    user_pias = pia.user_pias
+
+    if user_pias.present?
+      user_pias.each do |up|
+        user = { user: up.user, role: up.role }
+        res << user
+      end
+    end
+    res
+  end
+
 end
