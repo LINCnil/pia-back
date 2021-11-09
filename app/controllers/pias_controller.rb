@@ -6,7 +6,7 @@ class PiasController < ApplicationController
   def index
     res = []
     # check if user is technical else his pias
-    if current_user.is_technical_admin || ENV['ENABLE_AUTHENTICATION'].nil?
+    if current_user.is_technical_admin || ENV['ENABLE_AUTHENTICATION'].blank?
       pias = Pia.all
     else
       pias = policy_scope(Pia)
