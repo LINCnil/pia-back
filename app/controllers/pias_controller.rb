@@ -1,5 +1,6 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
+  before_action :authorize_pia
 
   # GET /pias
   def index
@@ -107,7 +108,12 @@ class PiasController < ApplicationController
     Pia.import(json_str)
   end
 
+
   private
+
+  def authorize_pia
+    authorize Pia
+  end
 
   # return the params if it's not a user
   def check_user_id(user_id)
