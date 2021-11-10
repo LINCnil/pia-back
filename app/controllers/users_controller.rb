@@ -69,7 +69,7 @@ class UsersController < ApplicationController
         render json: {}, status: 423
       else
         if user.valid? # change uuid
-          user.save
+          user.lock_access! # save user
           UserMailer.with(user: user).uuid_updated.deliver_now
           render json: {}
         else
