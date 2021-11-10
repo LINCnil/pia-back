@@ -56,10 +56,7 @@ class UsersController < ApplicationController
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
     return head 404 unless user
-    # check type of query
-    return head 403 if !user.access_locked? && params[:type] === "first_connection"
-    return head 403 if user.access_locked? && params[:type] = "password_forgotten"
-
+    return head 403 unless user.access_locked? # already unlocked
     # render user data
     render json: serialize(user)
   end
