@@ -2,9 +2,11 @@ class User < ApplicationRecord
   has_many :user_pias, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
-  validates :uuid, presence: true
   
+  # devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
+  devise :ldap_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
+  
+  validates :uuid, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, on: :create
   validates :password_confirmation, presence: true, on: :update, unless: lambda { |user| user.password.blank? }

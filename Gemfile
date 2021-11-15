@@ -38,6 +38,8 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'devise'
 gem 'devise-security'
+gem "devise_ldap_authenticatable"
+
 gem 'doorkeeper'
 gem 'pundit'
 
