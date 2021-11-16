@@ -56,7 +56,6 @@ class UsersController < ApplicationController
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
     return head 404 unless user
-    return head 403 unless user.access_locked? # already unlocked
     # render user data
     render json: serialize(user)
   end
@@ -69,7 +68,7 @@ class UsersController < ApplicationController
         render json: {}, status: 423
       else
         if user.valid? # change uuid
-          user.lock_access! # save user
+          user.save
           UserMailer.with(user: user).uuid_updated.deliver_now
           render json: {}
         else
@@ -92,7 +91,7 @@ class UsersController < ApplicationController
       user.unlock_access! # save user
       return head 204
     else
-      return head 406
+      render json: {}, status: 406
     end
   end
 
