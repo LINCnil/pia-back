@@ -28,13 +28,13 @@ authorizations: &AUTHORIZATIONS
 ## Environment
 
 development:
-  host: Rails.application.credentials.ldap_host
-  port: Rails.application.credentials.ldap_port
-  attribute: Rails.application.credentials.ldap_attribute
-  base: Rails.application.credentials.ldap_base
-  admin_user: Rails.application.credentials.ldap_admin_user
-  admin_password: Rails.application.credentials.ldap_admin_user_password
-  ssl: Rails.application.credentials.ldap_ssl
+  host: <%= Rails.application.credentials.ldap_host %>
+  port: <%= Rails.application.credentials.ldap_port %>
+  attribute: <%= Rails.application.credentials.ldap_attribute %>
+  base: <%= Rails.application.credentials.ldap_base %>
+  admin_user: <%= Rails.application.credentials.ldap_admin_user %>
+  admin_password: <%= Rails.application.credentials.ldap_admin_user_password %>
+  ssl: <%= Rails.application.credentials.ldap_ssl %>
   # <<: *AUTHORIZATIONS
 
 test:

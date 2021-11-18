@@ -352,7 +352,7 @@ Doorkeeper.configure do
 
     # LDAP IS ACTIVE
     if ENV['DEVISE_LDAP_LOGGER'].present?
-      # Check credentials
+      # Check LDAP credentials
       if User.check_ldap_credentials(login, password) # ldap valide
         user = User.find_for_authentication(login: login)
         #  Check if user exists in database
@@ -363,7 +363,7 @@ Doorkeeper.configure do
           user = User.create_with_ldap(login)
           user
         end
-      else
+      else # LDAP invalide
         # Normal auth
         user = User.find_for_authentication(email: login)
         # check if user exist and password is correct
