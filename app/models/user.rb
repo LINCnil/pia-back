@@ -3,9 +3,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable and :omniauthable
   
-  # devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
-  devise :ldap_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
-  
+  devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
   validates :uuid, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, on: :create
@@ -23,6 +21,31 @@ class User < ApplicationRecord
            class_name: 'Doorkeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :destroy
+
+  def get_ldap_email
+    if self.email.blank?
+      self.email = Devise::LDAP::Adapter.get_ldap_param(self.login, "mail").first
+    end
+    self.is_user = true
+  end
+
+  def self.check_ldap_credentials(login, password)
+    Devise::LDAP::Adapter.valid_credentials?(login, password)
+  end
+
+  # create user with ldap
+  def self.create_with_ldap(login)
+    user = User.new
+    user.login = login
+
+    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+    user.password = password
+    user.password_confirmation = password
+    user.get_ldap_email
+    user.generate_uuid
+    user.save
+    user
+  end
 
   def generate_uuid
     self.uuid = SecureRandom.uuid
