@@ -24,7 +24,12 @@ class User < ApplicationRecord
 
   def get_ldap_email
     if self.email.blank?
-      self.email = Devise::LDAP::Adapter.get_ldap_param(self.login, "mail").first
+      mail = Devise::LDAP::Adapter.get_ldap_param(self.login, "mail")
+      if mail.present?
+        self.email = mail.first
+      else # No email, use login
+        self.email = self.login
+      end
     end
     self.is_user = true
   end
