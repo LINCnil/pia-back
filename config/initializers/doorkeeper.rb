@@ -349,6 +349,7 @@ Doorkeeper.configure do
   resource_owner_from_credentials do
     login = params[:email]
     password = params[:password]
+    user = nil
 
     # LDAP IS ACTIVE
     if ENV['DEVISE_LDAP_LOGGER'].present?
@@ -357,32 +358,24 @@ Doorkeeper.configure do
         user = User.find_for_authentication(login: login)
         #  Check if user exists in database
         if user.present?
-          user
         else
           # Create user in database
           user = User.create_with_ldap(login)
-          user
-        end
-      else # LDAP invalide
-        # Normal auth
-        user = User.find_for_authentication(email: login)
-        # check if user exist and password is correct
-        if user && user.valid_password?(password)
-          user
-        else
-          nil
         end
       end
-    else
-      # Normal auth
-      user = User.find_for_database_authentication(email: login)
+    end
+
+    # Normal auth
+    if user.nil?
+      user = User.find_for_authentication(email: login)
       if user && user.valid_password?(password)
         user
       else
         nil
       end
+    else
+      user
     end
-
   end
 
   # Allows to customize OAuth grant flows that +each+ application support.
