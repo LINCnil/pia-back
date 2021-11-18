@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
-    render :text => exception, :status => 500
+    render text: exception, status: 500
   end
   
   include Pundit if ENV['ENABLE_AUTHENTICATION'].present?

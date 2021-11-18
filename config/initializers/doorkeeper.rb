@@ -357,8 +357,7 @@ Doorkeeper.configure do
       if User.check_ldap_credentials(login, password) # ldap valide
         user = User.find_for_authentication(login: login)
         #  Check if user exists in database
-        if user.present?
-        else
+        if user.blank?
           # Create user in database
           user = User.create_with_ldap(login)
         end
@@ -366,7 +365,7 @@ Doorkeeper.configure do
     end
 
     # Normal auth
-    if user.nil?
+    if user.blank?
       user = User.find_for_authentication(email: login)
       if user && user.valid_password?(password)
         user

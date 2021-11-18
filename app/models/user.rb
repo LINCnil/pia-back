@@ -22,7 +22,7 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :destroy
 
-  def get_ldap_email
+  def check_ldap_email
     if self.email.blank?
       mail = Devise::LDAP::Adapter.get_ldap_param(self.login, "mail")
       if mail.present?
@@ -46,7 +46,7 @@ class User < ApplicationRecord
     password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
     user.password = password
     user.password_confirmation = password
-    user.get_ldap_email
+    user.check_ldap_email
     user.generate_uuid
     user.save
     user
