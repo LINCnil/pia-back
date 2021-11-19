@@ -1,8 +1,8 @@
 en:
   email_new_account_uuid:
     subject: "[PIA] Account activation code"
-    content: "Your account has been created. Activate your account on the PIA tool with this activation code: "
+    content: "Your account has been created. Activate your account on the PIA tool with this activation code: %{uuid}"
   email_recover_account_uuid:
     subject: "[PIA] Account recovery code"
-    content: "Use this reset code to recover your account and to define a new password: "
+    content: "Use this reset code to recover your account and to define a new password: %{uuid}"
 
