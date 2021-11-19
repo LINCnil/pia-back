@@ -119,6 +119,14 @@ Update the database : `RAILS_ENV=production bin/rake db:migrate`
 ### Run the test
 `bin/rake`
 
+### Change default locale
+Pia back mailer work with rails-i18n. For update default locale, 
+go to change this line in rails configuration:
+
+In config/application.rb
+```
+config.i18n.default_locale = :en
+```
 
 ## Contributions
 - [Docker set-up](https://github.com/kosmas58/pia-docker) ([Kosmas Schütz](https://github.com/kosmas58)): a Docker-Compose configuration for production purpose. Everything is automated from creating containers to setting up the database. 
