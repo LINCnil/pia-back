@@ -1,6 +1,6 @@
 class UserSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :email, :firstname, :lastname, :access_locked?
+  attributes :id, :email, :firstname, :lastname
 
   attribute :access_type do |user|
     data = []
@@ -9,10 +9,8 @@ class UserSerializer
     data << "user" if user.is_user
     data
   end
-
-  attribute :access_auth do |user|
-    data = []
-
-    data
+  
+  attribute :access_locked do |user|
+    user.access_locked?
   end
 end
