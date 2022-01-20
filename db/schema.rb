@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_07_125146) do
+ActiveRecord::Schema.define(version: 2022_01_20_155800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_125146) do
     t.jsonb "structure_data"
     t.boolean "is_archive", default: false, null: false
     t.string "category"
+    t.integer "progress", default: 0
     t.index ["structure_id"], name: "index_pias_on_structure_id"
   end
 
