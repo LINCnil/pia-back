@@ -195,6 +195,7 @@ class PiasController < ApplicationController
                                   :structure_sector_name,
                                   :structure_data,
                                   :is_archive,
+                                  :progress,
                                   :category)
   end
 end
