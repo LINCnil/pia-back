@@ -1,7 +1,7 @@
 et:
   email_new_account_uuid:
     subject: "TO TRANSLATE - [PIA] Account activation code"
-    content: "TO TRANSLATE - Your account has been created. Activate your account on the PIA tool with this activation code: "
+    content: "TO TRANSLATE - Your account has been created. Activate your account on the PIA tool with this activation code: %{uuid}"
   email_recover_account_uuid:
     subject: "TO TRANSLATE - [PIA] Account recovery code"
-    content: "TO TRANSLATE - Use this reset code to recover your account and to define a new password: "
+    content: "TO TRANSLATE - Use this reset code to recover your account and to define a new password: %{uuid}"

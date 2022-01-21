@@ -9,10 +9,8 @@ class UserSerializer
     data << "user" if user.is_user
     data
   end
-
-  attribute :access_auth do |user|
-    data = []
-
-    data
+  
+  attribute :access_locked do |user|
+    user.access_locked?
   end
 end

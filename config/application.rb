@@ -32,5 +32,14 @@ module PiaBack
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # set the default locale to French
+    config.i18n.default_locale = :en
+    # if a locale isn't found fall back to this default locale
+    config.i18n.fallbacks = true
+    # set the possible locales to English and Brazilian-Portuguese
+    config.i18n.available_locales = [:bg, :cs, :da, :de, :el, :en, :es, :et,
+                                     :fi, :fr, :hr, :hu, :it, :lt, :lv, :nl,
+                                     :no, :pl, :pt, :ro, :sl, :sv]
   end
 end
