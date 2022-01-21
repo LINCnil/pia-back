@@ -12,6 +12,9 @@ class User < ApplicationRecord
   before_validation :generate_uuid
   after_commit :update_user_pias_infos, on: :update
 
+  # validates uniqueness of login only if is present
+  validate :validate_login_uniqueness, if: lambda { |user| user.login.present? }
+
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
            foreign_key: :resource_owner_id,
@@ -21,6 +24,13 @@ class User < ApplicationRecord
            class_name: 'Doorkeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :destroy
+
+  
+  def validate_login_uniqueness
+    if User.where(login: login).where.not(id: id).exists?
+      errors.add(:login, :taken)
+    end
+  end
 
   def check_ldap_email
     if self.email.blank?
