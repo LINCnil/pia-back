@@ -88,6 +88,9 @@ GEM
       devise (>= 4.8.0)
     devise-security (0.16.0)
       devise (>= 4.3.0, < 5.0)
+    devise_ldap_authenticatable (0.8.7)
+      devise (>= 3.4.1)
+      net-ldap (>= 0.16.0)
     doorkeeper (5.5.2)
       railties (>= 5)
     doorkeeper-i18n (5.2.2)
@@ -133,6 +136,7 @@ GEM
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     msgpack (1.4.2)
+    net-ldap (0.17.0)
     nio4r (2.5.8)
     nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
@@ -241,6 +245,7 @@ DEPENDENCIES
   devise
   devise-i18n
   devise-security
+  devise_ldap_authenticatable
   doorkeeper
   doorkeeper-i18n
   dotenv-rails

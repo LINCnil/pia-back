@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.boolean "is_user", default: false
     t.string "uuid"
     t.datetime "locked_at"
+    t.string "login"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

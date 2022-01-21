@@ -347,11 +347,33 @@ Doorkeeper.configure do
   grant_flows %w[password]
 
   resource_owner_from_credentials do
-    user = User.find_for_database_authentication(email: params[:email])
-    if user && user.valid_password?(params[:password])
-      user
+    login = params[:email]
+    password = params[:password]
+    user = nil
+
+    # LDAP IS ACTIVE
+    if ENV['DEVISE_LDAP_LOGGER'].present?
+      # Check LDAP credentials
+      if User.check_ldap_credentials(login, password) # ldap valide
+        user = User.find_for_authentication(login: login)
+        #  Check if user exists in database
+        if user.blank?
+          # Create user in database
+          user = User.create_with_ldap(login)
+        end
+      end
+    end
+
+    # Normal auth
+    if user.blank?
+      user = User.find_for_authentication(email: login)
+      if user && user.valid_password?(password)
+        user
+      else
+        nil
+      end
     else
-      nil
+      user
     end
   end
 
