@@ -6,6 +6,7 @@ The PIA software is a free tool published by the [CNIL](https://www.cnil.fr/en/o
 PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and PIA-APP applications. 
 
 ![Rails tests](https://github.com/lincnil/pia-back/workflows/CI/badge.svg?branch=master)
+[![CodeQL](https://github.com/LINCnil/pia-back/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/LINCnil/pia-back/actions/workflows/codeql-analysis.yml)
 
 ## Installation
 You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank">this runbook</a> for a full installation of pia (back-end) and pia (front-end) applications on a ubuntu 17.10 server.
