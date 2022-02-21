@@ -9,4 +9,7 @@ class UserMailer < ApplicationMailer
 
     mail(to: @user.email, subject: I18n.t('email_recover_account_uuid.subject'))
   end
+  def pia_ready_for_evaluation
+    
+  end
 end

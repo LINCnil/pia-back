@@ -25,6 +25,23 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
 
     if @evaluation.save
+      if params["evaluation"]["evaluation_infos"].present?
+        infos = JSON.parse(params["evaluation"]["evaluation_infos"])
+        evaluation_mode = infos["evaluation_mode"]
+        questions = infos["questions"]
+        if evaluation_mode === 'item'
+          byebug
+          # Mail Sending
+        elsif evaluation_mode === 'question'
+          reference_to = @evaluation.reference_to.split(".")
+          if questions[0]["id"] == reference_to.last.to_i
+            byebug
+            # Mail Sending
+          end
+        end
+          
+      end
+        
       render json: serialize(@evaluation), status: :created
     else
       render json: @evaluation.errors, status: :unprocessable_entity
