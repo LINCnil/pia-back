@@ -29,13 +29,15 @@ class EvaluationsController < ApplicationController
         infos = JSON.parse(params["evaluation"]["evaluation_infos"])
         evaluation_mode = infos["evaluation_mode"]
         questions = infos["questions"]
+        author = @evaluation.pia.user_pias.find_by({role: "author"}).user
+        evaluator = @evaluation.pia.user_pias.find_by({role: "evaluator"}).user
         if evaluation_mode === 'item'
-          byebug
+          send_email_for_evaluator(evaluator) if evaluator.present?
           # Mail Sending
         elsif evaluation_mode === 'question'
           reference_to = @evaluation.reference_to.split(".")
           if questions[0]["id"] == reference_to.last.to_i
-            byebug
+            send_email_for_evaluator(evaluator) if evaluator.present?
             # Mail Sending
           end
         end
@@ -65,6 +67,10 @@ class EvaluationsController < ApplicationController
   end
 
   private
+
+  def send_email_for_evaluator(evaluator)
+    UserMailer.with(evaluator: evaluator).section_ready_for_evaluation.deliver_now
+  end
 
   def serialize(evaluation)
     EvaluationSerializer.new(evaluation).serializable_hash.dig(:data, :attributes)
