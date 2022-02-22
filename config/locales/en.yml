@@ -5,4 +5,6 @@ en:
   email_recover_account_uuid:
     subject: "[PIA] Account recovery code"
     content: "Use this reset code to recover your account and to define a new password: %{uuid}"
-
+  section_ready_for_evaluation:
+    subject: "New evaluation request available"
+    content: "A new evaluation request is available for your PIA [NAME]. Please, proceed to the review."
