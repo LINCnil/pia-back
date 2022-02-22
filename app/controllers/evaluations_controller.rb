@@ -23,27 +23,9 @@ class EvaluationsController < ApplicationController
   # POST /evaluations
   def create
     @evaluation = Evaluation.new(evaluation_params)
+    @evaluation.evaluation_infos = JSON.parse(params['evaluation']["evaluation_infos"])
 
     if @evaluation.save
-      if params["evaluation"]["evaluation_infos"].present? && ENV['ENABLE_AUTHENTICATION'].present?
-        infos = JSON.parse(params["evaluation"]["evaluation_infos"])
-        evaluation_mode = infos["evaluation_mode"]
-        questions = infos["questions"]
-        author = @evaluation.pia.user_pias.find_by({role: "author"}).user
-        evaluator = @evaluation.pia.user_pias.find_by({role: "evaluator"}).user
-        if evaluation_mode === 'item'
-          send_email_for_evaluator(evaluator, @evaluation.pia) if evaluator.present?
-          # Mail Sending
-        elsif evaluation_mode === 'question'
-          reference_to = @evaluation.reference_to.split(".")
-          if questions[0]["id"] == reference_to.last.to_i
-            send_email_for_evaluator(evaluator, @evaluation.pia) if evaluator.present?
-            # Mail Sending
-          end
-        end
-          
-      end
-        
       render json: serialize(@evaluation), status: :created
     else
       render json: @evaluation.errors, status: :unprocessable_entity
@@ -67,10 +49,6 @@ class EvaluationsController < ApplicationController
   end
 
   private
-
-  def send_email_for_evaluator(evaluator, pia)
-    UserMailer.with({evaluator: evaluator, pia: pia}).section_ready_for_evaluation.deliver_now
-  end
 
   def serialize(evaluation)
     EvaluationSerializer.new(evaluation).serializable_hash.dig(:data, :attributes)
