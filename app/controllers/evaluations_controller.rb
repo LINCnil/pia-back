@@ -33,11 +33,13 @@ class EvaluationsController < ApplicationController
         evaluator = @evaluation.pia.user_pias.find_by({role: "evaluator"}).user
         if evaluation_mode === 'item'
           send_email_for_evaluator(evaluator, @evaluation.pia) if evaluator.present?
+          byebug
           # Mail Sending
         elsif evaluation_mode === 'question'
           reference_to = @evaluation.reference_to.split(".")
           if questions[0]["id"] == reference_to.last.to_i
             send_email_for_evaluator(evaluator, @evaluation.pia) if evaluator.present?
+            byebug
             # Mail Sending
           end
         end
@@ -69,7 +71,7 @@ class EvaluationsController < ApplicationController
   private
 
   def send_email_for_evaluator(evaluator, pia)
-    UserMailer.with(evaluator: evaluator).section_ready_for_evaluation.deliver_now
+    UserMailer.with({evaluator: evaluator, pia: pia}).section_ready_for_evaluation.deliver_now
   end
 
   def serialize(evaluation)
