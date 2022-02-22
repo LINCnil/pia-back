@@ -16,6 +16,5 @@ class Evaluation < ApplicationRecord
       (evaluation_mode === 'question' && questions[0]["id"] == self.reference_to.split(".").last.to_i)
       UserMailer.with(evaluator: evaluator, pia: self.pia).section_ready_for_evaluation.deliver_now
     end
-    byebug
   end
 end
