@@ -25,7 +25,7 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
 
     if @evaluation.save
-      if params["evaluation"]["evaluation_infos"].present?
+      if params["evaluation"]["evaluation_infos"].present? && ENV['ENABLE_AUTHENTICATION'].present?
         infos = JSON.parse(params["evaluation"]["evaluation_infos"])
         evaluation_mode = infos["evaluation_mode"]
         questions = infos["questions"]
