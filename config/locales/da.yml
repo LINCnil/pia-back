@@ -5,3 +5,6 @@ da:
   email_recover_account_uuid:
     subject: "TO TRANSLATE - [PIA] Account recovery code"
     content: "TO TRANSLATE - Use this reset code to recover your account and to define a new password: %{uuid}"
+  section_ready_for_evaluation:
+    subject: "TO TRANSLATE - New evaluation request available"
+    content: "TO TRANSLATE - A new evaluation request is available for your PIA %{pia_name}. Please, proceed to the review."
