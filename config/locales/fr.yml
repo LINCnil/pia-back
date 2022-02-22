@@ -7,4 +7,4 @@ fr:
     content: "Veuillez renseigner ce code de réinitialisation afin de récupérer votre compte et définir un nouveau mot de passe : %{uuid}"
   section_ready_for_evaluation:
     subject: "Nouvelle demande d'évaluation disponible"
-    content: "Une nouvelle demande d'évaluation est disponible pour votre PIA [NOM PIA]. Veuillez procéder à l'évaluation."
+    content: "Une nouvelle demande d'évaluation est disponible pour votre PIA %{pia_name}. Veuillez procéder à l'évaluation."
