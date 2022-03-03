@@ -8,3 +8,6 @@ en:
   section_ready_for_evaluation:
     subject: "New evaluation request available"
     content: "A new evaluation request is available for your PIA %{pia_name}. Please, proceed to the review."
+  section_ready_for_validation:
+    subject: "PIA - New validation request available"
+    content: "A new validation request is available for your PIA %{pia_name}. Please, proceed to the validation."

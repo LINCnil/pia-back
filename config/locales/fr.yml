@@ -8,3 +8,6 @@ fr:
   section_ready_for_evaluation:
     subject: "Nouvelle demande d'évaluation disponible"
     content: "Une nouvelle demande d'évaluation est disponible pour votre PIA %{pia_name}. Veuillez procéder à l'évaluation."
+  section_ready_for_validation:
+    subject: "Nouvelle demande de validation disponible"
+    content: "Une nouvelle demande de validation est disponible pour votre PIA %{pia_name}. Veuillez procéder à la validation."

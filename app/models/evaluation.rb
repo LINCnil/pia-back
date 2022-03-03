@@ -24,6 +24,8 @@ class Evaluation < ApplicationRecord
     if infos.present?
       evaluation_mode = infos["evaluation_mode"]
       questions = infos["questions"]
+      validator = self.pia.user_pias.find_by({role: "validator"}).user
+
       if evaluation_mode === 'item' || 
         (evaluation_mode === 'question' && questions[0]["id"] == self.reference_to.split(".").last.to_i)
         if self.global_status == 2

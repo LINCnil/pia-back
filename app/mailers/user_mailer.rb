@@ -17,4 +17,11 @@ class UserMailer < ApplicationMailer
 
     mail(to: @evaluator.email, subject: I18n.t('section_ready_for_evaluation.subject'))
   end
+
+  def section_ready_for_validation
+    @pia_name = params[:pia] ? params[:pia].name : ''
+    @validator = params[:validator]
+
+    mail(to: @validator.email, subject: I18n.t('section_ready_for_validation.subject'))
+  end
 end
