@@ -29,7 +29,7 @@ class Evaluation < ApplicationRecord
       if evaluation_mode === 'item' || 
         (evaluation_mode === 'question' && questions[0]["id"] == self.reference_to.split(".").last.to_i)
         if self.global_status == 2
-          # todo: send email to validator 
+          UserMailer.with(validator: validator, pia: self.pia).section_ready_for_validation.deliver_now
         end
       end
     end
