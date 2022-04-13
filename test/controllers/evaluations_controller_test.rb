@@ -13,7 +13,7 @@ class EvaluationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create evaluation" do
     assert_difference('Evaluation.count') do
-      post pia_evaluations_url(@pia), params: { evaluation: { reference_to: '1.1.2' } }, as: :json
+      post pia_evaluations_url(@pia), params: { evaluation: { reference_to: '1.1.2', evaluation_infos: "{}" } }, as: :json
     end
 
     assert_response 201
