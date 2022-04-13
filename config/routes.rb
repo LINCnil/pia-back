@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  use_doorkeeper if ENV['ENABLE_AUTHENTICATION'].present?
+  get '/info', to: 'application#info'
+
+  resources :users do
+    collection do
+      get 'unlock_access/:uuid', to: 'users#check_uuid'
+      post 'password-forgotten', to: 'users#password_forgotten'
+      put 'change-password', to: 'users#change_password'
+    end
+  end
+  
   resources :pias do
     collection do
       get 'example'

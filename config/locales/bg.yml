@@ -1,0 +1,13 @@
+bg:
+  email_new_account_uuid:
+    subject: "TO TRANSLATE - [PIA] Account activation code"
+    content: "TO TRANSLATE - Your account has been created. Activate your account on the PIA tool with this activation code: %{uuid}"
+  email_recover_account_uuid:
+    subject: "TO TRANSLATE - [PIA] Account recovery code"
+    content: "TO TRANSLATE - Use this reset code to recover your account and to define a new password: %{uuid}"
+  section_ready_for_evaluation:
+    subject: "TO TRANSLATE - New evaluation request available"
+    content: "TO TRANSLATE - A new evaluation request is available for your PIA %{pia_name}. Please, proceed to the review."
+  section_ready_for_validation:
+    subject: "TO TRANSLATE - PIA - New validation request available"
+    content: "TO TRANSLATE - A new validation request is available for your PIA %{pia_name}. Please, proceed to the validation."

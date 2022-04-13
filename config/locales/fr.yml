@@ -1,0 +1,13 @@
+fr:
+  email_new_account_uuid:
+    subject: "[PIA] Code d'activation de compte"
+    content: "Votre compte PIA a été créé. Veuillez activer votre compte sur l'outil PIA avec ce code d'activation : %{uuid}"
+  email_recover_account_uuid:
+    subject: "[PIA] Code de récupération de compte"
+    content: "Veuillez renseigner ce code de réinitialisation afin de récupérer votre compte et définir un nouveau mot de passe : %{uuid}"
+  section_ready_for_evaluation:
+    subject: "Nouvelle demande d'évaluation disponible"
+    content: "Une nouvelle demande d'évaluation est disponible pour votre PIA %{pia_name}. Veuillez procéder à l'évaluation."
+  section_ready_for_validation:
+    subject: "Nouvelle demande de validation disponible"
+    content: "Une nouvelle demande de validation est disponible pour votre PIA %{pia_name}. Veuillez procéder à la validation."

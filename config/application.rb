@@ -22,6 +22,7 @@ module PiaBack
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.0
 
+    config.autoload_paths << "#{Rails.root}/lib"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
@@ -31,5 +32,14 @@ module PiaBack
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # set the default locale to French
+    config.i18n.default_locale = :en
+    # if a locale isn't found fall back to this default locale
+    config.i18n.fallbacks = true
+    # set the possible locales to English and Brazilian-Portuguese
+    config.i18n.available_locales = [:bg, :cs, :da, :de, :el, :en, :es, :et,
+                                     :fi, :fr, :hr, :hu, :it, :lt, :lv, :nl,
+                                     :no, :pl, :pt, :ro, :sl, :sv]
   end
 end

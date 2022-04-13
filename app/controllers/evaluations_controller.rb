@@ -23,6 +23,7 @@ class EvaluationsController < ApplicationController
   # POST /evaluations
   def create
     @evaluation = Evaluation.new(evaluation_params)
+    @evaluation.evaluation_infos = JSON.parse(params['evaluation']["evaluation_infos"])
 
     if @evaluation.save
       render json: serialize(@evaluation), status: :created
@@ -34,6 +35,7 @@ class EvaluationsController < ApplicationController
   # PATCH/PUT /evaluations/1
   def update
     if @evaluation.update(evaluation_params)
+      @evaluation.evaluation_infos = JSON.parse(params['evaluation']["evaluation_infos"]) if params['evaluation']["evaluation_infos"]
       @evaluation.global_status = 0 if @evaluation.status == 1 && evaluation_params["global_status"].blank?
       @evaluation.save
       render json: serialize(@evaluation)

@@ -5,7 +5,7 @@ ruby '~> 2.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'fast_jsonapi'
-gem 'rails', '~> 6.0.3.6'
+gem 'rails', '~> 6.0.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -14,7 +14,7 @@ gem 'mime-types', '~> 3.3'
 
 gem 'carrierwave', '~> 2.1.1'
 gem 'carrierwave-base64', '~> 2.8.0'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -35,6 +35,18 @@ gem 'bootsnap', '>= 1.4.5', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'devise'
+gem 'devise-security'
+gem "devise_ldap_authenticatable"
+
+gem 'doorkeeper'
+gem 'pundit'
+
+# i18n gems
+gem 'rails-i18n'
+gem 'devise-i18n'
+gem 'doorkeeper-i18n'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

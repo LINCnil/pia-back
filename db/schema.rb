@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_210416) do
+ActiveRecord::Schema.define(version: 2022_01_20_155800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,48 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
     t.index ["pia_id"], name: "index_measures_on_pia_id"
   end
 
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
+    t.string "scopes", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  end
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri", null: false
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
   create_table "pias", id: :serial, force: :cascade do |t|
     t.integer "status", default: 0
     t.string "name", null: false
@@ -118,6 +160,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
     t.jsonb "structure_data"
     t.boolean "is_archive", default: false, null: false
     t.string "category"
+    t.integer "progress", default: 0
     t.index ["structure_id"], name: "index_pias_on_structure_id"
   end
 
@@ -137,12 +180,47 @@ ActiveRecord::Schema.define(version: 2021_03_16_210416) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "firstname"
+    t.string "lastname"
+    t.boolean "is_technical_admin", default: false
+    t.boolean "is_functional_admin", default: false
+    t.boolean "is_user", default: false
+    t.string "uuid"
+    t.datetime "locked_at"
+    t.string "login"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_pias", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "pia_id", null: false
+    t.integer "role", default: 0, null: false
+    t.index ["pia_id"], name: "index_users_pias_on_pia_id"
+    t.index ["user_id", "pia_id", "role"], name: "index_users_pias_on_user_id_and_pia_id_and_role", unique: true
+    t.index ["user_id"], name: "index_users_pias_on_user_id"
+  end
+
   add_foreign_key "answers", "pias"
   add_foreign_key "attachments", "pias"
   add_foreign_key "comments", "pias"
   add_foreign_key "evaluations", "pias"
-  add_foreign_key "knowledges", "knowledge_bases", column: "knowledge_base_id"
+  add_foreign_key "knowledges", "knowledge_bases"
   add_foreign_key "measures", "pias"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "pias", "structures"
   add_foreign_key "revisions", "pias"
+  add_foreign_key "users_pias", "pias"
+  add_foreign_key "users_pias", "users"
 end
