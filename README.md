@@ -12,8 +12,8 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank">this runbook</a> for a full installation of pia (back-end) and pia (front-end) applications on a ubuntu 17.10 server.
 
 ### Requirements
-- [pia (front-end) application](https://github.com/LINCnil/pia) and/or [pia (stand-alone) application](https://github.com/LINCnil/pia-app)
-- [Ruby](http://www.ruby-lang.org) 2.6.x or 2.7.x
+- [pia (front-end) application](https://github.com/LINCnil/pia)
+- [Ruby](http://www.ruby-lang.org) 2.7.x
 - [Rails](http://rubyonrails.org) 6.0.x
 - [PostgreSQL](https://www.postgresql.org) 12.0+
 
