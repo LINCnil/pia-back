@@ -9,7 +9,7 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 [![CodeQL](https://github.com/LINCnil/pia-back/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/LINCnil/pia-back/actions/workflows/codeql-analysis.yml)
 
 ## Installation
-You can follow <a href="https://github.com/LINCnil/pia/issues/77" target="_blank">this runbook</a> for a full installation of pia (back-end) and pia (front-end) applications on a ubuntu 17.10 server.
+You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full installation of PIA (back-end) and PIA (front-end) applications on a ubuntu 20.04 server.
 
 ### Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
