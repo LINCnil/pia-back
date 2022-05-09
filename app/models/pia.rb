@@ -56,6 +56,7 @@ class Pia < ApplicationRecord
     self.author_name = sanitize read_attribute(:author_name)
     self.evaluator_name = sanitize read_attribute(:evaluator_name)
     self.validator_name = sanitize read_attribute(:validator_name)
+    self.category = sanitize read_attribute(:category)
   end
 
   private

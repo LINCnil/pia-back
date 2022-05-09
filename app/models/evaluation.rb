@@ -1,10 +1,13 @@
 class Evaluation < ApplicationRecord
+  include ActionView::Helpers::SanitizeHelper
   belongs_to :pia, inverse_of: :evaluations
   validates :reference_to, presence: true
   attr_accessor :evaluation_infos
 
   after_create :email_for_evaluation! if ENV['ENABLE_AUTHENTICATION'].present?
   after_update :email_for_validation! if ENV['ENABLE_AUTHENTICATION'].present?
+
+  after_initialize :overwrite_to_safety_values
 
   def email_for_evaluation!
     return unless self.evaluation_infos.present?
@@ -31,5 +34,9 @@ class Evaluation < ApplicationRecord
     return unless self.global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]["id"] == self.reference_to.split(".").last.to_i))
     
     UserMailer.with(validator: validator, pia: self.pia).section_ready_for_validation.deliver_now
+  end
+
+  def overwrite_to_safety_values
+    self.evaluation_comment = sanitize read_attribute(:evaluation_comment)
   end
 end
