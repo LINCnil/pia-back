@@ -41,5 +41,10 @@ module PiaBack
     config.i18n.available_locales = [:bg, :cs, :da, :de, :el, :en, :es, :et,
                                      :fi, :fr, :hr, :hu, :it, :lt, :lv, :nl,
                                      :no, :pl, :pt, :ro, :sl, :sv]
+
+    tags_allowed = ENV['SANITIZED_ALLOWED_TAGS'] ? ENV['SANITIZED_ALLOWED_TAGS'].split(' ') : []
+    config.action_view.sanitized_allowed_tags = tags_allowed
+    attributes_allowed = ENV['SANITIZED_ALLOWED_ATTRIBUTES'] ? ENV['SANITIZED_ALLOWED_ATTRIBUTES'].split(' ') : []
+    config.action_view.sanitized_allowed_attributes = attributes_allowed
   end
 end

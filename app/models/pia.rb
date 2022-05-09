@@ -1,4 +1,5 @@
 class Pia < ApplicationRecord
+  include ActionView::Helpers::SanitizeHelper
   has_many :answers, inverse_of: :pia, dependent: :destroy
   has_many :comments, inverse_of: :pia, dependent: :destroy
   has_many :evaluations, inverse_of: :pia, dependent: :destroy
@@ -9,6 +10,8 @@ class Pia < ApplicationRecord
 
   belongs_to :structure, optional: true
   validates :name, presence: true
+
+  after_initialize :overwrite_to_safety_values
 
   def self.import(json_string)
     json = JSON.parse(json_string)
@@ -46,6 +49,14 @@ class Pia < ApplicationRecord
     duplicate_evaluations
     duplicate_measures
     @clone
+  end
+
+  def overwrite_to_safety_values
+    self.name = sanitize read_attribute(:name)
+    self.author_name = sanitize read_attribute(:author_name)
+    self.evaluator_name = sanitize read_attribute(:evaluator_name)
+    self.validator_name = sanitize read_attribute(:validator_name)
+    self.category = sanitize read_attribute(:category)
   end
 
   private
