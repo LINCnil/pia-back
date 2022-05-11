@@ -11,7 +11,7 @@ class KnowledgeBasesController < ApplicationController
 
   def create
     knowledge_base = KnowledgeBase.create(knowledge_base_params)
-    render json: serialize(knowledge_base)
+    render json: serialize(knowledge_base.reload)
   end
 
   def show
@@ -20,7 +20,7 @@ class KnowledgeBasesController < ApplicationController
 
   def update
     @knowledge_base.update(knowledge_base_params)
-    render json: serialize(@knowledge_base)
+    render json: serialize(@knowledge_base.reload)
   end
 
   def destroy

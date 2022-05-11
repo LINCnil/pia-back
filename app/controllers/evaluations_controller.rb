@@ -25,7 +25,7 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
 
     if @evaluation.save
-      render json: serialize(@evaluation), status: :created
+      render json: serialize(@evaluation.reload), status: :created
     else
       render json: @evaluation.errors, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class EvaluationsController < ApplicationController
     if @evaluation.update(evaluation_params)
       @evaluation.global_status = 0 if @evaluation.status == 1 && evaluation_params["global_status"].blank?
       @evaluation.save
-      render json: serialize(@evaluation)
+      render json: serialize(@evaluation.reload)
     else
       render json: @evaluation.errors, status: :unprocessable_entity
     end

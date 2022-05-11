@@ -16,7 +16,7 @@ class KnowledgesController < ApplicationController
     knowledge = Knowledge.new(data)
     knowledge.knowledge_base = @knowledge_base
     knowledge.save
-    render json: serialize(knowledge)
+    render json: serialize(knowledge.reload)
   end
 
   def show
@@ -27,7 +27,7 @@ class KnowledgesController < ApplicationController
     data = knowledge_params
     data["items"] = JSON.parse(data["items"]) if data["items"]
     @knowledge.update(data)
-    render json: serialize(@knowledge)
+    render json: serialize(@knowledge.reload)
   end
 
   def destroy
