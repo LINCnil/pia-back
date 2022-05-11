@@ -36,7 +36,10 @@ class Evaluation < ApplicationRecord
     UserMailer.with(validator: validator, pia: self.pia).section_ready_for_validation.deliver_now
   end
 
+  private
+
   def overwrite_to_safety_values
+    self.action_plan_comment = sanitize read_attribute(:action_plan_comment)
     self.evaluation_comment = sanitize read_attribute(:evaluation_comment)
   end
 end

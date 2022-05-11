@@ -25,7 +25,7 @@ class MeasuresController < ApplicationController
     @measure = Measure.new(measure_params)
 
     if @measure.save
-      render json: serialize(@measure), status: :created
+      render json: serialize(@measure.reload), status: :created
     else
       render json: @measure.errors, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class MeasuresController < ApplicationController
   # PATCH/PUT /measures/1
   def update
     if @measure.update(measure_params)
-      render json: serialize(@measure)
+      render json: serialize(@measure.reload)
     else
       render json: @measure.errors, status: :unprocessable_entity
     end

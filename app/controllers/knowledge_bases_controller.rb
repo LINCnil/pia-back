@@ -13,7 +13,7 @@ class KnowledgeBasesController < ApplicationController
     knowledge_base = KnowledgeBase.new(knowledge_base_params)
 
     if knowledge_base.save
-      render json: serialize(knowledge_base), status: :created
+      render json: serialize(knowledge_base.reload), status: :created
     else
       render json: knowledge_base.errors, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class KnowledgeBasesController < ApplicationController
 
   def update
     if @knowledge_base.update(knowledge_base_params)
-      render json: serialize(@knowledge_base)
+      render json: serialize(@knowledge_base.reload)
     else
       render json: @knowledge_base.errors, status: :unprocessable_entity
     end
