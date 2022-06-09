@@ -25,7 +25,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
-      render json: serialize(@answer), status: :created
+      render json: serialize(@answer.reload), status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   def update
     if @answer.update(answer_params)
-      render json: serialize(@answer)
+      render json: serialize(@answer.reload)
     else
       render json: @answer.errors, status: :unprocessable_entity
     end

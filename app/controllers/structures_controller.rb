@@ -22,7 +22,7 @@ class StructuresController < ApplicationController
     @structure = Structure.new(structures_parameters)
 
     if @structure.save
-      render json: serialize(@structure), status: :created
+      render json: serialize(@structure.reload), status: :created
     else
       render json: @structure.errors, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class StructuresController < ApplicationController
     structures_parameters[:data] = JSON.parse(structures_parameters[:data]) if structures_parameters[:data]
 
     if @structure.update(structures_parameters)
-      render json: serialize(@structure)
+      render json: serialize(@structure.reload)
     else
       render json: @structure.errors, status: :unprocessable_entity
     end

@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     if @comment.save
-      render json: serialize(@comment), status: :created
+      render json: serialize(@comment.reload), status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1
   def update
     if @comment.update(comment_params)
-      render json: serialize(@comment)
+      render json: serialize(@comment.reload)
     else
       render json: @comment.errors, status: :unprocessable_entity
     end

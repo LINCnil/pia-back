@@ -51,14 +51,6 @@ class Pia < ApplicationRecord
     @clone
   end
 
-  def overwrite_to_safety_values
-    self.name = sanitize read_attribute(:name)
-    self.author_name = sanitize read_attribute(:author_name)
-    self.evaluator_name = sanitize read_attribute(:evaluator_name)
-    self.validator_name = sanitize read_attribute(:validator_name)
-    self.category = sanitize read_attribute(:category)
-  end
-
   private
 
   def duplicate_self
@@ -72,5 +64,13 @@ class Pia < ApplicationRecord
         @clone.send(association) << value.dup
       end
     end
+  end
+
+  def overwrite_to_safety_values
+    self.name = sanitize read_attribute(:name)
+    self.author_name = sanitize read_attribute(:author_name)
+    self.evaluator_name = sanitize read_attribute(:evaluator_name)
+    self.validator_name = sanitize read_attribute(:validator_name)
+    self.category = sanitize read_attribute(:category)
   end
 end
