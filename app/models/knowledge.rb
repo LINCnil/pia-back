@@ -9,6 +9,6 @@ class Knowledge < ApplicationRecord
   private
 
   def overwrite_to_safety_values
-    self.name = sanitize read_attribute(:name)
+    self.name = sanitize self[:name]
   end
 end

@@ -6,11 +6,11 @@ class PiasController < ApplicationController
   def index
     res = []
     # check if user is technical else his pias
-    if ENV['ENABLE_AUTHENTICATION'].blank? || current_user.is_technical_admin
-      pias = Pia.all
-    else
-      pias = policy_scope(Pia)
-    end
+    pias = if ENV['ENABLE_AUTHENTICATION'].blank? || current_user.is_technical_admin
+             Pia.all
+           else
+             policy_scope(Pia)
+           end
 
     pias.where(is_archive: params[:is_archive].present?)
         .order(query_order)
@@ -36,15 +36,14 @@ class PiasController < ApplicationController
     pia_parameters = pia_params
     # do not add this to pia
     pia_parameters.delete(:guests)
-    
+
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
-    
+
     # Update pia user fields and UserPia relations
-    update_pia_user_field(:author_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
-    update_pia_user_field(:evaluator_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
-    update_pia_user_field(:validator_name) {|user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
-    
+    update_pia_user_field(:author_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
+    update_pia_user_field(:evaluator_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
+    update_pia_user_field(:validator_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
 
     # Guest in userPia
     if pia_params[:guests].present?
@@ -66,16 +65,16 @@ class PiasController < ApplicationController
 
     # do not add this to pia
     pia_parameters.delete(:guests)
-    
+
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
-    
+
     if @pia.update(pia_parameters)
 
       # Update pia user fields and UserPia relations
       update_pia_user_field(:author_name) { |user| update_user_pias(user, 1) }
       update_pia_user_field(:evaluator_name) { |user| update_user_pias(user, 2) }
       update_pia_user_field(:validator_name) { |user| update_user_pias(user, 3) }
-      
+
       # Guest in userPia
       if pia_params[:guests].present?
         @pia.user_pias.where(role: 0).delete_all
@@ -108,7 +107,6 @@ class PiasController < ApplicationController
     Pia.import(json_str)
   end
 
-
   private
 
   def authorize_pia
@@ -133,13 +131,13 @@ class PiasController < ApplicationController
   end
 
   def update_user_pias(user, role)
-      relation = @pia.user_pias.find_by(role: role)
-      if relation.blank?
-        relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
-      else
-        relation.update(user_id: user.id)
-      end
-      relation.save
+    relation = @pia.user_pias.find_by(role: role)
+    if relation.blank?
+      relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
+    else
+      relation.update(user_id: user.id)
+    end
+    relation.save
   end
 
   def import_params

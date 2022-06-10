@@ -11,15 +11,15 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
-  
+
     password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
     user.password = password
     user.password_confirmation = password
 
-    if params["user"]["access_type"]
-      user.is_technical_admin = params["user"]["access_type"].include? "technical"
-      user.is_functional_admin = params["user"]["access_type"].include? "functional"
-      user.is_user = params["user"]["access_type"].include? "user"
+    if params['user']['access_type']
+      user.is_technical_admin = params['user']['access_type'].include? 'technical'
+      user.is_functional_admin = params['user']['access_type'].include? 'functional'
+      user.is_user = params['user']['access_type'].include? 'user'
     end
 
     if user.valid? # change uuid
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
       UserMailer.with(user: user).uuid_created.deliver_now
       render json: serialize(user)
     else
-      render json: user.errors.to_json, status: 406
+      render json: user.errors.to_json, status: :not_acceptable
     end
   end
 
@@ -36,69 +36,66 @@ class UsersController < ApplicationController
     email = user.email
     user.update(user_params)
 
-    if params["user"]["access_type"]
-      user.is_technical_admin = params["user"]["access_type"].include? "technical"
-      user.is_functional_admin = params["user"]["access_type"].include? "functional"
-      user.is_user = params["user"]["access_type"].include? "user"
+    if params['user']['access_type']
+      user.is_technical_admin = params['user']['access_type'].include? 'technical'
+      user.is_functional_admin = params['user']['access_type'].include? 'functional'
+      user.is_user = params['user']['access_type'].include? 'user'
     end
 
     if user.valid? # change uuid
       user.save
-      if user.access_locked? && user.email != email # send email for to locked users
-        UserMailer.with(user: user).uuid_updated.deliver_now
-      end
+      UserMailer.with(user: user).uuid_updated.deliver_now if user.access_locked? && user.email != email # send email for to locked users
       render json: serialize(user)
     else
-      render json: user.errors.to_json, status: 406
+      render json: user.errors.to_json, status: :not_acceptable
     end
   end
 
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
-    return head 404 unless user
+    return head :not_found unless user
+
     # render user data
     render json: serialize(user)
   end
 
   def password_forgotten
     user = User.find_by(email: params[:email])
-    
+
     if user.present?
       if user.access_locked?
-        render json: {}, status: 423
+        render json: {}, status: :locked
+      elsif user.valid?
+        user.save
+        UserMailer.with(user: user).uuid_updated.deliver_now
+        render json: {} # change uuid
       else
-        if user.valid? # change uuid
-          user.save
-          UserMailer.with(user: user).uuid_updated.deliver_now
-          render json: {}
-        else
-          render json: {}, status: 406 # Not acceptable
-        end
+        render json: {}, status: :not_acceptable # Not acceptable
       end
     else
-      render json: {}, status: 404
+      render json: {}, status: :not_found
     end
   end
 
   def change_password
     user = User.find_by(id: params[:id], uuid: params[:uuid])
-    return head 404 unless user
+    return head :not_found unless user
 
-    user.password = params["password"]
-    user.password_confirmation = params["password_confirmation"]
+    user.password = params['password']
+    user.password_confirmation = params['password_confirmation']
 
     if user.valid? # change uuid
       user.unlock_access! # save user
-      return head 204
+      head :no_content
     else
-      render json: {}, status: 406
+      render json: {}, status: :not_acceptable
     end
   end
 
   def destroy
     user = User.find(params[:id])
     user.destroy
-    head 204
+    head :no_content
   end
 
   private
@@ -113,6 +110,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:firstname, :lastname, :email, :password, :password_confirmation, :uuid)
-                         .except("access_type")
+          .except('access_type')
   end
 end

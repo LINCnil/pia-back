@@ -5,7 +5,7 @@ class PiaPolicy < ApplicationPolicy
 
   def show?
     # return true if user is admin or user owner.user_pias .find_by(pia_id: record.id)
-    return (user.present? && user.is_functional_admin?) || record.user_pias.find_by(user_id: user.id).present? || record.is_example
+    (user.present? && user.is_functional_admin?) || record.user_pias.find_by(user_id: user.id).present? || record.is_example
   end
 
   def example?

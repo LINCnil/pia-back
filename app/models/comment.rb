@@ -7,6 +7,6 @@ class Comment < ApplicationRecord
   private
 
   def overwrite_to_safety_values
-    self.description = sanitize read_attribute(:description)
+    self.description = sanitize self[:description]
   end
 end
