@@ -11,7 +11,7 @@
 # end
 
 # These inflection rules are supported but not enabled by default:
- ActiveSupport::Inflector.inflections(:en) do |inflect|
-   inflect.irregular 'pia', 'pias'
-   inflect.irregular 'knowledge_base', 'knowledge_bases'
- end
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.irregular 'pia', 'pias'
+  inflect.irregular 'knowledge_base', 'knowledge_bases'
+end

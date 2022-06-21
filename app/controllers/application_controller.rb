@@ -1,10 +1,13 @@
 class ApplicationController < ActionController::API
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
-    render text: exception, status: 500
+    render text: exception, status: :internal_server_error
   end
-  
+
   include Pundit if ENV['ENABLE_AUTHENTICATION'].present?
-  before_action :doorkeeper_authorize!, except: %i[info check_uuid  password_forgotten change_password] if ENV['ENABLE_AUTHENTICATION'].present?
+  if ENV['ENABLE_AUTHENTICATION'].present?
+    before_action :doorkeeper_authorize!,
+                  except: %i[info check_uuid password_forgotten change_password]
+  end
 
   def info
     render json: { valid: true, auth: ENV['ENABLE_AUTHENTICATION'].present? }

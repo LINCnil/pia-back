@@ -352,26 +352,19 @@ Doorkeeper.configure do
     user = nil
 
     # LDAP IS ACTIVE
-    if ENV['DEVISE_LDAP_LOGGER'].present?
-      # Check LDAP credentials
-      if User.check_ldap_credentials(login, password) # ldap valide
-        user = User.find_for_authentication(login: login)
-        #  Check if user exists in database
-        if user.blank?
-          # Create user in database
-          user = User.create_with_ldap(login)
-        end
+    if ENV['DEVISE_LDAP_LOGGER'].present? && User.check_ldap_credentials(login, password) # ldap valide
+      user = User.find_for_authentication(login: login)
+      #  Check if user exists in database
+      if user.blank?
+        # Create user in database
+        user = User.create_with_ldap(login)
       end
     end
 
     # Normal auth
     if user.blank?
       user = User.find_for_authentication(email: login)
-      if user && user.valid_password?(password)
-        user
-      else
-        nil
-      end
+      user if user && user.valid_password?(password)
     else
       user
     end
@@ -515,7 +508,7 @@ Doorkeeper.configure do
   # like nginx to forbid the request.
 
   # WWW-Authenticate Realm (default: "Doorkeeper").
-  realm "PIA Authorization"
+  realm 'PIA Authorization'
 end
 
-Doorkeeper::OAuth::TokenResponse.send :prepend, CustomTokenResponse
+Doorkeeper::OAuth::TokenResponse.prepend CustomTokenResponse

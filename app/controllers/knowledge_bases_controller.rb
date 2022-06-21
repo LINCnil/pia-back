@@ -33,7 +33,7 @@ class KnowledgeBasesController < ApplicationController
 
   def destroy
     @knowledge_base.destroy
-    head 204
+    head :no_content
   end
 
   private

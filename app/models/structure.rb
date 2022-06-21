@@ -6,7 +6,7 @@ class Structure < ApplicationRecord
   private
 
   def overwrite_to_safety_values
-    self.name = sanitize read_attribute(:name)
-    self.sector_name = sanitize read_attribute(:sector_name)
+    self.name = sanitize self[:name]
+    self.sector_name = sanitize self[:sector_name]
   end
 end

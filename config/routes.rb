@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       put 'change-password', to: 'users#change_password'
     end
   end
-  
+
   resources :pias do
     collection do
       get 'example'

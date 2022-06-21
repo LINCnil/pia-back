@@ -6,8 +6,8 @@ class Measure < ApplicationRecord
   private
 
   def overwrite_to_safety_values
-    self.title = sanitize read_attribute(:title)
-    self.content = sanitize read_attribute(:content)
-    self.placeholder = sanitize read_attribute(:placeholder)
+    self.title = sanitize self[:title]
+    self.content = sanitize self[:content]
+    self.placeholder = sanitize self[:placeholder]
   end
 end

@@ -34,7 +34,7 @@ class KnowledgesController < ApplicationController
 
   def destroy
     @knowledge.destroy
-    head 204
+    head :no_content
   end
 
   private

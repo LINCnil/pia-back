@@ -54,11 +54,11 @@ class Pia < ApplicationRecord
   private
 
   def duplicate_self
-    @clone = self.dup
+    @clone = dup
     @clone.save
   end
 
-  %w(answers evaluations comments measures).each do |association|
+  %w[answers evaluations comments measures].each do |association|
     define_method("duplicate_#{association}") do
       send(association).each do |value|
         @clone.send(association) << value.dup
@@ -67,10 +67,10 @@ class Pia < ApplicationRecord
   end
 
   def overwrite_to_safety_values
-    self.name = sanitize read_attribute(:name)
-    self.author_name = sanitize read_attribute(:author_name)
-    self.evaluator_name = sanitize read_attribute(:evaluator_name)
-    self.validator_name = sanitize read_attribute(:validator_name)
-    self.category = sanitize read_attribute(:category)
+    self.name = sanitize self[:name]
+    self.author_name = sanitize self[:author_name]
+    self.evaluator_name = sanitize self[:evaluator_name]
+    self.validator_name = sanitize self[:validator_name]
+    self.category = sanitize self[:category]
   end
 end

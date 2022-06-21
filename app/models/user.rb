@@ -2,18 +2,18 @@ class User < ApplicationRecord
   has_many :user_pias, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable and :omniauthable
-  
+
   devise :database_authenticatable, :registerable, :recoverable, :secure_validatable, :lockable
   validates :uuid, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, on: :create
-  validates :password_confirmation, presence: true, on: :update, unless: lambda { |user| user.password.blank? }
+  validates :password_confirmation, presence: true, on: :update, unless: ->(user) { user.password.blank? }
 
   before_validation :generate_uuid
   after_commit :update_user_pias_infos, on: :update
 
   # validates uniqueness of login only if is present
-  validate :validate_login_uniqueness, if: lambda { |user| user.login.present? }
+  validate :validate_login_uniqueness, if: ->(user) { user.login.present? }
 
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
@@ -25,21 +25,18 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :destroy
 
-  
   def validate_login_uniqueness
-    if User.where(login: login).where.not(id: id).exists?
-      errors.add(:login, :taken)
-    end
+    errors.add(:login, :taken) if User.where(login: login).where.not(id: id).exists?
   end
 
   def check_ldap_email
-    if self.email.blank?
-      mail = Devise::LDAP::Adapter.get_ldap_param(self.login, "mail")
-      if mail.present?
-        self.email = mail.first
-      else # No email, use login
-        self.email = self.login
-      end
+    if email.blank?
+      mail = Devise::LDAP::Adapter.get_ldap_param(login, 'mail')
+      self.email = if mail.present?
+                     mail.first
+                   else # No email, use login
+                     login
+                   end
     end
     self.is_user = true
   end
@@ -73,11 +70,11 @@ class User < ApplicationRecord
       new_value = "#{firstname} #{lastname}"
       pia = user_pia.pia
       case user_pia.role
-      when "author"
+      when 'author'
         pia.author_name = new_value
-      when "evaluator"
+      when 'evaluator'
         pia.evaluator_name = new_value
-      when "validator"
+      when 'validator'
         pia.validator_name = new_value
       end
       pia.save

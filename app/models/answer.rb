@@ -7,6 +7,6 @@ class Answer < ApplicationRecord
   private
 
   def overwrite_to_safety_values
-    self.data['text'] = sanitize self.data['text']
+    data['text'] = sanitize data['text']
   end
 end
