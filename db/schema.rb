@@ -2,16 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_155800) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_08_08_130660) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "reference_to", null: false
     t.jsonb "data", default: {}
     t.integer "pia_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["pia_id"], name: "index_answers_on_pia_id"
   end
 
@@ -28,8 +27,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "attached_file"
     t.boolean "pia_signed", default: false
     t.integer "pia_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "comment"
     t.index ["pia_id"], name: "index_attachments_on_pia_id"
   end
@@ -39,8 +38,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "reference_to", null: false
     t.boolean "for_measure", default: false
     t.integer "pia_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["pia_id"], name: "index_comments_on_pia_id"
   end
 
@@ -49,13 +48,13 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "reference_to", null: false
     t.text "action_plan_comment", default: ""
     t.text "evaluation_comment", default: ""
-    t.datetime "evaluation_date"
+    t.datetime "evaluation_date", precision: nil
     t.jsonb "gauges", default: {}
-    t.datetime "estimated_implementation_date"
+    t.datetime "estimated_implementation_date", precision: nil
     t.string "person_in_charge", default: ""
     t.integer "pia_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "global_status", default: 0
     t.index ["pia_id"], name: "index_evaluations_on_pia_id"
   end
@@ -65,8 +64,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "author", null: false
     t.string "contributors", null: false
     t.boolean "is_example", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "knowledges", force: :cascade do |t|
@@ -78,8 +77,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.text "description"
     t.integer "items", default: [], array: true
     t.bigint "knowledge_base_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["knowledge_base_id"], name: "index_knowledges_on_knowledge_base_id"
   end
 
@@ -88,8 +87,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.text "content", default: ""
     t.text "placeholder", default: ""
     t.integer "pia_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["pia_id"], name: "index_measures_on_pia_id"
   end
 
@@ -99,8 +98,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
     t.string "scopes", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
@@ -113,8 +112,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
     t.string "scopes"
     t.string "previous_refresh_token", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
@@ -130,8 +129,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -147,8 +146,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.integer "concerned_people_status", default: 0
     t.text "rejection_reason", default: ""
     t.text "applied_adjustments", default: ""
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "dpos_names", default: ""
     t.string "people_names", default: ""
     t.integer "is_example", default: 0
@@ -167,8 +166,8 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
   create_table "revisions", force: :cascade do |t|
     t.jsonb "export", null: false
     t.bigint "pia_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["pia_id"], name: "index_revisions_on_pia_id"
   end
 
@@ -176,25 +175,25 @@ ActiveRecord::Schema.define(version: 2022_01_20_155800) do
     t.string "name", null: false
     t.string "sector_name", null: false
     t.jsonb "data", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "firstname"
     t.string "lastname"
     t.boolean "is_technical_admin", default: false
     t.boolean "is_functional_admin", default: false
     t.boolean "is_user", default: false
     t.string "uuid"
-    t.datetime "locked_at"
+    t.datetime "locked_at", precision: nil
     t.string "login"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

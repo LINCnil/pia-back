@@ -102,12 +102,13 @@ Doorkeeper.configure do
   #
   # `context` has the following properties available:
   #
-  # `client` - the OAuth client application (see Doorkeeper::OAuth::Client)
-  # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
-  # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
+  #   * `client` - the OAuth client application (see Doorkeeper::OAuth::Client)
+  #   * `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
+  #   * `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
+  #   * `resource_owner` - authorized resource owner instance (if present)
   #
   # custom_access_token_expires_in do |context|
-  #   context.client.application.additional_settings.implicit_oauth_expiration
+  #   context.client.additional_settings.implicit_oauth_expiration
   # end
 
   # Use a custom class for generating the access token.
@@ -118,7 +119,7 @@ Doorkeeper.configure do
   # The controller +Doorkeeper::ApplicationController+ inherits from.
   # Defaults to +ActionController::Base+ unless +api_only+ is set, which changes the default to
   # +ActionController::API+. The return value of this option must be a stringified class name.
-  # See https://doorkeeper.gitbook.io/guides/configuration/other-configurations#custom-base-controller
+  # See https://doorkeeper.gitbook.io/guides/configuration/other-configurations#custom-controllers
   #
   base_controller 'ApplicationController'
 
@@ -166,8 +167,7 @@ Doorkeeper.configure do
   # since plain values can no longer be retrieved.
   #
   # Note: If you are already a user of doorkeeper and have existing tokens
-  # in your installation, they will be invalid without enabling the additional
-  # setting `fallback_to_plain_secrets` below.
+  # in your installation, they will be invalid without adding 'fallback: :plain'.
   #
   # hash_token_secrets
   # By default, token secrets will be hashed using the
@@ -201,7 +201,9 @@ Doorkeeper.configure do
   # This will ensure that old access tokens and secrets
   # will remain valid even if the hashing above is enabled.
   #
-  # fallback_to_plain_secrets
+  # This can be done by adding 'fallback: plain', e.g. :
+  #
+  # hash_application_secrets using: '::Doorkeeper::SecretStoring::BCrypt', fallback: :plain
 
   # Issue access tokens with refresh token (disabled by default), you may also
   # pass a block which accepts `context` to customize when to give a refresh
@@ -273,7 +275,7 @@ Doorkeeper.configure do
   # force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' }
 
   # Specify what redirect URI's you want to block during Application creation.
-  # Any redirect URI is whitelisted by default.
+  # Any redirect URI is allowed by default.
   #
   # You can use this option in order to forbid URI's with 'javascript' scheme
   # for example.
@@ -315,13 +317,29 @@ Doorkeeper.configure do
   # This configuration option can be a proc, lambda or any Ruby object responds
   # to `.call` method and result of it's invocation must be a Hash.
   #
-  # custom_introspection_response do |token, context|
-  #   {
-  #     "sub": "Z5O3upPC88QrAjx00dis",
-  #     "aud": "https://protected.example.net/resource",
-  #     "username": User.find(token.resource_owner_id).username
-  #   }
-  # end
+  custom_introspection_response do |token, context|
+    user = User.find(token.resource_owner_id)
+    access_type = []
+    access_type << 'technical' if user.is_technical_admin
+    access_type << 'functional' if user.is_functional_admin
+    access_type << 'user' if user.is_user
+    #     "sub": "Z5O3upPC88QrAjx00dis",
+    #     "aud": "https://protected.example.net/resource",
+    #     "username": User.find(token.resource_owner_id).username
+
+    {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      access_type: access_type,
+      access_auth: [
+        {
+          id: nil,
+          roles: []
+        }
+      ]
+    }
+  end
   #
   # or
   #
@@ -340,8 +358,8 @@ Doorkeeper.configure do
   #
   # implicit and password grant flows have risks that you should understand
   # before enabling:
-  #   http://tools.ietf.org/html/rfc6819#section-4.4.2
-  #   http://tools.ietf.org/html/rfc6819#section-4.4.3
+  #   https://datatracker.ietf.org/doc/html/rfc6819#section-4.4.2
+  #   https://datatracker.ietf.org/doc/html/rfc6819#section-4.4.3
   #
   # grant_flows %w[authorization_code client_credentials]
   grant_flows %w[password]
@@ -409,7 +427,7 @@ Doorkeeper.configure do
   # Be default all Resource Owners are authorized to any Client (application).
   #
   # authorize_resource_owner_for_client do |client, resource_owner|
-  #   resource_owner.admin? || client.owners_whitelist.include?(resource_owner)
+  #   resource_owner.admin? || client.owners_allowlist.include?(resource_owner)
   # end
 
   # Hook into the strategies' request & response life-cycle in case your
@@ -511,4 +529,3 @@ Doorkeeper.configure do
   realm 'PIA Authorization'
 end
 
-Doorkeeper::OAuth::TokenResponse.prepend CustomTokenResponse

@@ -15,14 +15,14 @@ class Evaluation < ApplicationRecord
     infos = evaluation_infos
     evaluation_mode = infos['evaluation_mode']
     questions = infos['questions']
-    author = pia.user_pias.find_by({ role: 'author' }).user
-    evaluator = pia.user_pias.find_by({ role: 'evaluator' }).user
+    evaluator_relation = pia.user_pias.find_by({ role: 'evaluator' })
+    evaluator = evaluator_relation.user if evaluator_relation.present? && evaluator_relation.user.present?
 
     unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]['id'] == reference_to.split('.').last.to_i))
       return
     end
 
-    UserMailer.with(evaluator: evaluator, pia: pia).section_ready_for_evaluation.deliver_now
+    UserMailer.with(evaluator: evaluator, pia: pia).section_ready_for_evaluation.deliver_now if evaluator.present?
   end
 
   def email_for_validation!
@@ -31,13 +31,14 @@ class Evaluation < ApplicationRecord
     infos = evaluation_infos
     evaluation_mode = infos['evaluation_mode']
     questions = infos['questions']
-    validator = pia.user_pias.find_by({ role: 'validator' }).user
+    validator_relation = pia.user_pias.find_by({ role: 'validator' })
+    validator = validator_relation.user if validator_relation.present? && validator_relation.user.present?
 
     unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]['id'] == reference_to.split('.').last.to_i))
       return
     end
 
-    UserMailer.with(validator: validator, pia: pia).section_ready_for_validation.deliver_now
+    UserMailer.with(validator: validator, pia: pia).section_ready_for_validation.deliver_now if validator.present?
   end
 
   private
