@@ -16,7 +16,7 @@ class Evaluation < ApplicationRecord
     evaluation_mode = infos['evaluation_mode']
     questions = infos['questions']
     evaluator_relation = pia.user_pias.find_by({ role: 'evaluator' })
-    evaluator = pia.user_pias.find_by({ role: 'evaluator' }).user if evaluator_relation.present? && evaluator_relation.user.present?
+    evaluator = evaluator_relation.user if evaluator_relation.present? && evaluator_relation.user.present?
 
     unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]['id'] == reference_to.split('.').last.to_i))
       return
