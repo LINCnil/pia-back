@@ -65,22 +65,20 @@ class PiasController < ApplicationController
 
     # do not add this to pia
     pia_parameters.delete(:guests)
+    pia_parameters.delete(:authors)
+    pia_parameters.delete(:evaluators)
+    pia_parameters.delete(:validators)
 
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
 
     if @pia.update(pia_parameters)
 
-      # Update pia user fields and UserPia relations
-      update_pia_user_field(:author_name) { |user| update_user_pias(user, 1) }
-      update_pia_user_field(:evaluator_name) { |user| update_user_pias(user, 2) }
-      update_pia_user_field(:validator_name) { |user| update_user_pias(user, 3) }
-
-      # Guest in userPia
-      if pia_params[:guests].present?
-        @pia.user_pias.where(role: 0).delete_all
-        pia_params[:guests].split(',').each do |user_id|
-          @pia.user_pias << UserPia.new(user_id: user_id, role: 0) if check_user_id(user_id).is_a?(User)
-        end
+      if ENV['ENABLE_AUTHENTICATION'].present?
+        # Update pia user fields and UserPia relations
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params["authors"].present?
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params["evaluators"].present?
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3) if pia_params["validators"].present?
+        check_pia_user_field(:guests, pia_params["guests"]) { |user| update_user_pias(user, 3) }
       end
 
       @pia.save
@@ -122,22 +120,26 @@ class PiasController < ApplicationController
     end
   end
 
-  def update_pia_user_field(field)
-    user = check_user_id(pia_params[field])
-    return unless user.is_a?(User)
+  def check_pia_user_field(field, value, dump_field = nil, role = 0)
+    user_fullnames = []
+    @pia.user_pias.where(role: role).delete_all
+    value.split(',').each do |potential_user_id|
+      user = check_user_id(potential_user_id)
+      if user.is_a?(User)
+        # save for normal mode
+        if field != :guests
+          user_fullnames << "#{user.firstname} #{user.lastname}"
+          @pia.send("#{dump_field}=", user_fullnames.join(',')) if dump_field.present?
+        end
 
-    @pia.send("#{field}=", "#{user.firstname} #{user.lastname}")
-    yield(user)
-  end
-
-  def update_user_pias(user, role)
-    relation = @pia.user_pias.find_by(role: role)
-    if relation.blank?
-      relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
-    else
-      relation.update(user_id: user.id)
+        # save for auth mode
+        relation = @pia.user_pias.find_by(role: role, user_id: user.id)
+        if relation.blank?
+          relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
+        end
+        relation.save
+      end
     end
-    relation.save
   end
 
   def import_params
@@ -194,6 +196,9 @@ class PiasController < ApplicationController
                                   :structure_data,
                                   :is_archive,
                                   :progress,
-                                  :category)
+                                  :category,
+                                  :authors,
+                                  :validators,
+                                  :evaluators)
   end
 end
