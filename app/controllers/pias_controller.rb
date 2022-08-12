@@ -125,18 +125,21 @@ class PiasController < ApplicationController
     # update relations
     value.split(',').each do |id|
       user = check_user_id(id)
-      return unless user.present?
+      # return unless user.present?
+      if user.is_a?(User)
+        if field != :guests
+          user_fullnames << "#{user.firstname} #{user.lastname}"
+        end
 
-      if field != :guests
-        user_fullnames << "#{user.firstname} #{user.lastname}"
+        # save for auth mode
+        relation = @pia.user_pias.find_by(role: role, user_id: user.id)
+        if relation.blank?
+          relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
+        end
+        relation.save
+      else
+        user_fullnames << user
       end
-
-      # save for auth mode
-      relation = @pia.user_pias.find_by(role: role, user_id: user.id)
-      if relation.blank?
-        relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
-      end
-      relation.save
     end
 
     # update dump_field_value with user fullnames
