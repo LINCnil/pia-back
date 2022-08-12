@@ -45,7 +45,7 @@ class PiasController < ApplicationController
       check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
       check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
       check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
-      check_pia_user_field(:guests, pia_params["guests"]) { |user| update_user_pias(user, 3) }
+      check_pia_user_field(:guests, pia_params["guests"])
     end
 
     if @pia.save
@@ -74,7 +74,7 @@ class PiasController < ApplicationController
         check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
         check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
         check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
-        check_pia_user_field(:guests, pia_params["guests"]) { |user| update_user_pias(user, 3) }
+        check_pia_user_field(:guests, pia_params["guests"])
 
       end
 
@@ -118,6 +118,7 @@ class PiasController < ApplicationController
   end
 
   def check_pia_user_field(field, value, dump_field = nil, role = 0)
+    return unless value.present?
     user_fullnames = []
     @pia.user_pias.where(role: role).delete_all
 
