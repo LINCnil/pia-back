@@ -46,12 +46,12 @@ class PiasController < ApplicationController
     if @pia.save
       if ENV['ENABLE_AUTHENTICATION'].present?
         # Update pia user fields and UserPia relations
-        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
-        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
-        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
-        check_pia_user_field(:guests, pia_params["guests"])
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3) if pia_params.key?("validators")
+        check_pia_user_field(:guests, pia_params["guests"]) if pia_params.key?("guests")
+        @pia.save
       end
-      @pia.save
       render json: serialize(@pia.reload), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -74,13 +74,12 @@ class PiasController < ApplicationController
 
       if ENV['ENABLE_AUTHENTICATION'].present?
         # Update pia user fields and UserPia relations
-        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
-        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
-        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
-        check_pia_user_field(:guests, pia_params["guests"])
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3) if pia_params.key?("validators")
+        check_pia_user_field(:guests, pia_params["guests"]) if pia_params.key?("guests")
+        @pia.save
       end
-
-      @pia.save
       render json: serialize(@pia.reload), status: :ok
     else
       render json: @pia.errors, status: :unprocessable_entity
@@ -120,9 +119,9 @@ class PiasController < ApplicationController
   end
 
   def check_pia_user_field(field, value, dump_field = nil, role = 0)
-    return unless value.present?
     user_fullnames = []
     @pia.user_pias.where(role: role).delete_all
+    return unless value.present?
 
     # update relations
     value.split(',').each do |id|
