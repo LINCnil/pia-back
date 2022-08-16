@@ -36,20 +36,23 @@ class PiasController < ApplicationController
     pia_parameters = pia_params
     # do not add this to pia
     pia_parameters.delete(:guests)
+    pia_parameters.delete(:authors)
+    pia_parameters.delete(:evaluators)
+    pia_parameters.delete(:validators)
 
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
 
-    if ENV['ENABLE_AUTHENTICATION'].present?
-      # Update pia user fields and UserPia relations
-      check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
-      check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
-      check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
-      check_pia_user_field(:guests, pia_params["guests"])
-    end
-
     if @pia.save
-      render json: serialize(@pia), status: :created
+      if ENV['ENABLE_AUTHENTICATION'].present?
+        # Update pia user fields and UserPia relations
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1)
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
+        check_pia_user_field(:guests, pia_params["guests"])
+      end
+      @pia.save
+      render json: serialize(@pia.reload), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
@@ -75,11 +78,10 @@ class PiasController < ApplicationController
         check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2)
         check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3)
         check_pia_user_field(:guests, pia_params["guests"])
-
       end
 
       @pia.save
-      render json: serialize(@pia)
+      render json: serialize(@pia.reload), status: :ok
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
