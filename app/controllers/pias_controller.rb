@@ -194,6 +194,7 @@ class PiasController < ApplicationController
                                   :structure_data,
                                   :is_archive,
                                   :progress,
-                                  :category)
+                                  :category,
+                                  :lock_version)
   end
 end

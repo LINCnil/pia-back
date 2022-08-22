@@ -24,7 +24,8 @@ class PiaSerializer
              :structure_sector_name,
              :structure_data,
              :category,
-             :progress
+             :progress,
+             :lock_version
 
   attribute :is_archive do |pia|
     pia.is_archive ? 1 : 0
