@@ -59,7 +59,7 @@ class AnswersController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def answer_params
     params.fetch(:answer, {}).permit(
-      :reference_to,
+      :reference_to, :lock_version,
       data: [:text, :gauge, { list: [] }]
     ).merge(params.permit(:pia_id))
   end

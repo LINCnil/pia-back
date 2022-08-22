@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
     t.integer "pia_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "lock_version", default: 0, null: false
     t.index ["pia_id"], name: "index_answers_on_pia_id"
   end
 
