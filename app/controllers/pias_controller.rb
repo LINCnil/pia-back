@@ -2,6 +2,16 @@ class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
   before_action :authorize_pia if ENV['ENABLE_AUTHENTICATION'].present?
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: pia.model_name.singular,
+        record: e.record,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   # GET /pias
   def index
     res = []

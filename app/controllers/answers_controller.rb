@@ -1,6 +1,16 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: %i[show update destroy]
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @answer.model_name.singular,
+        record: e.record,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   # GET /answers
   def index
     if params[:reference_to]
