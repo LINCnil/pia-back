@@ -5,7 +5,8 @@ class AnswersController < ApplicationController
     render json: {
       errors: {
         model: @answer.model_name.singular,
-        record: e.record,
+        params: e.record,
+        record: @answer.reload,
         attempted_action: e.attempted_action
       }
     }, status: :conflict

@@ -5,8 +5,9 @@ class PiasController < ApplicationController
   rescue_from ActiveRecord::StaleObjectError do |e|
     render json: {
       errors: {
-        model: pia.model_name.singular,
-        record: e.record,
+        model: @pia.model_name.singular,
+        params: e.record,
+        record: @pia.reload,
         attempted_action: e.attempted_action
       }
     }, status: :conflict
