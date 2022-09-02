@@ -6,7 +6,7 @@ class PiasController < ApplicationController
     render json: {
       errors: {
         model: @pia.model_name.singular,
-        params: e.record,
+        params: pia_params,
         record: @pia.reload,
         attempted_action: e.attempted_action
       }
