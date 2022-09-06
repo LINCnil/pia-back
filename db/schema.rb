@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_08_130660) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_08_130660) do
     t.integer "pia_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "lock_version", default: 0, null: false
     t.index ["pia_id"], name: "index_answers_on_pia_id"
   end
 
@@ -160,6 +161,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_08_130660) do
     t.boolean "is_archive", default: false, null: false
     t.string "category"
     t.integer "progress", default: 0
+    t.integer "lock_version", default: 0, null: false
     t.index ["structure_id"], name: "index_pias_on_structure_id"
   end
 

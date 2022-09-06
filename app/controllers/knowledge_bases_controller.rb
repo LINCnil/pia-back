@@ -58,6 +58,6 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def knowledge_base_params
-    params.fetch(:knowledge_base, {}).permit(:name, :author, :contributors)
+    params.fetch(:knowledge_base, {}).permit(:name, :author, :contributors, :lock_version)
   end
 end
