@@ -2,6 +2,17 @@ class KnowledgesController < ApplicationController
   before_action :set_knowledge_base
   before_action :set_knowledge, only: %w[show update destroy]
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @knowledge.model_name.singular,
+        params: knowledge_params,
+        record: @knowledge.reload,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   def index
     knowledges = []
     @knowledge_base.knowledges.find_each do |knowledge|
@@ -52,7 +63,7 @@ class KnowledgesController < ApplicationController
   end
 
   def knowledge_params
-    data = params.fetch(:knowledge, {}).permit(:name, :slug, :filters, :category, :placeholder, :description, :items)
+    data = params.fetch(:knowledge, {}).permit(:name, :slug, :filters, :category, :placeholder, :description, :items, :lock_version)
     data[:items] = JSON.parse(data[:items]) if data[:items].present?
     data
   end

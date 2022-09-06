@@ -1,6 +1,17 @@
 class MeasuresController < ApplicationController
   before_action :set_measure, only: %i[show update destroy]
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @measure.model_name.singular,
+        params: measure_params,
+        record: @measure.reload,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   # GET /measures
   def index
     if params[:reference_to]
@@ -61,7 +72,7 @@ class MeasuresController < ApplicationController
     params.fetch(:measure, {}).permit(
       :title,
       :content,
-      :placeholder
+      :placeholder, :lock_version
     ).merge(params.permit(:pia_id))
   end
 end
