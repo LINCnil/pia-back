@@ -140,7 +140,8 @@ class PiasController < ApplicationController
       # return unless user.present?
       if user.is_a?(User)
         if field != :guests
-          user_fullnames << "#{user.firstname} #{user.lastname}"
+          full_name = (user.firstname.present? && user.lastname.present?) ? "#{user.firstname} #{user.lastname}" : user.email
+          user_fullnames << full_name
         end
 
         # save for auth mode
