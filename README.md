@@ -79,7 +79,7 @@ Use these credentials into your PIA application
 
 Enter the rails console with `bin/rails c`
 
-Launch the command `User.create(email: 'YOUR_EMAIL', password: 'azeazeazeaze', password_confirmation: 'azeazeazeaze')` (your password should be at least 12 characters long).
+Launch the command `User.create(email: 'YOUR_EMAIL', password: 'Azeazeaze123-', password_confirmation: 'Azeazeaze123-')` (your password should be at least 12 characters long, with numbers and special characters).
 
 Unlock your user with the **unlock_access!** method
 
