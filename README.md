@@ -79,7 +79,7 @@ Use these credentials into your PIA application
 
 Enter the rails console with `bin/rails c`
 
-Launch the command `User.create(email: 'YOUR_EMAIL', password: 'azeazeaze', password_confirmation: 'azeazeaze')`
+Launch the command `User.create(email: 'YOUR_EMAIL', password: 'azeazeazeaze', password_confirmation: 'azeazeazeaze')` (your password should be at least 12 characters long).
 
 Unlock your user with the **unlock_access!** method
 
@@ -101,6 +101,8 @@ Unlock your user with the **unlock_access!** method
 - Then, in [the pia (front-end) application](https://github.com/LINCnil/pia), use this URL to enable the server mode.
 
 - Fill the field in "Tools" > "Settings"
+
+- For the authentication mode: every user will have to fill the server URL, the client ID the client SECRET to access the authentication interface.
 
 ![PIA Settings](public/pia-settings.png)
 
