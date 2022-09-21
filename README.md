@@ -102,7 +102,7 @@ Unlock your user with the **unlock_access!** method
 
 - Fill the field in "Tools" > "Settings"
 
-- For the authentication mode: every user will have to fill the server URL, the client ID the client SECRET to access the authentication interface.
+- For the authentication mode: every user will have to fill the server URL, the client ID and the client SECRET fields to access the authentication interface.
 
 ![PIA Settings](public/pia-settings.png)
 
