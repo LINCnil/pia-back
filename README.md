@@ -96,7 +96,8 @@ Unlock your user with the **unlock_access!** method
 ### Enable LDAP MODE
 Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file
 
-Set up credential
+Set up environment credentials variables:
+
 ```
 ldap_host
 ldap_port
