@@ -65,6 +65,8 @@ If needed, fill DEFAULT_PORT to the PORT you use
 
 ### Enable the authentication mode
 
+#### configure App
+
 Set `ENABLE_AUTHENTICATION=true` inside your `.env` file
 
 Enter the rails console with `bin/rails c`
@@ -75,7 +77,7 @@ Find your UID and SECRET information `Doorkeeper::Application.select(:uid, :secr
 
 Use these credentials into your PIA application
 
-### Create admin account
+#### Create admin account
 
 Enter the rails console with `bin/rails c`
 
@@ -89,6 +91,21 @@ Unlock your user with the **unlock_access!** method
     a.is_functional_admin = true
     a.is_user = true
     a.unlock_access!
+```
+
+### Enable LDAP MODE
+Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file
+
+Set up environment credentials variables:
+
+```
+ldap_host
+ldap_port
+ldap_attribute
+ldap_base
+ldap_admin_user
+ldap_admin_user_password
+ldap_ssl
 ```
 
 ### Run the application
