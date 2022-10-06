@@ -94,18 +94,18 @@ Unlock your user with the **unlock_access!** method
 ```
 
 ### Enable LDAP MODE
-Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file
+Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
-Set up environment credentials variables:
+Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
 
 ```
-ldap_host
-ldap_port
-ldap_attribute
-ldap_base
-ldap_admin_user
-ldap_admin_user_password
-ldap_ssl
+ldap_host: [Fill it with the LDAP host]
+ldap_port: [Fill it with the LDAP port]
+ldap_attribute: [Fill it with the LDAP attribute]
+ldap_base: [Fill it with the LDAP base]
+ldap_admin_user: [Fill it with the LDAP admin user]
+ldap_admin_user_password: [Fill it with admin user password]
+ldap_ssl: [true or false]
 ```
 
 ### Run the application
