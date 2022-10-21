@@ -328,6 +328,7 @@ Doorkeeper.configure do
     #     "username": User.find(token.resource_owner_id).username
 
     {
+      resource_owner_id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
