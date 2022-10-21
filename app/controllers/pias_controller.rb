@@ -28,6 +28,7 @@ class PiasController < ApplicationController
         .find_each do |pia|
       res << serialize(pia)
     end
+    res = res.uniq
     render json: res
   end
 
