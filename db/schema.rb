@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_24_092351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,7 +41,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
     t.integer "pia_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.bigint "user_id"
     t.index ["pia_id"], name: "index_comments_on_pia_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "evaluations", id: :serial, force: :cascade do |t|
@@ -67,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
     t.boolean "is_example", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lock_version", default: 0, null: false
   end
 
   create_table "knowledges", force: :cascade do |t|
@@ -80,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
     t.bigint "knowledge_base_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lock_version", default: 0, null: false
     t.index ["knowledge_base_id"], name: "index_knowledges_on_knowledge_base_id"
   end
 
@@ -90,6 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
     t.integer "pia_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "lock_version", default: 0, null: false
     t.index ["pia_id"], name: "index_measures_on_pia_id"
   end
 
@@ -213,6 +218,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_144223) do
   add_foreign_key "answers", "pias"
   add_foreign_key "attachments", "pias"
   add_foreign_key "comments", "pias"
+  add_foreign_key "comments", "users"
   add_foreign_key "evaluations", "pias"
   add_foreign_key "knowledges", "knowledge_bases"
   add_foreign_key "measures", "pias"
