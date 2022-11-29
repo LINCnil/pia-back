@@ -18,7 +18,7 @@ class Evaluation < ApplicationRecord
     evaluator_relation = pia.user_pias.find_by({ role: 'evaluator' })
     evaluator = evaluator_relation.user if evaluator_relation.present? && evaluator_relation.user.present?
 
-    unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]['id'] == reference_to.split('.').last.to_i))
+    unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions.present? && questions[0]['id'] == reference_to.split('.').last.to_i))
       return
     end
 
@@ -34,7 +34,8 @@ class Evaluation < ApplicationRecord
     validator_relation = pia.user_pias.find_by({ role: 'validator' })
     validator = validator_relation.user if validator_relation.present? && validator_relation.user.present?
 
-    unless global_status == 2 && (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions[0]['id'] == reference_to.split('.').last.to_i))
+    unless global_status == 2 &&
+      (evaluation_mode === 'item' || (evaluation_mode === 'question' && questions.present? && questions[0]['id'] == reference_to.split('.').last.to_i) || infos['is_measure'].present?)
       return
     end
 
