@@ -218,6 +218,8 @@ class PiasController < ApplicationController
                                   :lock_version,
                                   :authors,
                                   :validators,
-                                  :evaluators)
+                                  :evaluators,
+                                  :rejection_reason,
+                                  :applied_adjustments)
   end
 end
