@@ -16,8 +16,8 @@ You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full 
 
 ### Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
-- [Ruby](http://www.ruby-lang.org) 2.7.x
-- [Rails](http://rubyonrails.org) 6.0.x
+- [Ruby](http://www.ruby-lang.org) 3.1.x
+- [Rails](http://rubyonrails.org) 7.0.x
 - [PostgreSQL](https://www.postgresql.org) 12.0+
 
 ### System requirements
@@ -49,13 +49,17 @@ Fill the fields `username` and `password` for each environment with the PostgreS
 ### Create and fill the file `.env` file
 `cp .env-example .env`
 
-Generate the SECRET_KEY_BASE with `bin/rake secret` and paste the secret key in the file.
-Generate the DEVISE_SECRET_KEY with `bin/rake secret` and paste the secret key in the file.
-Generate the DEVISE_PEPPER with `bin/rake secret` and paste the secret key in the file.
-Fill MAILER_SENDER with the default address email sender
-Fill DEFAULT_URL with the URL of your server
-If needed, fill DEFAULT_PORT to the PORT you use
+Generate the `SECRET_KEY_BASE` with `bin/rake secret` and paste the secret key in the file.
 
+Generate the `DEVISE_SECRET_KEY` with `bin/rake secret` and paste the secret key in the file.
+
+Generate the `DEVISE_PEPPER` with `bin/rake secret` and paste the secret key in the file.
+
+Fill `MAILER_SENDER` with the default address email sender
+
+Fill `DEFAULT_URL` with the URL of your server
+
+If needed, fill `DEFAULT_PORT` to the PORT you use
 
 ### Create database
 `bin/rake db:create`

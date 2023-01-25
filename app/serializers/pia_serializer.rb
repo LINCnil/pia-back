@@ -24,23 +24,11 @@ class PiaSerializer
              :structure_sector_name,
              :structure_data,
              :category,
-             :progress
+             :progress,
+             :lock_version
 
   attribute :is_archive do |pia|
     pia.is_archive ? 1 : 0
-  end
-
-  attribute :guests do |pia|
-    res = []
-    guests = pia.user_pias.where(role: 0)
-
-    if guests.present?
-      guests.each do |up|
-        user = User.find(up.user_id)
-        res << user
-      end
-    end
-    res
   end
 
   attribute :user_pias do |pia|

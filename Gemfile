@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 2.7'
+ruby '~> 3.1.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'fast_jsonapi'
-gem 'rails', '~> 6.0.4'
+gem 'rails', '~> 7.0.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -55,7 +55,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'listen', '~> 3.2.1'
+  # gem 'listen', '~> 3.2.1'
   gem 'rubocop-rails', require: false
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem 'spring'
