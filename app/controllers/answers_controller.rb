@@ -1,6 +1,17 @@
 class AnswersController < ApplicationController
   before_action :set_answer, only: %i[show update destroy]
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @answer.model_name.singular,
+        params: answer_params,
+        record: @answer.reload,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   # GET /answers
   def index
     if params[:reference_to]
@@ -59,7 +70,7 @@ class AnswersController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def answer_params
     params.fetch(:answer, {}).permit(
-      :reference_to,
+      :reference_to, :lock_version,
       data: [:text, :gauge, { list: [] }]
     ).merge(params.permit(:pia_id))
   end

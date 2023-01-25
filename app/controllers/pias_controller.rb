@@ -2,6 +2,17 @@ class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
   before_action :authorize_pia if ENV['ENABLE_AUTHENTICATION'].present?
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @pia.model_name.singular,
+        params: pia_params,
+        record: @pia.reload,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   # GET /pias
   def index
     res = []
@@ -17,6 +28,7 @@ class PiasController < ApplicationController
         .find_each do |pia|
       res << serialize(pia)
     end
+    res = res.uniq
     render json: res
   end
 
@@ -36,24 +48,23 @@ class PiasController < ApplicationController
     pia_parameters = pia_params
     # do not add this to pia
     pia_parameters.delete(:guests)
+    pia_parameters.delete(:authors)
+    pia_parameters.delete(:evaluators)
+    pia_parameters.delete(:validators)
 
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
     @pia = Pia.new(pia_parameters)
 
-    # Update pia user fields and UserPia relations
-    update_pia_user_field(:author_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 1) }
-    update_pia_user_field(:evaluator_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 2) }
-    update_pia_user_field(:validator_name) { |user| @pia.user_pias << UserPia.new(user_id: user.id, role: 3) }
-
-    # Guest in userPia
-    if pia_params[:guests].present?
-      pia_params[:guests].split(',').each do |user_id|
-        @pia.user_pias << UserPia.new(user_id: user_id, role: 0)
-      end
-    end
-
     if @pia.save
-      render json: serialize(@pia), status: :created
+      if ENV['ENABLE_AUTHENTICATION'].present?
+        # Update pia user fields and UserPia relations
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3) if pia_params.key?("validators")
+        check_pia_user_field(:guests, pia_params["guests"]) if pia_params.key?("guests")
+        @pia.save
+      end
+      render json: serialize(@pia.reload), status: :created
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
@@ -65,26 +76,23 @@ class PiasController < ApplicationController
 
     # do not add this to pia
     pia_parameters.delete(:guests)
+    pia_parameters.delete(:authors)
+    pia_parameters.delete(:evaluators)
+    pia_parameters.delete(:validators)
 
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
 
     if @pia.update(pia_parameters)
 
-      # Update pia user fields and UserPia relations
-      update_pia_user_field(:author_name) { |user| update_user_pias(user, 1) }
-      update_pia_user_field(:evaluator_name) { |user| update_user_pias(user, 2) }
-      update_pia_user_field(:validator_name) { |user| update_user_pias(user, 3) }
-
-      # Guest in userPia
-      if pia_params[:guests].present?
-        @pia.user_pias.where(role: 0).delete_all
-        pia_params[:guests].split(',').each do |user_id|
-          @pia.user_pias << UserPia.new(user_id: user_id, role: 0) if check_user_id(user_id).is_a?(User)
-        end
+      if ENV['ENABLE_AUTHENTICATION'].present?
+        # Update pia user fields and UserPia relations
+        check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
+        check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
+        check_pia_user_field(:validators, pia_params["validators"], "validator_name", 3) if pia_params.key?("validators")
+        check_pia_user_field(:guests, pia_params["guests"]) if pia_params.key?("guests")
+        @pia.save
       end
-
-      @pia.save
-      render json: serialize(@pia)
+      render json: serialize(@pia.reload), status: :ok
     else
       render json: @pia.errors, status: :unprocessable_entity
     end
@@ -122,22 +130,34 @@ class PiasController < ApplicationController
     end
   end
 
-  def update_pia_user_field(field)
-    user = check_user_id(pia_params[field])
-    return unless user.is_a?(User)
+  def check_pia_user_field(field, value, dump_field = nil, role = 0)
+    user_fullnames = []
+    @pia.user_pias.where(role: role).delete_all
+    return unless value.present?
 
-    @pia.send("#{field}=", "#{user.firstname} #{user.lastname}")
-    yield(user)
-  end
+    # update relations
+    value.split(',').each do |id|
+      user = check_user_id(id)
+      # return unless user.present?
+      if user.is_a?(User)
+        if field != :guests
+          full_name = (user.firstname.present? && user.lastname.present?) ? "#{user.firstname} #{user.lastname}" : user.email
+          user_fullnames << full_name
+        end
 
-  def update_user_pias(user, role)
-    relation = @pia.user_pias.find_by(role: role)
-    if relation.blank?
-      relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
-    else
-      relation.update(user_id: user.id)
+        # save for auth mode
+        relation = @pia.user_pias.find_by(role: role, user_id: user.id)
+        if relation.blank?
+          relation = UserPia.new(user_id: user.id, role: role, pia_id: @pia.id)
+        end
+        relation.save
+      else
+        user_fullnames << user
+      end
     end
-    relation.save
+
+    # update dump_field_value with user fullnames
+    @pia.send("#{dump_field}=", user_fullnames.join(',')) if field != :guests && dump_field.present?
   end
 
   def import_params
@@ -194,6 +214,12 @@ class PiasController < ApplicationController
                                   :structure_data,
                                   :is_archive,
                                   :progress,
-                                  :category)
+                                  :category,
+                                  :lock_version,
+                                  :authors,
+                                  :validators,
+                                  :evaluators,
+                                  :rejection_reason,
+                                  :applied_adjustments)
   end
 end

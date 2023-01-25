@@ -1,6 +1,17 @@
 class KnowledgeBasesController < ApplicationController
   before_action :set_knowledge_base, only: %w[show update destroy]
 
+  rescue_from ActiveRecord::StaleObjectError do |e|
+    render json: {
+      errors: {
+        model: @knowledge_base.model_name.singular,
+        params: knowledge_base_params,
+        record: @knowledge_base.reload,
+        attempted_action: e.attempted_action
+      }
+    }, status: :conflict
+  end
+
   def index
     knowledge_bases = []
     KnowledgeBase.all.find_each do |knowledge_base|
@@ -47,6 +58,6 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def knowledge_base_params
-    params.fetch(:knowledge_base, {}).permit(:name, :author, :contributors)
+    params.fetch(:knowledge_base, {}).permit(:name, :author, :contributors, :lock_version)
   end
 end
