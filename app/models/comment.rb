@@ -1,6 +1,6 @@
 class Comment < ApplicationRecord
   include ActionView::Helpers::SanitizeHelper
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :pia, inverse_of: :comments
   validates :reference_to, presence: true
   after_initialize :overwrite_to_safety_values
