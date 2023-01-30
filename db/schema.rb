@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_24_092351) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_27_143405) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -146,10 +146,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_092351) do
     t.string "author_name", default: ""
     t.string "evaluator_name", default: ""
     t.string "validator_name", default: ""
-    t.integer "dpo_status", default: 0
+    t.integer "dpo_status"
     t.text "dpo_opinion", default: ""
     t.text "concerned_people_opinion", default: ""
-    t.integer "concerned_people_status", default: 0
+    t.integer "concerned_people_status"
     t.text "rejection_reason", default: ""
     t.text "applied_adjustments", default: ""
     t.datetime "created_at", precision: nil, null: false
@@ -157,7 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_092351) do
     t.string "dpos_names", default: ""
     t.string "people_names", default: ""
     t.integer "is_example", default: 0
-    t.boolean "concerned_people_searched_opinion", default: false
+    t.boolean "concerned_people_searched_opinion"
     t.string "concerned_people_searched_content"
     t.integer "structure_id"
     t.string "structure_name"
