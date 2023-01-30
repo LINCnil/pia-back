@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :user do
     transient do
+      role {nil}
       is_user { true }
       is_functional_admin { false }
       is_technical_admin { false }
@@ -9,8 +10,7 @@ FactoryBot.define do
     email { "user#{role.present? ? '+' +  role : nil}@test.com" }
     firstname {'user'}
     lastname {role ? role : 'nothing'}
-    is_user {is_user}
-    is_functional_admin {is_functional_admin}
-    is_technical_admin {is_technical_admin}
+    password {[*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join}
+    password_confirmation {password}
   end
 end
