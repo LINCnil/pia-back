@@ -9,7 +9,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @auth_tokens = auth_tokens_for_user(@admin, @auth)
   end
 
-  test "test create route" do
+  test "test create route + new user is locked" do
     post users_url, params: {
       user: {
         firstname: "new",
@@ -22,6 +22,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
+
+    new_user = JSON.parse(response.body)
+    assert_equal new_user['access_locked'], true
   end
 
   test "test update route" do
