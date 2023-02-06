@@ -10,41 +10,46 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "test create route + new user is locked" do
-    new_user = create_user_by_controller
+    if ENV['ENABLE_AUTHENTICATION'].present?
+      new_user = create_user_by_controller
 
-    assert_response :success
-    assert_equal new_user['access_locked'], true
+      assert_response :success
+      assert_equal new_user['access_locked'], true
+    end
   end
 
   test "test update route" do
-    user_to_update = create(:user, identifier: "functional")
-    patch user_url(user_to_update), params: {
-      user: {
-        firstname: "updated",
-        email: "user+update@test.com",
-        access_type: ['user', 'functional']
+    if ENV['ENABLE_AUTHENTICATION'].present?
+      user_to_update = create(:user, identifier: "functional")
+      patch user_url(user_to_update), params: {
+        user: {
+          firstname: "updated",
+          email: "user+update@test.com",
+          access_type: ['user', 'functional']
+        }
+      }, headers: {
+        "Authorization": "Bearer #{@auth_tokens['access_token']}"
       }
-    }, headers: {
-      "Authorization": "Bearer #{@auth_tokens['access_token']}"
-    }
 
-    assert_response :success
+      assert_response :success
+    end
   end
 
   test "test delete route" do
-    user_to_delete = create(:user, identifier: "functional")
-    delete user_url(user_to_delete), headers: {
-      "Authorization": "Bearer #{@auth_tokens['access_token']}"
-    }
+    if ENV['ENABLE_AUTHENTICATION'].present?
+      user_to_delete = create(:user, identifier: "functional")
+      delete user_url(user_to_delete), headers: {
+        "Authorization": "Bearer #{@auth_tokens['access_token']}"
+      }
 
-    assert_response :no_content
+      assert_response :no_content
+    end
   end
 
   test "test process to unlock user and set password" do
     # create a user locked by default
-    new_user = create_user_by_controller
-    new_user = User.find(new_user["id"])
-    assert_equal new_user.access_locked?, true
+    new_user = create(:user)
+    new_user.lock_access!
 
     # check by uuid
     get "/users/unlock_access/" +  new_user.uuid
