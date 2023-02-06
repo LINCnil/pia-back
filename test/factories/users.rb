@@ -1,11 +1,15 @@
 FactoryBot.define do
   factory :user do
+    transient do
+      identifier { nil }
+    end
+
     firstname {'user'}
     lastname {'nothing'}
     password {[*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join}
     password_confirmation {password}
     is_user { true }
-    email { 'user@nothing.com' }
+    email { "user+#{identifier ? identifier : 'default'}@test.com" }
 
     factory :user_admin do
       is_functional_admin { true }
