@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     if user.valid? # change uuid
       user.lock_access! # save user
       UserMailer.with(user: user).uuid_created.deliver_now
-      render json: serialize(user)
+      render json: serialize(user), status: 200
     else
       render json: user.errors.to_json, status: :not_acceptable
     end
