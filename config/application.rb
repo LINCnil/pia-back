@@ -38,7 +38,7 @@ module PiaBack
     config.api_only = true
 
     # set the default locale to French
-    config.i18n.default_locale = :en
+    config.i18n.default_locale = ENV.fetch("DEFAULT_LOCALE", :en)
     # if a locale isn't found fall back to this default locale
     config.i18n.fallbacks = true
     # set the possible locales to English and Brazilian-Portuguese

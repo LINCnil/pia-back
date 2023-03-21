@@ -98,6 +98,7 @@ Unlock your user with the **unlock_access!** method
 ```
 
 ### Enable LDAP MODE
+
 Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
@@ -111,6 +112,18 @@ ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
 ldap_ssl: [true or false]
 ```
+
+### Configure the default locale for the authentication emails
+
+The PIA tool can send different emails when the authentication module is enabled (new user, new evaluation ready, ...).
+
+The default locale for the content of the authentication emails is English (en).
+
+Define `DEFAULT_LOCALE="[locale key]"` inside your `.env` file to change the locale.
+
+For example, if you want to have French translations for the authenication emails, configure `DEFAULT_LOCALE="fr"` in your `.env` file.
+
+Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, nl, no, pl, pt, ro, sl, sv.
 
 ### Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
