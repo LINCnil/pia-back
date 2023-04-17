@@ -97,8 +97,22 @@ Unlock your user with the **unlock_access!** method
     a.unlock_access!
 ```
 
-### Enable LDAP MODE
-Set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
+#### SMTP configuration
+Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
+
+```
+email_from: pia@xxxx.com
+smtp_address: xxxx
+smtp_port: xxxx
+smtp_domain: xxxx
+smtp_user_name: xxxx
+smtp_password: xxxx
+smtp_authentication: :cram_md5
+smtp_enable_starttls_auto: true
+```
+
+### Enable LDAP MODE (optional)
+If you want to use the ldap authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
 
