@@ -10,7 +10,8 @@ class ApplicationController < ActionController::API
   end
 
   def info
-    render json: { valid: true, auth: ENV['ENABLE_AUTHENTICATION'].present? }
+    client_app = Doorkeeper::Application.find_by(uid: params["client_id"], secret: params["client_secret"])
+    render json: { valid: client_app.present?, auth: ENV['ENABLE_AUTHENTICATION'].present? }
   end
 
   protected
