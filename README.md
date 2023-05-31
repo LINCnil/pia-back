@@ -77,7 +77,11 @@ Enter the rails console with `bin/rails c`
 
 Launch the command `Doorkeeper::Application.create(name: "PIA", redirect_uri: "urn:ietf:wg:oauth:2.0:oob", scopes: ["read", "write"])`
 
-Find your UID and SECRET information `Doorkeeper::Application.select(:uid, :secret).first`
+Find your Client ID and Client SECRET by using `Doorkeeper::Application.select(:uid, :secret).last.uid` and `Doorkeeper::Application.select(:uid, :secret).last.secret`
+
+See:
+
+![image](https://github.com/LINCnil/pia-back/assets/24872475/b82f817d-6faa-4e9a-b5bb-df056049abc5)
 
 Use these credentials into your PIA application
 
