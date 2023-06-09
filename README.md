@@ -127,9 +127,15 @@ ldap_host: [Fill it with the LDAP host]
 ldap_port: [Fill it with the LDAP port]
 ldap_attribute: [Fill it with the LDAP attribute]
 ldap_base: [Fill it with the LDAP base]
+ldap_ssl: [true or false]
+```
+
+If admin user binding is a necessity,
+set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true` inside your `.env` file and set up LDAP admin user credentials:
+
+```
 ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
-ldap_ssl: [true or false]
 ```
 
 ### Configure the default locale for the authentication emails
