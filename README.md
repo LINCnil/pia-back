@@ -127,7 +127,7 @@ ldap_ssl: [true or false]
 ```
 
 If admin user binding is a necessity,
-set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true inside` your `.env` file and set up ldap admin user credentials:
+set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true` inside your `.env` file and set up LDAP admin user credentials:
 
 ```
 ldap_admin_user: [Fill it with the LDAP admin user]
