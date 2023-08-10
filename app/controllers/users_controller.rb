@@ -54,6 +54,7 @@ class UsersController < ApplicationController
   def check_uuid
     user = User.find_by(uuid: params[:uuid])
     return head :not_found unless user
+    return head :not_acceptable unless user.access_locked?
 
     # render user data
     render json: serialize(user)
@@ -61,19 +62,15 @@ class UsersController < ApplicationController
 
   def password_forgotten
     user = User.find_by(email: params[:email])
+    return :not_found unless user.present?
 
-    if user.present?
-      if user.access_locked?
-        render json: {}, status: :locked
-      elsif user.valid?
-        user.save
-        UserMailer.with(user: user).uuid_updated.deliver_now
-        render json: {} # change uuid
-      else
-        render json: {}, status: :not_acceptable # Not acceptable
-      end
+    if user.access_locked?
+      render json: {}, status: :locked
     else
-      render json: {}, status: :not_found
+      user.generate_uuid
+      user.save
+      UserMailer.with(user: user).uuid_updated.deliver_now
+      render json: {} # change uuid
     end
   end
 
