@@ -160,7 +160,7 @@ GEM
       digest
       net-protocol
       timeout
-    nio4r (2.5.8)
+    nio4r (2.5.9)
     nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
@@ -170,7 +170,7 @@ GEM
       ast (~> 2.4.1)
     pg (1.4.2)
     public_suffix (4.0.7)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     pundit (2.2.0)
       activesupport (>= 3.0.0)
@@ -269,7 +269,7 @@ DEPENDENCIES
   fast_jsonapi
   mime-types (~> 3.3)
   pg (>= 0.18, < 2.0)
-  puma (~> 4.3)
+  puma (~> 5.6)
   pundit
   rack-cors
   rails (~> 7.0.3)
