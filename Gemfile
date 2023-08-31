@@ -10,7 +10,7 @@ gem 'rails', '~> 7.0.3'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'mime-types', '~> 3.3'
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.6'
 
 gem 'carrierwave', '~> 2.1.1'
 gem 'carrierwave-base64', '~> 2.8.0'
