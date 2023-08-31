@@ -162,7 +162,7 @@ Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, n
 
 - Fill the field in "Tools" > "Settings"
 
-- For the authentication mode: every user will have to fill the server URL, the client ID and the client SECRET fields to access the authentication interface.
+- Every user will have to fill the server URL, the client ID and the client SECRET fields to access the authentication interface.
 
 ![PIA Settings](public/pia-settings.png)
 
