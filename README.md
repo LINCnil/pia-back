@@ -68,9 +68,7 @@ If needed, fill `DEFAULT_PORT` to the PORT you use.
 ## Create tables
 `bin/rake db:migrate`
 
-## Enable the authentication mode
-
-### configure the application
+## Configure the application
 
 Set `ENABLE_AUTHENTICATION=true` inside your `.env` file
 
@@ -85,6 +83,8 @@ See:
 ![image](https://github.com/LINCnil/pia-back/assets/24872475/b82f817d-6faa-4e9a-b5bb-df056049abc5)
 
 You will need the CLIENT ID and the CLIENT SECRET data to enable the authentication mode in your PIA application, in the settings page.
+
+## Enable the authentication mode
 
 ### Create the first admin account
 
