@@ -11,43 +11,44 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 [![Rails Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop-rails)
 [![Rails Style Guide](https://img.shields.io/badge/code_style-community-brightgreen.svg)](https://rails.rubystyle.guide)
 
-## Installation
+## Wiki
 You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full installation of PIA (back-end) and PIA (front-end) applications on a ubuntu 20.04 server.
 
-### Requirements
+## Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
 - [Ruby](http://www.ruby-lang.org) 3.1.x
 - [Rails](http://rubyonrails.org) 7.0.x
 - [PostgreSQL](https://www.postgresql.org) 12.0+
 
-### System requirements
+## System requirements
 - CPU : i5
 - Ram: 4Go
 - Disk Space : 20Go
 - OS : preferably Linux but other OS works as well
 
-### PostgreSQL installation
+## PostgreSQL installation
 Basic installation on Debian you can use the following documentation: [wiki.debian.org/PostgreSql](https://wiki.debian.org/PostgreSql)
-on Ubuntu you can use: [help.ubuntu.com/community/PostgreSQL](https://help.ubuntu.com/community/PostgreSQL)
+
+On Ubuntu you can use: [help.ubuntu.com/community/PostgreSQL](https://help.ubuntu.com/community/PostgreSQL)
 
 Also, you need to create a new user with password.
 
-### Clone the repository
+## Clone the repository
 `git clone https://github.com/LINCnil/pia-back.git`
 
-### Go to the folder pia-back
+## Go to the folder pia-back
 `cd pia-back`
 
-### Create and fill the file database.yml
+## Create and fill the file database.yml
 `cp config/database.example.yml config/database.yml`
 
 Fill the fields `username` and `password` for each environment with the PostgreSQL username and password created in the step "PostgreSQL installation".
 
-### Install all dependencies
+## Install all dependencies
 `bundle install`
 
-### Create and fill the file `.env` file
-`cp .env-example .env`
+## Create and fill the file `.env` file
+Go in the root path of the back project then `cp .env-example .env`.
 
 Generate the `SECRET_KEY_BASE` with `bin/rake secret` and paste the secret key in the file.
 
@@ -55,21 +56,21 @@ Generate the `DEVISE_SECRET_KEY` with `bin/rake secret` and paste the secret key
 
 Generate the `DEVISE_PEPPER` with `bin/rake secret` and paste the secret key in the file.
 
-Fill `MAILER_SENDER` with the default address email sender
+Fill `MAILER_SENDER` with the default address email sender.
 
-Fill `DEFAULT_URL` with the URL of your server
+Fill `DEFAULT_URL` with the URL of your server.
 
-If needed, fill `DEFAULT_PORT` to the PORT you use
+If needed, fill `DEFAULT_PORT` to the PORT you use.
 
-### Create database
+## Create the database
 `bin/rake db:create`
 
-### Create tables
+## Create tables
 `bin/rake db:migrate`
 
-### Enable the authentication mode
+## Enable the authentication mode
 
-#### configure App
+### configure the application
 
 Set `ENABLE_AUTHENTICATION=true` inside your `.env` file
 
@@ -83,15 +84,15 @@ See:
 
 ![image](https://github.com/LINCnil/pia-back/assets/24872475/b82f817d-6faa-4e9a-b5bb-df056049abc5)
 
-Use these credentials into your PIA application
+You will need the CLIENT ID and the CLIENT SECRET data to enable the authentication mode in your PIA application, in the settings page.
 
-#### Create admin account
+### Create the first admin account
 
 Enter the rails console with `bin/rails c`
 
 Launch the command `User.create(email: 'YOUR_EMAIL', password: 'Azeazeaze123-', password_confirmation: 'Azeazeaze123-')` (your password should be at least 12 characters long, with numbers and special characters).
 
-Unlock your user with the **unlock_access!** method
+Get your user, add him all roles and unlock him with the **unlock_access!** method:
 
 ```
     a = User.last
@@ -99,10 +100,10 @@ Unlock your user with the **unlock_access!** method
     a.is_functional_admin = true
     a.is_user = true
     a.unlock_access!
+    a.save
 ```
 
-
-#### SMTP configuration
+## SMTP configuration
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
 
 ```
@@ -116,11 +117,11 @@ smtp_authentication: :cram_md5
 smtp_enable_starttls_auto: true
 ```
 
-### Enable LDAP MODE (optional)
-If you want to use the ldap authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
+## Enable LDAP mode (optional)
+If you want to use the LDAP authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
 
-Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
+Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit`:
 
 ```
 ldap_host: [Fill it with the LDAP host]
@@ -138,7 +139,7 @@ ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
 ```
 
-### Configure the default locale for the authentication emails
+## Configure the default locale for the authentication emails
 
 The PIA tool can send different emails when the authentication module is enabled (new user, new evaluation ready, ...).
 
@@ -150,7 +151,7 @@ For example, if you want to have French translations for the authenication email
 
 Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, nl, no, pl, pt, ro, sl, sv.
 
-### Run the application
+## Run the application
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
 
 - You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a different port.
@@ -165,13 +166,13 @@ Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, n
 
 ![PIA Settings](public/pia-settings.png)
 
-### Run the application in production mode
+## Run the application in production mode
 1. Fill the `production` section in the `database.yml`file.
 2. Create the database: `RAILS_ENV=production bin/rake db:create`
 3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
 4. Run the server: `RAILS_ENV=production bin/rails s`
 
-### How to update to the latest version
+## How to update to the latest version
 
 Go to the folder pia-back : `cd pia-back`
 
@@ -181,10 +182,10 @@ Update the dependencies : `bundle install`
 
 Update the database : `RAILS_ENV=production bin/rake db:migrate`
 
-### Run the test
+## Run the test
 `bin/rake`
 
-### Change default locale
+## Change the default locale
 Pia back mailer work with rails-i18n. For update default locale,
 go to change this line in rails configuration:
 
