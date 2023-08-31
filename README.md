@@ -68,9 +68,7 @@ If needed, fill `DEFAULT_PORT` to the PORT you use.
 ## Create tables
 `bin/rake db:migrate`
 
-## Enable the authentication mode
-
-### configure the application
+## Configure the application
 
 Set `ENABLE_AUTHENTICATION=true` inside your `.env` file
 
@@ -85,6 +83,8 @@ See:
 ![image](https://github.com/LINCnil/pia-back/assets/24872475/b82f817d-6faa-4e9a-b5bb-df056049abc5)
 
 You will need the CLIENT ID and the CLIENT SECRET data to enable the authentication mode in your PIA application, in the settings page.
+
+## Enable the authentication mode
 
 ### Create the first admin account
 
@@ -103,21 +103,7 @@ Get your user, add him all roles and unlock him with the **unlock_access!** meth
     a.save
 ```
 
-## SMTP configuration
-Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
-
-```
-email_from: pia@xxxx.com
-smtp_address: xxxx
-smtp_port: xxxx
-smtp_domain: xxxx
-smtp_user_name: xxxx
-smtp_password: xxxx
-smtp_authentication: :cram_md5
-smtp_enable_starttls_auto: true
-```
-
-## Enable LDAP mode (optional)
+### Enable LDAP mode (optional)
 If you want to use the LDAP authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
 
@@ -138,6 +124,21 @@ set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true` inside your `.env` file and set up LDAP
 ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
 ```
+
+## SMTP configuration
+Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
+
+```
+email_from: pia@xxxx.com
+smtp_address: xxxx
+smtp_port: xxxx
+smtp_domain: xxxx
+smtp_user_name: xxxx
+smtp_password: xxxx
+smtp_authentication: :cram_md5
+smtp_enable_starttls_auto: true
+```
+
 
 ## Configure the default locale for the authentication emails
 
@@ -162,7 +163,7 @@ Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, n
 
 - Fill the field in "Tools" > "Settings"
 
-- For the authentication mode: every user will have to fill the server URL, the client ID and the client SECRET fields to access the authentication interface.
+- Every user will have to fill the server URL, the client ID and the client SECRET fields to access the authentication interface.
 
 ![PIA Settings](public/pia-settings.png)
 
