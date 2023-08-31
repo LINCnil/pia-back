@@ -103,21 +103,7 @@ Get your user, add him all roles and unlock him with the **unlock_access!** meth
     a.save
 ```
 
-## SMTP configuration
-Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
-
-```
-email_from: pia@xxxx.com
-smtp_address: xxxx
-smtp_port: xxxx
-smtp_domain: xxxx
-smtp_user_name: xxxx
-smtp_password: xxxx
-smtp_authentication: :cram_md5
-smtp_enable_starttls_auto: true
-```
-
-## Enable LDAP mode (optional)
+### Enable LDAP mode (optional)
 If you want to use the LDAP authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
 
 
@@ -138,6 +124,21 @@ set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true` inside your `.env` file and set up LDAP
 ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
 ```
+
+## SMTP configuration
+Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
+
+```
+email_from: pia@xxxx.com
+smtp_address: xxxx
+smtp_port: xxxx
+smtp_domain: xxxx
+smtp_user_name: xxxx
+smtp_password: xxxx
+smtp_authentication: :cram_md5
+smtp_enable_starttls_auto: true
+```
+
 
 ## Configure the default locale for the authentication emails
 
