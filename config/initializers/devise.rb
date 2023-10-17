@@ -58,7 +58,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  # config.authentication_keys = [:email]
+  config.authentication_keys = [:email]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -320,4 +320,21 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # # config.saml_default_user_key = :email # or whatever attribute you want to use as the user identifier
+  # config.saml_create_user = true # Automatically create users
+  # config.saml_update_user = true # Update user attributes after login
+  # config.saml_configure do |saml|
+  #   url_base = "#{ENV['SAML_URL_BASE']}"
+  #   saml.issuer = "#{url_base}/saml/metadata"
+  #   saml.assertion_consumer_service_url = "#{url_base}/saml/acs"
+  #   saml.assertion_consumer_logout_service_url = "#{url_base}/saml/logout"
+
+  #   # IdP section
+  #   saml.idp_entity_id                  = ENV['IDP_ENTITY_ID']
+  #   saml.idp_sso_target_url             = ENV['IDP_SSO_TARGET_URL']
+  #   saml.idp_slo_target_url             = ENV['IDP_SLO_TARGET_URL']
+  #   saml.idp_cert                       = ENV['IDP_CERT']
+  #   saml.name_identifier_format         = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+  # end
 end

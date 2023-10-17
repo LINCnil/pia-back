@@ -106,6 +106,9 @@ GEM
     devise_ldap_authenticatable (0.8.7)
       devise (>= 3.4.1)
       net-ldap (>= 0.16.0)
+    devise_saml_authenticatable (1.9.1)
+      devise (> 2.0.0)
+      ruby-saml (~> 1.7)
     docile (1.4.1)
     doorkeeper (5.9.2)
       railties (>= 5)
@@ -249,6 +252,7 @@ GEM
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
+    rexml (3.4.4)
     rubocop (1.87.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -278,6 +282,9 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
+    ruby-saml (1.18.1)
+      nokogiri (>= 1.13.10)
+      rexml
     securerandom (0.4.1)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -321,6 +328,7 @@ DEPENDENCIES
   devise-i18n
   devise-security
   devise_ldap_authenticatable
+  devise_saml_authenticatable (~> 1.9)
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
@@ -337,6 +345,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rails-omakase
+  ruby-saml (~> 1.15)
   simplecov
   tzinfo-data
 
@@ -371,6 +380,7 @@ CHECKSUMS
   devise-i18n (1.16.0) sha256=a33306f90f317cfe92753a000064e3ba9dec3cab2d5d01ef40d30f4b6e24e753
   devise-security (0.18.0) sha256=fc06be1624b5151044ff9c5d8e61abdfa7d56eb16bfdaec16a11235d54708513
   devise_ldap_authenticatable (0.8.7) sha256=8af6f839661e24ca9afc5a1508a7ec7e1327e93af4516f2baabacdf511ee5a2e
+  devise_saml_authenticatable (1.9.1) sha256=347c42e282f1d75b8aacb1537934f92024f79ddf2b50f199911ad8472e8cfa61
   docile (1.4.1) sha256=96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
   doorkeeper (5.9.2) sha256=cd4a43e0085f12afe36a8f0fc59d7f7d9ed2cb9d5c3d8a00cb9d5d845622d3f7
   doorkeeper-i18n (5.2.9) sha256=dea73afae44ffbf3bf7f2921b24ca801ee199d931591f15e24cb07af9c45b4a4
@@ -434,12 +444,14 @@ CHECKSUMS
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
   responders (3.2.0) sha256=89c2d6ac0ae16f6458a11524cae4a8efdceba1a3baea164d28ee9046bd3df55a
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rubocop (1.87.0) sha256=b9d9ddf55116a513f8ef2c7ae660662d8b49301f118d3f0df61865b33a5c188d
   rubocop-ast (1.49.1) sha256=4412f3ee70f6fe4546cc489548e0f6fcf76cafcfa80fa03af67098ffed755035
   rubocop-performance (1.26.1) sha256=cd19b936ff196df85829d264b522fd4f98b6c89ad271fa52744a8c11b8f71834
   rubocop-rails (2.35.4) sha256=3aeaa325439c89950e8327565682ea794065d08e2ecbbfe95032bfa295a35df5
   rubocop-rails-omakase (1.1.0) sha256=2af73ac8ee5852de2919abbd2618af9c15c19b512c4cfc1f9a5d3b6ef009109d
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
+  ruby-saml (1.18.1) sha256=1b0e7a44aef150b4197955f5e015d593672e242cfdc5d06aa7554ec2350b9107
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.13.2) sha256=bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246

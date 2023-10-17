@@ -8,8 +8,12 @@ class ApplicationController < ActionController::API
   before_action :active_storage_url_options
 
   def info
-    client_app = Doorkeeper::Application.find_by(uid: params["client_id"], secret: params["client_secret"])
-    render json: { valid: client_app.present?, auth: ENV['ENABLE_AUTHENTICATION'].present? }
+    client_app = Doorkeeper::Application.find_by(uid: params['client_id'], secret: params['client_secret'])
+    render json: {
+      valid: client_app.present?,
+      auth: ENV['ENABLE_AUTHENTICATION'].present?,
+      sso_enabled: ENV['ENABLE_SSO'].present? ? ActiveModel::Type::Boolean.new.cast(ENV['ENABLE_SSO']) : false
+    }
   end
 
   protected
