@@ -1,4 +1,4 @@
-require_relative "boot"
+require_relative 'boot'
 
 require "rails"
 # Pick the frameworks you want:
@@ -42,7 +42,7 @@ module PiaBack
     config.api_only = true
 
     # set the default locale to French
-    config.i18n.default_locale = ENV.fetch("DEFAULT_LOCALE", :en)
+    config.i18n.default_locale = ENV.fetch('DEFAULT_LOCALE', :en)
     # if a locale isn't found fall back to this default locale
     config.i18n.fallbacks = true
     # set the possible locales to English and Brazilian-Portuguese
@@ -54,5 +54,11 @@ module PiaBack
     config.action_view.sanitized_allowed_tags = tags_allowed
     attributes_allowed = ENV['SANITIZED_ALLOWED_ATTRIBUTES'] ? ENV['SANITIZED_ALLOWED_ATTRIBUTES'].split(' ') : []
     config.action_view.sanitized_allowed_attributes = attributes_allowed
+
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+
+    config.secret_key_base = Rails.application.credentials.secret_key_base
+    config.session_store :cookie_store, expire_after: 30.minutes
   end
 end

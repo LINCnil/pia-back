@@ -60,3 +60,6 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem "rubocop-rails-omakase", require: false, group: [ :development ]
 
 gem 'simplecov', require: false, group: :test
+gem "ruby-saml", "~> 1.15"
+gem "devise_saml_authenticatable", "~> 1.9"
+
