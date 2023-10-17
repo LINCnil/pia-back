@@ -35,4 +35,10 @@ Rails.application.routes.draw do
   resources :knowledge_bases do
     resources :knowledges
   end
+
+  get '/saml/metadata', to: 'saml#metadata'
+  get '/saml/sso', to: 'saml#sso'
+  get '/saml/logout', to: 'saml#logout'
+  post '/saml/acs', to: 'saml#consume'
+  get '/saml/slo', to: 'saml#slo'
 end

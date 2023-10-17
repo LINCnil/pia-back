@@ -101,6 +101,9 @@ GEM
     devise_ldap_authenticatable (0.8.7)
       devise (>= 3.4.1)
       net-ldap (>= 0.16.0)
+    devise_saml_authenticatable (1.9.1)
+      devise (> 2.0.0)
+      ruby-saml (~> 1.7)
     digest (3.1.0)
     doorkeeper (5.6.6)
       railties (>= 5)
@@ -234,6 +237,9 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
+    ruby-saml (1.16.0)
+      nokogiri (>= 1.13.10)
+      rexml
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ssrf_filter (1.0.8)
@@ -263,6 +269,7 @@ DEPENDENCIES
   devise-i18n
   devise-security
   devise_ldap_authenticatable
+  devise_saml_authenticatable (~> 1.9)
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
@@ -276,6 +283,7 @@ DEPENDENCIES
   rails (~> 7.0.3)
   rails-i18n
   rubocop-rails
+  ruby-saml (~> 1.15)
   tzinfo-data
 
 RUBY VERSION
