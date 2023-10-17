@@ -26,7 +26,7 @@ class User < ApplicationRecord
            dependent: :destroy
 
   def validate_login_uniqueness
-    errors.add(:login, :taken) if User.where(login: login).where.not(id: id).exists?
+    errors.add(:login, :taken) if User.where(login:).where.not(id:).exists?
   end
 
   RANDOM_PASSWORD_CHARS = [*'a'..'z', *'A'..'Z', *'0'..'9', *'!@#$%^&*()-_=+[]{}<>?'.chars].freeze
