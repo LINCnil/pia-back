@@ -47,10 +47,15 @@ Fill the fields `username` and `password` for each environment with the PostgreS
 ## Install all dependencies
 `bundle install`
 
+## Generate and fill the secret_key_base in your credentials
+Generate the `secret_key_base` with `bin/rake secret` and add it in your credentials using `EDITOR='nano' rails credentials:edit` :
+
+```
+    secret_key_base: [FIll it with your generated SECRET KEY BASE]
+```
+
 ## Create and fill the file `.env` file
 Go in the root path of the back project then `cp .env-example .env`.
-
-Generate the `SECRET_KEY_BASE` with `bin/rake secret` and paste the secret key in the file.
 
 Generate the `DEVISE_SECRET_KEY` with `bin/rake secret` and paste the secret key in the file.
 
