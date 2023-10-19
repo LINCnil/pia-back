@@ -51,7 +51,7 @@ Fill the fields `username` and `password` for each environment with the PostgreS
 Generate the `secret_key_base` with `bin/rake secret` and add it in your credentials using `EDITOR='nano' rails credentials:edit` :
 
 ```
-    secret_key_base: [FIll it with your generated SECRET KEY BASE]
+    secret_key_base: [Fill it with the secret key base you have generated]
 ```
 
 ## Create and fill the file `.env` file
