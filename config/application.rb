@@ -55,10 +55,6 @@ module PiaBack
     attributes_allowed = ENV['SANITIZED_ALLOWED_ATTRIBUTES'] ? ENV['SANITIZED_ALLOWED_ATTRIBUTES'].split(' ') : []
     config.action_view.sanitized_allowed_attributes = attributes_allowed
 
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
-
     config.secret_key_base = Rails.application.credentials.secret_key_base
-    config.session_store :cookie_store, expire_after: 30.minutes
   end
 end
