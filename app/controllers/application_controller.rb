@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
     render text: exception, status: :internal_server_error
   end
 
-  include Pundit if ENV['ENABLE_AUTHENTICATION'].present?
+  include Pundit::Authorization if ENV['ENABLE_AUTHENTICATION'].present?
   if ENV['ENABLE_AUTHENTICATION'].present?
     before_action :doorkeeper_authorize!,
                   except: %i[info check_uuid password_forgotten change_password]
