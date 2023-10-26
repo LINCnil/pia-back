@@ -87,6 +87,7 @@ GEM
       mime-types (~> 3.0)
       mimemagic (~> 0.3.2)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     crass (1.0.6)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -215,6 +216,19 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    redis (5.0.8)
+      redis-client (>= 0.17.0)
+    redis-actionpack (5.3.0)
+      actionpack (>= 5, < 8)
+      redis-rack (>= 2.1.0, < 3)
+      redis-store (>= 1.1.0, < 2)
+    redis-client (0.18.0)
+      connection_pool
+    redis-rack (2.1.4)
+      rack (>= 2.0.8, < 3)
+      redis-store (>= 1.2, < 2)
+    redis-store (1.10.0)
+      redis (>= 4, < 6)
     regexp_parser (2.5.0)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -282,6 +296,8 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.3)
   rails-i18n
+  redis (~> 5.0)
+  redis-actionpack (~> 5.3)
   rubocop-rails
   ruby-saml (~> 1.15)
   tzinfo-data
