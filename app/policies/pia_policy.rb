@@ -42,9 +42,11 @@ class PiaPolicy < ApplicationPolicy
 
     def resolve
       if user.present? && user.is_functional_admin?
-        scope.all
+        scope.eager_load(:user_pias)
+             .all
       else
-        scope.joins(:user_pias).merge(UserPia.where(user_id: user.id))
+        scope.eager_load(:user_pias)
+             .merge(UserPia.where(user_id: user.id))
       end
     end
   end
