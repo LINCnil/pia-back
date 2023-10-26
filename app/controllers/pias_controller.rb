@@ -18,7 +18,8 @@ class PiasController < ApplicationController
     res = []
     # check if user is technical else his pias
     pias = if ENV['ENABLE_AUTHENTICATION'].blank? || current_user.is_technical_admin
-             Pia.all
+             Pia.eager_load(:user_pias)
+                .all
            else
              policy_scope(Pia)
            end
