@@ -17,7 +17,7 @@ class SamlController < Doorkeeper::TokensController
     if response.is_valid?
       email = response.name_id
       session[:nameid] = response.name_id
-      user = User.find_by_email(email)
+      user = User.find_by("LOWER(email) = ?", email.strip.downcase)
       unless user
         password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
         user = User.create!(email:, password:, password_confirmation: password)
