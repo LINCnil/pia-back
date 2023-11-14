@@ -8,7 +8,7 @@ class SamlController < Doorkeeper::TokensController
 
   def sso
     request = OneLogin::RubySaml::Authrequest.new
-    redirect_to(request.create(settings))
+    redirect_to(request.create(settings), allow_other_host: true)
   end
 
   def consume
@@ -23,6 +23,7 @@ class SamlController < Doorkeeper::TokensController
         user = User.create!(email:, password:, password_confirmation: password)
         user.is_user = true
         user.save
+        user.unlock_access!
       end
       sign_in(:user, user)
 
@@ -34,7 +35,7 @@ class SamlController < Doorkeeper::TokensController
       )
 
       # redirect_to  frontrnd
-      redirect_to "#{ENV['SSO_FRONTEND_REDIRECTION']}/#/?sso_token=#{access_token.token}"
+      redirect_to "#{ENV['SSO_FRONTEND_REDIRECTION']}/#/?sso_token=#{access_token.token}", allow_other_host: true
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
@@ -50,7 +51,7 @@ class SamlController < Doorkeeper::TokensController
 
     settings.name_identifier_value = session[:nameid] if settings.name_identifier_value.nil?
 
-    redirect_to(logout_request.create(settings))
+    redirect_to(logout_request.create(settings), allow_other_host: true)
   end
 
   # Handle the SLO response from the IdP
@@ -73,7 +74,7 @@ class SamlController < Doorkeeper::TokensController
       session[:nameid] = nil
       session[:transaction_id] = nil
 
-      redirect_to ENV['SSO_FRONTEND_REDIRECTION']
+      redirect_to ENV['SSO_FRONTEND_REDIRECTION'], allow_other_host: true
     end
   end
 
