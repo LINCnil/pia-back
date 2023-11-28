@@ -125,6 +125,25 @@ ldap_admin_user: [Fill it with the LDAP admin user]
 ldap_admin_user_password: [Fill it with admin user password]
 ```
 
+### Enable SSO mode (optional)
+This following information are required to enable SSO mode, make sure you have them all:
+- "entity_id (issuer)"
+- "sso_service_url (idp_sso_target_url)"
+- "idp_cert (idp_cert_fingerprint)"
+
+set those informations inside your `.env` file.
+
+```
+ENABLE_SSO=true
+IDP_ENTITY_ID=[ENTITY_ID_VALUE]
+IDP_SSO_TARGET_URL=[SSO_TARGET_URL]
+IDP_SLO_TARGET_URL=[SSO_TARGET_URL]
+IDP_CERT=[SSO_CERTIFICATE_VALUE]
+SSO_FRONTEND_REDIRECTION=[FRONT_END_URL]
+```
+
+Restart your pia-back rails app
+
 ## SMTP configuration
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
 
