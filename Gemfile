@@ -12,7 +12,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'mime-types', '~> 3.3'
 gem 'puma', '~> 5.6'
 
-gem 'carrierwave', '~> 2.1.1'
+gem 'carrierwave', '~> 2.2.5'
 gem 'carrierwave-base64', '~> 2.8.0'
 gem 'dotenv-rails'
 
