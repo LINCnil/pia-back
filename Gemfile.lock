@@ -275,6 +275,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.3)
   rails-i18n
+  rubocop
   rubocop-rails
   tzinfo-data
 
