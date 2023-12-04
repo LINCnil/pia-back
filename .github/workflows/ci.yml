@@ -47,6 +47,9 @@ jobs:
           ruby-version: 3.1.4
           bundler-cache: true
 
+      - name: Bundle binstubs
+        run: bundle install --binstubs
+
       - name: Security audit dependencies
         run: bin/bundler-audit --update
 
