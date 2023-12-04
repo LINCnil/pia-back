@@ -150,6 +150,13 @@ SSO_FRONTEND_REDIRECTION=[FRONT_END_URL]
 
 Restart your pia-back rails app.
 
+You also need to configure your SAML SSO:
+- "Identifier (Entity ID)" : https://[PIA_BACK_URL]/saml/metadata
+- "Reply URL (Assertion Consumer Service URL / ACS)" : https://[PIA_BACK_URL]/saml/acs
+- "Logout URL (Single Logout URL / SLO)" : https://[PIA_BACK_URL]/saml/slo
+
+After this, you should be able to use the SSO authentication button on the homepage of the PIA tool.
+
 ## SMTP configuration
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
 
