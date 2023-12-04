@@ -135,14 +135,14 @@ set those informations inside your `.env` file.
 
 ```
 ENABLE_SSO=true
-IDP_ENTITY_ID=[ENTITY_ID_VALUE]
-IDP_SSO_TARGET_URL=[SSO_TARGET_URL]
-IDP_SLO_TARGET_URL=[SSO_TARGET_URL]
-IDP_CERT=[SSO_CERTIFICATE_VALUE]
+IDP_ENTITY_ID=[ENTITY ID VALUE]
+IDP_SSO_TARGET_URL=[SSO TARGET URL]
+IDP_SLO_TARGET_URL=[SSO TARGET URL] (same URL than IDP_SSO_TARGET_URL)
+IDP_CERT=[SSO CERTIFICATE VALUE]
 SSO_FRONTEND_REDIRECTION=[FRONT_END_URL]
 ```
 
-Restart your pia-back rails app
+Restart your pia-back rails app.
 
 ## SMTP configuration
 Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit` :
