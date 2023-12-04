@@ -1,10 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches: [ master, community ]
-  pull_request:
-    branches: [ master, community ]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -39,3 +35,23 @@ jobs:
           bundle install --jobs 4 --retry 3
           bin/rails db:prepare
           bin/rails test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.x
+          bundler-cache: true
+
+      - name: Security audit dependencies
+        run: bin/bundler-audit --update
+
+      - name: Security audit application code
+        run: bin/brakeman -q -w3
+
+      - name: Lint Ruby files
+        run: bundle exec rubocop --parallel
