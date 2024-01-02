@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
     if user.valid? # change uuid
       user.lock_access! # save user
-      UserMailer.with(user: user).uuid_created.deliver_now
+      UserMailer.with(user:).uuid_created.deliver_now
       render json: serialize(user)
     else
       render json: user.errors.to_json, status: :not_acceptable
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
     if user.valid? # change uuid
       user.save
-      UserMailer.with(user: user).uuid_updated.deliver_now if user.access_locked? && user.email != email # send email for to locked users
+      UserMailer.with(user:).uuid_updated.deliver_now if user.access_locked? && user.email != email # send email for to locked users
       render json: serialize(user)
     else
       render json: user.errors.to_json, status: :not_acceptable
@@ -62,14 +62,14 @@ class UsersController < ApplicationController
 
   def password_forgotten
     user = User.find_by(email: params[:email])
-    return :not_found unless user.present?
+    return head :not_found unless user
 
     if user.access_locked?
       render json: {}, status: :locked
     else
       user.generate_uuid
       user.save
-      UserMailer.with(user: user).uuid_updated.deliver_now
+      UserMailer.with(user:).uuid_updated.deliver_now
       render json: {} # change uuid
     end
   end
