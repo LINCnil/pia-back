@@ -5,3 +5,4 @@ Style/Documentation:
   Enabled: false
 Layout/LineLength:
   Max: 140
+EnforcedShorthandSyntax: never
