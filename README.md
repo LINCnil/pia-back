@@ -199,8 +199,3 @@ In config/application.rb
 ```
 config.i18n.default_locale = :en
 ```
-
-## Contributions
-- [Docker set-up](https://github.com/kosmas58/pia-docker) ([Kosmas Schütz](https://github.com/kosmas58)): a Docker-Compose configuration for production purpose. Everything is automated from creating containers to setting up the database.
-- [Installation runbook](https://github.com/LINCnil/pia/issues/77) ([ylachgar](https://github.com/ylachgar)): runbook to install the pia tool server version on a ubuntu 17.10 server.
-
