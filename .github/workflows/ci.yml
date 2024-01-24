@@ -1,6 +1,8 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches: [ 'master' ]
 
 jobs:
   test:
@@ -54,7 +56,7 @@ jobs:
         run: bin/bundler-audit --update
 
       - name: Security audit application code
-        run: bin/brakeman -q -w3
+        run: bin/brakeman
 
       - name: Lint Ruby files
-        run: bundle exec rubocop --parallel
+        run: bin/rubocop
