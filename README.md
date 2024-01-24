@@ -18,7 +18,7 @@ You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full 
 - [pia (front-end) application](https://github.com/LINCnil/pia)
 - [Ruby](http://www.ruby-lang.org) 3.1.x
 - [Rails](http://rubyonrails.org) 7.0.x
-- [PostgreSQL](https://www.postgresql.org) 12.0+. 
+- [PostgreSQL](https://www.postgresql.org) 12.0+
 
 ## System requirements
 - CPU : i5
