@@ -22,32 +22,31 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
-      - name: Build and run tests
+          bundler-cache: true
+          ruby-version: '3.3'
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+      - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/pia_test
           RAILS_ENV: test
-        run: |
-          sudo apt-get -yqq install libpq-dev
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-          bin/rails db:prepare
-          bin/rails test
+        run: bin/rails test
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install Ruby and gems
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.4
           bundler-cache: true
+          ruby-version: '3.3'
 
       - name: Bundle binstubs
         run: bundle install --binstubs
