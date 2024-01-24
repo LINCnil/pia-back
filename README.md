@@ -11,14 +11,14 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 [![Rails Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop-rails)
 [![Rails Style Guide](https://img.shields.io/badge/code_style-community-brightgreen.svg)](https://rails.rubystyle.guide)
 
-## Wiki
-You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full installation of PIA (back-end) and PIA (front-end) applications on a ubuntu 20.04 server.
+## Wiki for a production environment
+You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full production installation of `pia` (frontend) and `pia-back` (backend) applications on an Ubuntu server.
 
 ## Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
 - [Ruby](http://www.ruby-lang.org) 3.1.x
 - [Rails](http://rubyonrails.org) 7.0.x
-- [PostgreSQL](https://www.postgresql.org) 12.0+
+- [PostgreSQL](https://www.postgresql.org) 12.0+. See 
 
 ## System requirements
 - CPU : i5
@@ -27,11 +27,7 @@ You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full 
 - OS : preferably Linux but other OS works as well
 
 ## PostgreSQL installation
-Basic installation on Debian you can use the following documentation: [wiki.debian.org/PostgreSql](https://wiki.debian.org/PostgreSql)
-
-On Ubuntu you can use: [help.ubuntu.com/community/PostgreSQL](https://help.ubuntu.com/community/PostgreSQL)
-
-Also, you need to create a new user with password.
+See the [Install PostgreSQL](https://github.com/LINCnil/pia-back/wiki/Install-PostgreSQL) page in the Wiki.
 
 ## Clone the repository
 `git clone https://github.com/LINCnil/pia-back.git`
@@ -157,7 +153,7 @@ For example, if you want to have French translations for the authenication email
 
 Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, nl, no, pl, pt, ro, sl, sv.
 
-## Run the application
+## Run the application in a development environment
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
 
 - You can specify the option `-b` to bind to a public IP address or domain name and `-p` to use a different port.
@@ -172,13 +168,7 @@ Supported locales: bg, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, n
 
 ![PIA Settings](public/pia-settings.png)
 
-## Run the application in production mode
-1. Fill the `production` section in the `database.yml`file.
-2. Create the database: `RAILS_ENV=production bin/rake db:create`
-3. Create the tables: `RAILS_ENV=production bin/rake db:migrate`
-4. Run the server: `RAILS_ENV=production bin/rails s`
-
-## How to update to the latest version
+## How to update to the latest version in a development environment
 
 Go to the folder pia-back : `cd pia-back`
 
@@ -186,10 +176,7 @@ Update the repository : `git pull`
 
 Update the dependencies : `bundle install`
 
-Update the database : `RAILS_ENV=production bin/rake db:migrate`
-
-## Run the test
-`bin/rake`
+Update the database : `bin/rake db:migrate`
 
 ## Change the default locale
 Pia back mailer work with rails-i18n. For update default locale,
