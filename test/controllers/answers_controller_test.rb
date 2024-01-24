@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AnswersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @answer = create(:answer)
+    @answer = FactoryBot.create(:answer)
     @pia = @answer.pia
   end
 

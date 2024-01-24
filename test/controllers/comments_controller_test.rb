@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CommentsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @comment = create(:comment)
+    @comment = FactoryBot.create(:comment)
     @pia = @comment.pia
   end
 

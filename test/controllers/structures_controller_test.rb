@@ -2,7 +2,7 @@ require 'test_helper'
 
 class StructuresControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @structure = create(:structure)
+    @structure = FactoryBot.create(:structure)
   end
 
   test 'should get index' do
@@ -11,7 +11,7 @@ class StructuresControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create structure' do
-    structure_build = build(:structure)
+    structure_build = FactoryBot.build(:structure)
     assert_difference('Structure.count') do
       post structures_url, params: { structure: { name: 'Structure 1', sector_name: 'Structure Sector Name 1', data: '{"sections":[]}' } },
                            as: :json

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @attachment = create(:attachment)
+    @attachment = FactoryBot.create(:attachment)
     @pia = @attachment.pia
   end
 
