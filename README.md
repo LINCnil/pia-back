@@ -57,12 +57,6 @@ Generate the `DEVISE_SECRET_KEY` with `bin/rake secret` and paste the secret key
 
 Generate the `DEVISE_PEPPER` with `bin/rake secret` and paste the secret key in the file.
 
-Fill `MAILER_SENDER` with the default address email sender.
-
-Fill `DEFAULT_URL` with the URL of your server.
-
-If needed, fill `DEFAULT_PORT` to the PORT you use.
-
 ## Create the database
 `bin/rake db:create`
 
