@@ -12,7 +12,7 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 [![Rails Style Guide](https://img.shields.io/badge/code_style-community-brightgreen.svg)](https://rails.rubystyle.guide)
 
 ## Wiki for a production environment
-You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full production installation of the `pia` (frontend) and `pia-back` (backend) applications on an Ubuntu server.
+**You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full production installation of the `pia` (frontend) and `pia-back` (backend) applications on an Ubuntu server.**
 
 ## Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
@@ -26,49 +26,11 @@ You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full 
 - Disk Space : 20Go
 - OS : preferably Linux but other OS works as well
 
+# Ruby installation
+See the [Install Ruby](https://github.com/LINCnil/pia-back/wiki/Install-ruby) page in the Wiki.
+
 ## PostgreSQL installation
 See the [Install PostgreSQL](https://github.com/LINCnil/pia-back/wiki/Install-PostgreSQL) page in the Wiki.
-
-## Enable the authentication mode
-
-### Create the first admin account
-
-Enter the rails console with `bin/rails c`
-
-Launch the command `User.create(email: 'YOUR_EMAIL', password: 'Azeazeaze123-', password_confirmation: 'Azeazeaze123-')` (your password should be at least 12 characters long, with numbers and special characters).
-
-Get your user, add him all roles and unlock him with the **unlock_access!** method:
-
-```
-    a = User.last
-    a.is_technical_admin = true
-    a.is_functional_admin = true
-    a.is_user = true
-    a.unlock_access!
-    a.save
-```
-
-### Enable LDAP mode (optional)
-If you want to use the LDAP authentification mode, set `DEVISE_LDAP_LOGGER=true` inside your `.env` file.
-
-
-Set up the environment credentials variables using `EDITOR='nano' rails credentials:edit`:
-
-```
-ldap_host: [Fill it with the LDAP host]
-ldap_port: [Fill it with the LDAP port]
-ldap_attribute: [Fill it with the LDAP attribute]
-ldap_base: [Fill it with the LDAP base]
-ldap_ssl: [true or false]
-```
-
-If admin user binding is a necessity,
-set `DEVISE_LDAP_LOGGER_ADMIN_BIND=true` inside your `.env` file and set up LDAP admin user credentials:
-
-```
-ldap_admin_user: [Fill it with the LDAP admin user]
-ldap_admin_user_password: [Fill it with admin user password]
-```
 
 ## Run the application in a development environment
 - `bin/rails s` your server will be accessible with the URL `localhost:3000`
