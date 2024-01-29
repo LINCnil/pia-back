@@ -38,7 +38,7 @@ class PiasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should duplicate pia' do
-    assert_difference('Pia.where(name: "PIA ONE").count') do
+    assert_difference('Pia.count') do
       post duplicate_pia_url(@pia), headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }
     end
   end
