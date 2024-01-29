@@ -4,10 +4,8 @@ class ApplicationController < ActionController::API
   end
 
   include Pundit::Authorization if ENV['ENABLE_AUTHENTICATION'].present?
-  if ENV['ENABLE_AUTHENTICATION'].present?
-    before_action :doorkeeper_authorize!,
-                  except: %i[info check_uuid password_forgotten change_password]
-  end
+  before_action :doorkeeper_authorize!,
+                except: %i[info check_uuid password_forgotten change_password]
 
   def info
     client_app = Doorkeeper::Application.find_by(uid: params["client_id"], secret: params["client_secret"])

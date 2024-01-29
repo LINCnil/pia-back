@@ -13,5 +13,9 @@ module ActiveSupport
     # fixtures :all
 
     # Add more helper methods to be used by all tests here...
+    def doorkeeper_token
+      oauth_application = Doorkeeper::Application.create!(name: "PIA", redirect_uri: "urn:ietf:wg:oauth:2.0:oob", scopes: %w[read write])
+      Doorkeeper::AccessToken.create!(application: oauth_application).token
+    end
   end
 end

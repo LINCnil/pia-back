@@ -7,7 +7,7 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get index' do
-    get pia_attachments_url(@pia), as: :json
+    get pia_attachments_url(@pia), headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }, as: :json
     assert_response :success
   end
 
@@ -20,13 +20,13 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   # end
 
   test 'should show attachment' do
-    get pia_attachment_url(id: @attachment.id, pia_id: @pia.id), as: :json
+    get pia_attachment_url(id: @attachment.id, pia_id: @pia.id), headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }, as: :json
     assert_response :success
   end
 
   test 'should destroy attachment' do
     assert_difference('Attachment.count', -1) do
-      delete pia_attachment_url(id: @attachment.id, pia_id: @pia.id), as: :json
+      delete pia_attachment_url(id: @attachment.id, pia_id: @pia.id), headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }, as: :json
     end
 
     assert_response 204

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  use_doorkeeper if ENV['ENABLE_AUTHENTICATION'].present?
+  use_doorkeeper
   post '/info', to: 'application#info'
 
   resources :users do
