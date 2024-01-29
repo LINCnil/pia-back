@@ -7,7 +7,7 @@ class PiaTest < ActiveSupport::TestCase
       answers: [],
       evaluations: [],
       comments: [],
-      measures: [],
+      measures: []
     }]
 
     assert Pia.import(data.to_json)
