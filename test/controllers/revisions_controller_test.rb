@@ -2,7 +2,7 @@ require 'test_helper'
 
 class RevisionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @revision = create(:revision)
+    @revision = FactoryBot.create(:revision)
     @pia = @revision.pia
   end
 

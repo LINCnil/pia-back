@@ -1,8 +1,11 @@
-require: rubocop-rails
-Style/FrozenStringLiteralComment:
+# Omakase Ruby styling for Rails
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+# Your own specialized rules go here
+Style/StringLiterals:
   Enabled: false
-Style/Documentation:
+Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: false
-Layout/LineLength:
-  Max: 140
-EnforcedShorthandSyntax: never
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: keyword

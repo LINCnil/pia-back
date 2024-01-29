@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MeasuresControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @measure = create(:measure)
+    @measure = FactoryBot.create(:measure)
     @pia = @measure.pia
   end
 

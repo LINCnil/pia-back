@@ -2,7 +2,7 @@ require 'test_helper'
 
 class KnowledgeBasesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @knowledge_base = create(:knowledge_base)
+    @knowledge_base = FactoryBot.create(:knowledge_base)
   end
 
   test 'should get index' do

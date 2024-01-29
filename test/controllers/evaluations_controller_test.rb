@@ -2,7 +2,7 @@ require 'test_helper'
 
 class EvaluationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @evaluation = create(:evaluation)
+    @evaluation = FactoryBot.create(:evaluation)
     @pia = @evaluation.pia
   end
 
