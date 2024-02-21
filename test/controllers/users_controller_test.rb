@@ -4,8 +4,8 @@ require 'authorization_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
   include AuthorizationHelper
   setup do
-    @auth = create(:access_token)
-    @admin = create(:user_admin, identifier: "admin")
+    @auth = FactoryBot.create(:access_token)
+    @admin = FactoryBot.create(:user_admin, identifier: "admin")
     @auth_tokens = auth_tokens_for_user(@admin, @auth)
   end
 
@@ -20,7 +20,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "test update route" do
     if ENV['ENABLE_AUTHENTICATION'].present?
-      user_to_update = create(:user, identifier: "functional")
+      user_to_update = FactoryBot.create(:user, identifier: "functional")
       patch user_url(user_to_update), params: {
         user: {
           firstname: "updated",
@@ -37,7 +37,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "test delete route" do
     if ENV['ENABLE_AUTHENTICATION'].present?
-      user_to_delete = create(:user, identifier: "functional")
+      user_to_delete = FactoryBot.create(:user, identifier: "functional")
       delete user_url(user_to_delete), headers: {
         "Authorization": "Bearer #{@auth_tokens['access_token']}"
       }
@@ -48,7 +48,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "test process to unlock user and set password" do
     # create a user locked by default
-    new_user = create(:user)
+    new_user = FactoryBot.create(:user)
     new_user.lock_access!
 
     # check by uuid
