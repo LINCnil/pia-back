@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.1.3'
+ruby '~> 3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'fast_jsonapi'
@@ -10,10 +10,10 @@ gem 'rails', '~> 7.0.3'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'mime-types', '~> 3.3'
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.6'
 
-gem 'carrierwave', '~> 2.1.1'
-gem 'carrierwave-base64', '~> 2.8.0'
+gem 'carrierwave'
+gem 'carrierwave-base64'
 gem 'dotenv-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -50,13 +50,16 @@ gem 'rails-i18n'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'brakeman'
+  gem 'bundler-audit'
   gem 'byebug', platform: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
+  gem 'rubocop'
+  gem 'rubocop-rails', require: false
 end
 
 group :development do
   # gem 'listen', '~> 3.2.1'
-  gem 'rubocop-rails', require: false
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem 'spring'
   # gem 'spring-watcher-listen', '~> 2.0.0'
@@ -64,3 +67,6 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem "rubocop-rails-omakase", require: false, group: [ :development ]
+
+gem 'simplecov', require: false, group: :test

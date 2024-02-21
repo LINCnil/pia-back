@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :pia do
     status { 0 }
-    name { 'PIA ONE' }
+    name { "PIA #{SecureRandom.uuid}" }
     author_name { 'William S. Burroughs' }
     evaluator_name { 'William Lee' }
     validator_name { 'Norman Mailer' }

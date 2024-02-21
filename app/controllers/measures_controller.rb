@@ -14,13 +14,9 @@ class MeasuresController < ApplicationController
 
   # GET /measures
   def index
-    if params[:reference_to]
-      measures = serialize Measure.find_by(pia_id: params[:pia_id], reference_to: params[:reference_to])
-    else
-      measures = []
-      Measure.where(pia_id: params[:pia_id]).find_each do |measure|
-        measures << serialize(measure)
-      end
+    measures = []
+    Measure.where(pia_id: params[:pia_id]).find_each do |measure|
+      measures << serialize(measure)
     end
 
     render json: measures

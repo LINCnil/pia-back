@@ -22,7 +22,7 @@ Bundler.require(*Rails.groups)
 module PiaBack
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
+    config.load_defaults 7.0
     config.autoload_paths << "#{Rails.root}/lib"
     # Configuration for the application, engines, and railties goes here.
     #
@@ -38,7 +38,7 @@ module PiaBack
     config.api_only = true
 
     # set the default locale to French
-    config.i18n.default_locale = :en
+    config.i18n.default_locale = ENV.fetch("DEFAULT_LOCALE", :en)
     # if a locale isn't found fall back to this default locale
     config.i18n.fallbacks = true
     # set the possible locales to English and Brazilian-Portuguese

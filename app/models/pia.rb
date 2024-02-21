@@ -38,7 +38,6 @@ class Pia < ApplicationRecord
         end
       end
       current_pia.save
-      p current_pia
     end
   end
 

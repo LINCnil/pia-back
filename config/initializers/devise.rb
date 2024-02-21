@@ -18,7 +18,7 @@ Devise.setup do |config|
   config.ldap_check_group_membership_without_admin = false
   config.ldap_check_attributes = false
   config.ldap_check_attributes_presence = false
-  config.ldap_use_admin_to_bind = true
+  config.ldap_use_admin_to_bind = ENV['DEVISE_LDAP_LOGGER_ADMIN_BIND']
   config.ldap_ad_group_check = false
 
   # The secret key used by Devise. Devise uses this key to generate
@@ -36,7 +36,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = ENV['MAILER_SENDER']
+  config.mailer_sender = Rails.application.credentials.email_from
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
