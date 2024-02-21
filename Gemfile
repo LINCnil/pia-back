@@ -67,6 +67,10 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem "ruby-saml", "~> 1.15"
+gem "devise_saml_authenticatable", "~> 1.9"
+gem "redis", "~> 5.0" # Redis client for Ruby
+gem "redis-actionpack", "~> 5.3" # Redis session store for ActionPack
 gem "rubocop-rails-omakase", require: false, group: [ :development ]
 
 gem 'simplecov', require: false, group: :test
