@@ -4,10 +4,10 @@ FactoryBot.define do
       identifier { nil }
     end
 
-    firstname {'user'}
-    lastname {'nothing'}
-    password {[*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join}
-    password_confirmation {password}
+    firstname { 'user' }
+    lastname { 'nothing' }
+    password { [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join }
+    password_confirmation { password }
     is_user { true }
     email { "user+#{identifier ? identifier : 'default'}@test.com" }
 
