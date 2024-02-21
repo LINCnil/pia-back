@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   # POST /comments
   def create
     @comment = Comment.new(comment_params)
-    @comment.user = current_user
+    @comment.user = current_user if ENV['ENABLE_AUTHENTICATION'].present?
 
     if @comment.save
       render json: serialize(@comment.reload), status: :created

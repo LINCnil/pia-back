@@ -51,4 +51,4 @@ Dockerfile
 /data/
 .env
 .DS_Store
-
+coverage/

@@ -529,4 +529,3 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default: "Doorkeeper").
   realm 'PIA Authorization'
 end
-
