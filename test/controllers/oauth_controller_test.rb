@@ -6,10 +6,6 @@ class OauthControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    if ENV['ENABLE_AUTHENTICATION'].present?
-
-    end
-    @pia = FactoryBot.create(:pia)
     @admin = FactoryBot.create(:user_admin, identifier: "admin")
     @doorkeeper_token = doorkeeper_token
     @auth = FactoryBot.create(:access_token)

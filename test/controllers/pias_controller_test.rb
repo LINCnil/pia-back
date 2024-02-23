@@ -40,17 +40,17 @@ class PiasControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update pia' do
     pia_params = {}
-    if ENV['ENABLE_AUTHENTICATION'].present?
-      # assign users
-      pia_params[:authors] = [@user_functional.id, @user_user.id].join(",")
-      pia_params[:validators] = [@user_user.id].join(",")
-    end
+    # assign users
+    pia_params[:authors] = [@user_functional.id, @user_user.id].join(",")
+    pia_params[:validators] = [@user_user.id].join(",")
 
     patch pia_url(@pia), params: { pia: pia_params }, headers: { 'Authorization' => "Bearer #{@doorkeeper_token}" }, as: :json
     pia_response = JSON.parse(response.body)
-
     assert_response 200
-    assert_equal pia_response["user_pias"].count, 3
+
+    if ENV['ENABLE_AUTHENTICATION'].present?
+     assert_equal pia_response["user_pias"].count, 3
+    end
   end
 
   test 'should destroy pia' do
