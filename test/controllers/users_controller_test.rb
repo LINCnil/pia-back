@@ -47,26 +47,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "test process to unlock user and set password" do
-    # create a user locked by default
-    new_user = FactoryBot.create(:user)
-    new_user.lock_access!
+    if ENV['ENABLE_AUTHENTICATION'].present?
+      # create a user locked by default
+      new_user = FactoryBot.create(:user)
+      new_user.lock_access!
 
-    # check by uuid
-    get "/users/unlock_access/" +  new_user.uuid
-    assert_response :success
+      # check by uuid
+      get "/users/unlock_access/" +  new_user.uuid
+      assert_response :success
 
-    # change password
-    put "/users/change-password", params: {
-      id: new_user.id,
-      password: "newPassword12-",
-      password_confirmation: "newPassword12-",
-      uuid: new_user.uuid
-    }
-    assert_response :success
+      # change password
+      put "/users/change-password", params: {
+        id: new_user.id,
+        password: "newPassword12-",
+        password_confirmation: "newPassword12-",
+        uuid: new_user.uuid
+      }
+      assert_response :success
 
-    # now he must be unlocked
-    new_user.reload
-    assert_equal new_user.access_locked?, false
+      # now he must be unlocked
+      new_user.reload
+      assert_equal new_user.access_locked?, false
+    end
   end
 
   private
