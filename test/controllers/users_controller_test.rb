@@ -46,18 +46,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # TODO
-  test "test delete the only one admin" do
-    if ENV['ENABLE_AUTHENTICATION'].present?
-      user_to_delete = FactoryBot.create(:user, identifier: "technical")
-      delete user_url(user_to_delete), headers: {
-        "Authorization": "Bearer #{@auth_tokens['access_token']}"
-      }
-
-      # should not return a error
-    end
-  end
-
   test "test process to unlock user and set password" do
     # create a user locked by default
     new_user = FactoryBot.create(:user)

@@ -16,7 +16,7 @@ class ApplicationController < ActionController::API
 
   # Find the user that owns the access token
   def current_resource_owner
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token && doorkeeper_token.resource_owner_id
   end
 
   def current_user
