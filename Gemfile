@@ -5,7 +5,7 @@ ruby '~> 3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'fast_jsonapi'
-gem 'rails', '~> 7.0.3'
+gem 'rails', '~> 7.0.8'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
