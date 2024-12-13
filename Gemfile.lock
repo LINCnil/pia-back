@@ -180,7 +180,7 @@ GEM
       activesupport (>= 3.0.0)
     racc (1.8.1)
     rack (2.2.10)
-    rack-cors (2.0.1)
+    rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-test (2.1.0)
       rack (>= 1.3)
