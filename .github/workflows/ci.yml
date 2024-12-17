@@ -33,7 +33,11 @@ jobs:
           ruby-version: '3.3'
       - name: Set up database schema
         run: bin/rails db:schema:load
-      - name: Run tests
+      - name: Run tests without auth
+        run: bin/rails test
+      - name: Run tests with auth
+        env:
+          ENABLE_AUTHENTICATION: true
         run: bin/rails test
 
   lint:
