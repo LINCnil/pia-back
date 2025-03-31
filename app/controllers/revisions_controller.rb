@@ -1,5 +1,5 @@
 class RevisionsController < ApplicationController
-  before_action :set_revision, only: %i[show update destroy]
+  before_action :set_revision, only: %i[show destroy]
 
   # GET /revisions
   def index
