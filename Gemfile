@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.1'
+ruby '~> 3.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'fast_jsonapi'
@@ -10,7 +10,7 @@ gem 'rails', '~> 7.0.8'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'mime-types', '~> 3.3'
-gem 'puma', '~> 5.6'
+gem 'puma'
 
 gem 'carrierwave'
 gem 'carrierwave-base64'
