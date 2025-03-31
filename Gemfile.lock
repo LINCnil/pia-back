@@ -332,7 +332,7 @@ DEPENDENCIES
   factory_bot_rails
   fast_jsonapi
   mime-types (~> 3.3)
-  pg (>= 0.18, < 2.0)
+  pg
   puma
   pundit
   rack-cors
