@@ -54,7 +54,11 @@ class Pia < ApplicationRecord
   def create_answers_from_structure
     return unless structure.present?
 
-    self.update_column(:structure_data, structure.data)
+    self.update(
+      structure_data: structure.data,
+      structure_name: structure.name,
+      structure_sector_name: structure.sector_name
+    )
     structure.data['sections'].each do |section|
       section['items'].each do |item|
         if item['questions'].present?
