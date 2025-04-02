@@ -12,6 +12,7 @@ class Pia < ApplicationRecord
   validates :name, presence: true
 
   after_initialize :overwrite_to_safety_values
+  after_create :create_answers_from_structure
 
   def self.import(json_string)
     json = JSON.parse(json_string)
@@ -48,6 +49,35 @@ class Pia < ApplicationRecord
     duplicate_evaluations
     duplicate_measures
     @clone
+  end
+
+  def create_answers_from_structure
+    return unless structure.present?
+
+    self.update_column(:structure_data, structure.data)
+    structure.data['sections'].each do |section|
+      section['items'].each do |item|
+        if item['questions'].present?
+          item['questions'].each do |question|
+            next unless question['answer'].present?
+
+            Answer.create(
+              pia_id: id,
+              reference_to: question['id'],
+              data: { text: question['answer'] }
+            )
+          end
+        elsif item['answers'].present?
+          item['answers'].each do |answer|
+            Measure.create(
+              pia_id: id,
+              title: answer['title'],
+              content: answer['content']
+            )
+          end
+        end
+      end
+    end
   end
 
   private
