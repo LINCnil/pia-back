@@ -11,8 +11,6 @@ gem 'pg'
 gem 'mime-types', '~> 3.3'
 gem 'puma'
 
-gem 'carrierwave'
-gem 'carrierwave-base64'
 gem 'dotenv-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

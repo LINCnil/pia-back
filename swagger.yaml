@@ -1090,10 +1090,10 @@ definitions:
         type: string
       for_measure:
         type: boolean
-      attached_file:
-        $ref: '#/definitions/AttachedFile'
+      file:
+        $ref: '#/definitions/File'
 
-  AttachedFile:
+  File:
     required:
       - pia_id
     properties:
