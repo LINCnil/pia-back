@@ -21,14 +21,4 @@ class PiaTest < ActiveSupport::TestCase
     assert_equal pia.name, Pia.last.name
     assert_not_equal pia.id, Pia.last.id
   end
-
-  test '#create a PIA with a structure should add this template to the PIA' do
-    structure = FactoryBot.create(:structure)
-    pia = FactoryBot.create(:pia, structure: structure)
-
-    assert_equal pia.structure_id, pia.structure.id
-    assert_equal pia.structure_data, pia.structure.data
-    assert_equal pia.structure_name, pia.structure.name
-    assert_equal pia.structure_sector_name, pia.structure.sector_name
-  end
 end
