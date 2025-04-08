@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_01_203524) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_08_145426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,7 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_203524) do
   end
 
   create_table "answers", id: :serial, force: :cascade do |t|
-    t.string "reference_to", null: false
+    t.integer "reference_to", null: false
     t.jsonb "data", default: {}
     t.integer "pia_id"
     t.datetime "created_at", precision: nil, null: false
