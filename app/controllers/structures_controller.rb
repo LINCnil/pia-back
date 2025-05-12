@@ -1,5 +1,5 @@
 class StructuresController < ApplicationController
-  before_action :set_structure, only: %i[show update destroy duplicate]
+  before_action :set_structure, only: %i[show update destroy]
 
   # GET /structures
   def index

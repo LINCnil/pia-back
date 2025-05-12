@@ -4,8 +4,8 @@ class ApplicationController < ActionController::API
   end
 
   include Pundit::Authorization if ENV['ENABLE_AUTHENTICATION'].present?
-  before_action :doorkeeper_authorize!,
-                except: %i[info check_uuid password_forgotten change_password]
+  before_action :doorkeeper_authorize!, except: %i[info]
+  before_action :active_storage_url_options
 
   def info
     client_app = Doorkeeper::Application.find_by(uid: params["client_id"], secret: params["client_secret"])
@@ -21,5 +21,9 @@ class ApplicationController < ActionController::API
 
   def current_user
     current_resource_owner
+  end
+
+  def active_storage_url_options
+    ActiveStorage::Current.url_options = Rails.application.routes.default_url_options
   end
 end

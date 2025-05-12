@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: pia_test

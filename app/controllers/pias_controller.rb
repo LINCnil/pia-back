@@ -51,10 +51,9 @@ class PiasController < ApplicationController
     pia_parameters.delete(:authors)
     pia_parameters.delete(:evaluators)
     pia_parameters.delete(:validators)
-
     pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
-    @pia = Pia.new(pia_parameters)
 
+    @pia = Pia.new(pia_parameters)
     if @pia.save
       if ENV['ENABLE_AUTHENTICATION'].present?
         # Update pia user fields and UserPia relations
@@ -79,11 +78,11 @@ class PiasController < ApplicationController
     pia_parameters.delete(:authors)
     pia_parameters.delete(:evaluators)
     pia_parameters.delete(:validators)
-
-    pia_parameters[:structure_data] = JSON.parse(pia_parameters[:structure_data]) if pia_parameters[:structure_data]
+    pia_parameters.delete(:structure_id)
+    pia_parameters.delete(:structure_sector_name)
+    pia_parameters.delete(:structure_data)
 
     if @pia.update(pia_parameters)
-
       if ENV['ENABLE_AUTHENTICATION'].present?
         # Update pia user fields and UserPia relations
         check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
