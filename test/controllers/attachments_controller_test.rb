@@ -11,13 +11,16 @@ class AttachmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "should create attachment" do
-  #  assert_difference('Attachment.count') do
-  #    post pia_attachments_url(@pia), params: { attachment: { pia_id: @pia.id, attached_file: fixture_file_upload('test/files/test_file.txt', 'text/plain') } }, as: :json
-  #  end
+  test "should create attachment" do
+    assert_difference('Attachment.count') do
+      post pia_attachments_url(@pia),
+           params: { attachment: { file: Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'files', 'test_file.txt')) } },
+           headers: { 'Authorization' => "Bearer #{doorkeeper_token}" },
+           as: :json
+    end
 
-  #  assert_response 201
-  # end
+    assert_response 201
+  end
 
   test 'should show attachment' do
     get pia_attachment_url(id: @attachment.id, pia_id: @pia.id), headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }, as: :json

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: pia_test
@@ -30,7 +30,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '3.3'
+          ruby-version: '.ruby-version'
       - name: Set up database schema
         run: bin/rails db:schema:load
       - name: Run tests
@@ -45,7 +45,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '3.3'
+          ruby-version: '.ruby-version'
 
       - name: Bundle binstubs
         run: bundle install --binstubs

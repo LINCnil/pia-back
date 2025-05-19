@@ -11,7 +11,6 @@ class PiasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create pia' do
-    pia_build = FactoryBot.build(:pia)
     assert_difference('Pia.count') do
       post pias_url, params: { pia: { name: 'PIA' } }, headers: { 'Authorization' => "Bearer #{doorkeeper_token}" }, as: :json
     end

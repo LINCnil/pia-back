@@ -56,3 +56,10 @@ Update the repository : `git pull`
 Update the dependencies : `bundle install`
 
 Update the database : `bin/rake db:migrate`
+
+## Rails 8 - How to migrate your attachments from Carrierwave to ActiveStorage
+
+This migration utility converts file attachments from the legacy Carrierwave storage system to Rails' ActiveStorage.
+Note that this migration only works for locally stored files and requires the correct file structure within the data/attachment/attached_file/ directory.
+
+`RAILS_ENV=production bin/rake active_storage_migration`
