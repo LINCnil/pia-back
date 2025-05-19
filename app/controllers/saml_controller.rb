@@ -21,7 +21,7 @@ class SamlController < Doorkeeper::TokensController
       if user
         user.unlock_access!
       else
-        password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+        password = SecureRandom.hex(16)
         user = User.create!(email:, password:, password_confirmation: password)
         user.is_user = true
         user.unlock_access!
