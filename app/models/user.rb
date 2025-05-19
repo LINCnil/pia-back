@@ -50,7 +50,7 @@ class User < ApplicationRecord
     user = User.new
     user.login = login
 
-    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+    password = SecureRandom.hex(16)
     user.password = password
     user.password_confirmation = password
     user.check_ldap_email
