@@ -162,9 +162,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.8-arm64-darwin)
+    nokogiri (1.18.9-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.8-x86_64-linux-gnu)
+    nokogiri (1.18.9-x86_64-linux-gnu)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.27.0)
@@ -385,8 +385,8 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
-  nokogiri (1.18.8-arm64-darwin) sha256=483b5b9fb33653f6f05cbe00d09ea315f268f0e707cfc809aa39b62993008212
-  nokogiri (1.18.8-x86_64-linux-gnu) sha256=4a747875db873d18a2985ee2c320a6070c4a414ad629da625fbc58d1a20e5ecc
+  nokogiri (1.18.9-arm64-darwin) sha256=eea3f1f06463ff6309d3ff5b88033c4948d0da1ab3cc0a3a24f63c4d4a763979
+  nokogiri (1.18.9-x86_64-linux-gnu) sha256=b52f5defedc53d14f71eeaaf990da66b077e1918a2e13088b6a96d0230f44360
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.8.0) sha256=2476364142b307fa5a1b1ece44f260728be23858a9c71078e956131a75453c45
