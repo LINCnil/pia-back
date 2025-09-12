@@ -104,6 +104,9 @@ GEM
     devise_ldap_authenticatable (0.8.7)
       devise (>= 3.4.1)
       net-ldap (>= 0.16.0)
+    devise_saml_authenticatable (1.9.1)
+      devise (> 2.0.0)
+      ruby-saml (~> 1.7)
     docile (1.4.1)
     doorkeeper (5.8.2)
       railties (>= 5)
@@ -230,12 +233,26 @@ GEM
     rake (13.2.1)
     rdoc (6.13.1)
       psych (>= 4.0.0)
+    redis (5.4.0)
+      redis-client (>= 0.22.0)
+    redis-actionpack (5.5.0)
+      actionpack (>= 5)
+      redis-rack (>= 2.1.0, < 4)
+      redis-store (>= 1.1.0, < 2)
+    redis-client (0.24.0)
+      connection_pool
+    redis-rack (3.0.0)
+      rack-session (>= 0.2.0)
+      redis-store (>= 1.2, < 2)
+    redis-store (1.11.0)
+      redis (>= 4, < 6)
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    rexml (3.4.1)
     rubocop (1.75.3)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -265,6 +282,9 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
+    ruby-saml (1.18.0)
+      nokogiri (>= 1.13.10)
+      rexml
     securerandom (0.4.1)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -305,6 +325,7 @@ DEPENDENCIES
   devise-i18n
   devise-security
   devise_ldap_authenticatable
+  devise_saml_authenticatable (~> 1.9)
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
@@ -317,9 +338,12 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.0.2)
   rails-i18n
+  redis (~> 5.0)
+  redis-actionpack (~> 5.3)
   rubocop
   rubocop-rails
   rubocop-rails-omakase
+  ruby-saml (~> 1.15)
   simplecov
   tzinfo-data
 
@@ -353,6 +377,7 @@ CHECKSUMS
   devise-i18n (1.13.0) sha256=306753c8ba4c687bdab82bc71daeab566b2286fb3f52311b88e54556f45f2f2e
   devise-security (0.18.0) sha256=fc06be1624b5151044ff9c5d8e61abdfa7d56eb16bfdaec16a11235d54708513
   devise_ldap_authenticatable (0.8.7) sha256=8af6f839661e24ca9afc5a1508a7ec7e1327e93af4516f2baabacdf511ee5a2e
+  devise_saml_authenticatable (1.9.1) sha256=347c42e282f1d75b8aacb1537934f92024f79ddf2b50f199911ad8472e8cfa61
   docile (1.4.1) sha256=96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
   doorkeeper (5.8.2) sha256=a73d07aeaf590b1e7e2a35390446f23131c9f37bc0561653e514d3973f4d50d3
   doorkeeper-i18n (5.2.7) sha256=df9db14564b22f8b55ce06f1d83e6bc603e6af6b0e377eb3872b5b2a42b328a3
@@ -411,15 +436,22 @@ CHECKSUMS
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.2.1) sha256=46cb38dae65d7d74b6020a4ac9d48afed8eb8149c040eccf0523bec91907059d
   rdoc (6.13.1) sha256=62a0dac99493c94e8eb7a3fb44e55aefcb4cecb119f7991f25bddc5ed8d472f7
+  redis (5.4.0) sha256=798900d869418a9fc3977f916578375b45c38247a556b61d58cba6bb02f7d06b
+  redis-actionpack (5.5.0) sha256=dc0570b78c14ec62b35c17b97fab778ee5986bc55e695bfb6826488088693311
+  redis-client (0.24.0) sha256=ee65ee39cb2c38608b734566167fd912384f3c1241f59075e22858f23a085dbb
+  redis-rack (3.0.0) sha256=abb50b82ae10ad4d11ca2e4901bfc2b98256cdafbbd95f80c86fc9e001478380
+  redis-store (1.11.0) sha256=edc4f3e239dcd1fdd9905584e6b1e623a84618e14436e6e8a07c70891008eda4
   regexp_parser (2.10.0) sha256=cb6f0ddde88772cd64bff1dbbf68df66d376043fe2e66a9ef77fcb1b0c548c61
   reline (0.6.1) sha256=1afcc9d7cb1029cdbe780d72f2f09251ce46d3780050f3ec39c3ccc6b60675fb
   responders (3.1.1) sha256=92f2a87e09028347368639cfb468f5fefa745cb0dc2377ef060db1cdd79a341a
+  rexml (3.4.1) sha256=c74527a9a0a04b4ec31dbe0dc4ed6004b960af943d8db42e539edde3a871abca
   rubocop (1.75.3) sha256=1860a1b571fe4a15dff79d6683642ebf3ea4b3f7ae7903743ab0885b4686a1d5
   rubocop-ast (1.44.1) sha256=e3cc04203b2ef04f6d6cf5f85fe6d643f442b18cc3b23e3ada0ce5b6521b8e92
   rubocop-performance (1.25.0) sha256=6f7d03568a770054117a78d0a8e191cefeffb703b382871ca7743831b1a52ec1
   rubocop-rails (2.31.0) sha256=79476e1075299c3e60fc50549c7c32614f9ebaae719b899ed75785c6786c52bd
   rubocop-rails-omakase (1.1.0) sha256=2af73ac8ee5852de2919abbd2618af9c15c19b512c4cfc1f9a5d3b6ef009109d
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
+  ruby-saml (1.18.0) sha256=de342a55925fd5ce6114d0802651c324428c0fec26e7fe52bf3a7cfa54dbfa6d
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.13.1) sha256=5dab0b7ee612e60e9887ad57693832fdf4695b4c0c859eaea5f95c18791ef10b
