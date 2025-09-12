@@ -36,9 +36,12 @@ class PiaSerializer
     user_pias = pia.user_pias
 
     if user_pias.present?
-      user_pias.each do |up|
-        user = { user: up.user, role: up.role }
-        res << user
+      user_pias.each do |user_pia|
+        res << { user: UserSerializer.new(user_pia.user)
+                                     .serializable_hash
+                                     .dig(:data, :attributes)
+                                     .except(:access_type, :user_pias, :access_locked),
+                 role: user_pia.role }
       end
     end
     res
