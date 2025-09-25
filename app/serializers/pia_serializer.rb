@@ -12,18 +12,11 @@ class PiaSerializer < Blueprinter::Base
   end
 
   field :user_pias do |pia|
-    res = []
-    user_pias = pia.user_pias
-
-    if user_pias.present?
-      user_pias.each do |user_pia|
-        res << { user: UserSerializer.new(user_pia.user)
-                                     .serializable_hash
-                                     .dig(:data, :attributes)
-                                     .except(:access_type, :user_pias, :access_locked),
-                 role: user_pia.role }
-      end
+    pia.user_pias.map do |user_pia|
+      {
+        user: UserSerializer.render_as_hash(user_pia.user, view: :restricted),
+        role: user_pia.role
+      }
     end
-    res
   end
 end

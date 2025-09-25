@@ -1,16 +1,18 @@
-class AttachmentSerializer
-  include FastJsonapi::ObjectSerializer
-  attributes :id, :pia_id, :pia_signed, :comment, :created_at, :updated_at
+# frozen_string_literal: true
 
-  attribute :file do |object|
-    object.file.url if object.file.attached?
+class AttachmentSerializer < Blueprinter::Base
+  identifier :id
+  fields :pia_id, :pia_signed, :comment, :created_at, :updated_at
+
+  field :file do |attachment|
+    attachment.file.url if attachment.file.attached?
   end
 
-  attribute :name do |object|
-    object.file.filename.to_s if object.file.attached?
+  field :name do |attachment|
+    attachment.file.filename.to_s if attachment.file.attached?
   end
 
-  attribute :mime_type do |object|
-    object.file.content_type if object.file.attached?
+  field :mime_type do |attachment|
+    attachment.file.content_type if attachment.file.attached?
   end
 end

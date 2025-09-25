@@ -50,7 +50,9 @@ class KnowledgeBasesController < ApplicationController
   private
 
   def serialize(knowledge_base)
-    KnowledgeBaseSerializer.new(knowledge_base).serializable_hash.dig(:data, :attributes)
+    return unless knowledge_base
+
+    KnowledgeBaseSerializer.render_as_hash(knowledge_base)
   end
 
   def set_knowledge_base

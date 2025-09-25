@@ -164,10 +164,12 @@ class PiasController < ApplicationController
   end
 
   def serialize(pia)
+    return unless pia
+
     if params[:export].present?
-      ExportPiaSerializer.new(pia).serializable_hash.dig(:data, :attributes)
+      ExportPiaSerializer.render_as_hash(pia)
     else
-      PiaSerializer.new(pia).serializable_hash.dig(:data, :attributes)
+      PiaSerializer.render_as_hash(pia)
     end
   end
 

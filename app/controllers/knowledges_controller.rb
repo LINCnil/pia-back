@@ -51,7 +51,9 @@ class KnowledgesController < ApplicationController
   private
 
   def serialize(knowledge)
-    KnowledgeSerializer.new(knowledge).serializable_hash.dig(:data, :attributes)
+    return unless knowledge
+
+    KnowledgeSerializer.render_as_hash(knowledge)
   end
 
   def set_knowledge_base

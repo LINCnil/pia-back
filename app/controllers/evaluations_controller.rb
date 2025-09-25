@@ -52,7 +52,9 @@ class EvaluationsController < ApplicationController
   private
 
   def serialize(evaluation)
-    EvaluationSerializer.new(evaluation).serializable_hash.dig(:data, :attributes)
+    return unless evaluation
+
+    EvaluationSerializer.render_as_hash(evaluation)
   end
 
   # Use callbacks to share common setup or constraints between actions.

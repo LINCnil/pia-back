@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class UserSerializer < Blueprinter::Base
   identifier :id
-  fields :email, :firstname, :lastname, :user_pias
+  fields :email, :firstname, :lastname
 
   field :access_type do |user|
     data = []
@@ -12,5 +14,9 @@ class UserSerializer < Blueprinter::Base
 
   field :access_locked do |user|
     user.access_locked?
+  end
+
+  view :restricted do
+    excludes :access_type, :user_pias, :access_locked
   end
 end

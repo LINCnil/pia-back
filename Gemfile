@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 ruby file: '.ruby-version'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'fast_jsonapi'
 gem 'blueprinter'
 gem 'rails', '~> 8.0.2'
 # Use postgresql as the database for Active Record
