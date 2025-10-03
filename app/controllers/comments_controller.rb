@@ -51,7 +51,9 @@ class CommentsController < ApplicationController
   private
 
   def serialize(comment)
-    CommentSerializer.new(comment).serializable_hash.dig(:data, :attributes)
+    return unless comment
+
+    CommentSerializer.render_as_hash(comment)
   end
 
   # Use callbacks to share common setup or constraints between actions.

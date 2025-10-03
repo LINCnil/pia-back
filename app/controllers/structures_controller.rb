@@ -55,7 +55,9 @@ class StructuresController < ApplicationController
   end
 
   def serialize(structure)
-    StructureSerializer.new(structure).serializable_hash.dig(:data, :attributes)
+    return unless structure
+
+    StructureSerializer.render_as_hash(structure)
   end
 
   def import_params

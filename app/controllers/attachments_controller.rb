@@ -50,7 +50,9 @@ class AttachmentsController < ApplicationController
   end
 
   def serialize(attachment)
-    AttachmentSerializer.new(attachment).serializable_hash.dig(:data, :attributes)
+    return unless attachment
+
+    AttachmentSerializer.render_as_hash(attachment)
   end
 
   # Only allow a trusted parameter "white list" through.
