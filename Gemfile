@@ -4,7 +4,7 @@ ruby file: '.ruby-version'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'blueprinter'
-gem 'rails', '~> 8.0.2'
+gem 'rails', '~> 8.1.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
