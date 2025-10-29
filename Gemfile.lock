@@ -438,7 +438,7 @@ CHECKSUMS
   zeitwerk (2.7.2) sha256=842e067cb11eb923d747249badfb5fcdc9652d6f20a1f06453317920fdcd4673
 
 RUBY VERSION
-   ruby 3.4.6p54
+   ruby 3.4.7p58
 
 BUNDLED WITH
-   2.6.7
+   2.7.2
