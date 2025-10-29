@@ -12,13 +12,13 @@ PIA-BACK is developped with RubyOnRails providing a RESTful API for the PIA and 
 [![Rails Style Guide](https://img.shields.io/badge/code_style-community-brightgreen.svg)](https://rails.rubystyle.guide)
 
 ## Wiki for a production environment
-**You can follow ![the wiki](https://github.com/LINCnil/pia-back/wiki) for a full production installation of the `pia` (frontend) and `pia-back` (backend) applications on an Ubuntu server.**
+**You can follow [the wiki](https://github.com/LINCnil/pia-back/wiki) for a full production installation of the `pia` (frontend) and `pia-back` (backend) applications on an Ubuntu server.**
 
 ## Requirements
 - [pia (front-end) application](https://github.com/LINCnil/pia)
-- [Ruby](http://www.ruby-lang.org) 3.1.x
-- [Rails](http://rubyonrails.org) 7.0.x
-- [PostgreSQL](https://www.postgresql.org) 12.0+
+- [Ruby](http://www.ruby-lang.org) 3.4.x
+- [Rails](http://rubyonrails.org) 8.0.x
+- [PostgreSQL](https://www.postgresql.org) 13+
 
 ## System requirements
 - CPU : i5
