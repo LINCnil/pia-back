@@ -16,6 +16,11 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     # fixtures :all
 
+    # Set up ActiveStorage URL options for tests
+    setup do
+      ActiveStorage::Current.url_options = Rails.application.routes.default_url_options
+    end
+
     # Add more helper methods to be used by all tests here...
     def doorkeeper_token
       user = FactoryBot.create(:user)

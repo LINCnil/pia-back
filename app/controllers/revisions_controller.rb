@@ -35,7 +35,9 @@ class RevisionsController < ApplicationController
   private
 
   def serialize(revision)
-    RevisionSerializer.new(revision).serializable_hash.dig(:data, :attributes)
+    return unless revision
+
+    RevisionSerializer.render_as_hash(revision)
   end
 
   # Use callbacks to share common setup or constraints between actions.

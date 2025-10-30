@@ -55,7 +55,9 @@ class MeasuresController < ApplicationController
   private
 
   def serialize(measure)
-    MeasureSerializer.new(measure).serializable_hash.dig(:data, :attributes)
+    return unless measure
+
+    MeasureSerializer.render_as_hash(measure)
   end
 
   # Use callbacks to share common setup or constraints between actions.

@@ -1,4 +1,6 @@
-class RevisionSerializer
-  include FastJsonapi::ObjectSerializer
-  attributes :id, :pia_id, :export, :created_at
+# frozen_string_literal: true
+
+class RevisionSerializer < Blueprinter::Base
+  identifier :id
+  fields :pia_id, :export, :created_at
 end

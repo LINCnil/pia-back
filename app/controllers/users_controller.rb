@@ -103,7 +103,9 @@ class UsersController < ApplicationController
   end
 
   def serialize(user)
-    UserSerializer.new(user).serializable_hash.dig(:data, :attributes)
+    return unless user
+
+    UserSerializer.render_as_hash(user)
   end
 
   def user_params

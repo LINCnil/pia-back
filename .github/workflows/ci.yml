@@ -1,15 +1,13 @@
 name: CI
 
-on:
-  pull_request:
-    branches: [ 'master' ]
+on: push
 
 jobs:
   test:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: pia_test
@@ -25,7 +23,7 @@ jobs:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/pia_test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -40,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:

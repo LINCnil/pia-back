@@ -59,7 +59,9 @@ class AnswersController < ApplicationController
   private
 
   def serialize(answer)
-    AnswerSerializer.new(answer).serializable_hash.dig(:data, :attributes)
+    return unless answer
+
+    AnswerSerializer.render_as_hash(answer)
   end
 
   # Use callbacks to share common setup or constraints between actions.
