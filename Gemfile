@@ -8,7 +8,7 @@ gem 'rails', '~> 8.0.2'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
-gem 'mime-types', '~> 3.3'
+gem 'mime-types', '~> 3.7'
 gem 'puma'
 
 gem 'dotenv-rails'
