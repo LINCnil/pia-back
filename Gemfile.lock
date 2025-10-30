@@ -130,8 +130,8 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.10.2)
-    language_server-protocol (3.17.0.4)
+    json (2.15.2)
+    language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.24.0)
@@ -167,18 +167,18 @@ GEM
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.27.0)
-    parser (3.3.8.0)
+    parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.4.0)
+    prism (1.6.0)
     psych (5.2.3)
       date
       stringio
-    puma (6.6.0)
+    puma (7.1.0)
       nio4r (~> 2.0)
     pundit (2.5.0)
       activesupport (>= 3.0.0)
@@ -230,13 +230,13 @@ GEM
     rake (13.2.1)
     rdoc (6.13.1)
       psych (>= 4.0.0)
-    regexp_parser (2.10.0)
+    regexp_parser (2.11.3)
     reline (0.6.1)
       io-console (~> 0.5)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rubocop (1.75.3)
+    rubocop (1.81.6)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -244,10 +244,10 @@ GEM
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
-      rubocop-ast (>= 1.44.0, < 2.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.44.1)
+    rubocop-ast (1.47.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-performance (1.25.0)
@@ -277,9 +277,9 @@ GEM
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode-display_width (3.1.4)
-      unicode-emoji (~> 4.0, >= 4.0.4)
-    unicode-emoji (4.0.4)
+    unicode-display_width (3.2.0)
+      unicode-emoji (~> 4.1)
+    unicode-emoji (4.1.0)
     uri (1.0.4)
     useragent (0.16.11)
     warden (1.2.9)
@@ -368,8 +368,8 @@ CHECKSUMS
   i18n (1.14.7) sha256=ceba573f8138ff2c0915427f1fc5bdf4aa3ab8ae88c8ce255eb3ecf0a11a5d0f
   io-console (0.8.0) sha256=cd6a9facbc69871d69b2cb8b926fc6ea7ef06f06e505e81a64f14a470fddefa2
   irb (1.15.2) sha256=222f32952e278da34b58ffe45e8634bf4afc2dc7aa9da23fed67e581aa50fdba
-  json (2.10.2) sha256=34e0eada93022b2a0a3345bb0b5efddb6e9ff5be7c48e409cfb54ff8a36a8b06
-  language_server-protocol (3.17.0.4) sha256=c484626478664fd13482d8180947c50a8590484b1258b99b7aedb3b69df89669
+  json (2.15.2) sha256=1068e1d966d2d0dcaf953eaed09c2d30e4104c64c1e3140c435d17be08d1fa27
+  language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   loofah (2.24.0) sha256=61e6a710883abb8210887f3dc868cf3ed66594c509d9ff6987621efa6651ee1e
@@ -390,13 +390,13 @@ CHECKSUMS
   nokogiri (1.18.9-x86_64-linux-gnu) sha256=b52f5defedc53d14f71eeaaf990da66b077e1918a2e13088b6a96d0230f44360
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
-  parser (3.3.8.0) sha256=2476364142b307fa5a1b1ece44f260728be23858a9c71078e956131a75453c45
+  parser (3.3.10.0) sha256=ce3587fa5cc55a88c4ba5b2b37621b3329aadf5728f9eafa36bbd121462aabd6
   pg (1.5.9) sha256=761efbdf73b66516f0c26fcbe6515dc7500c3f0aa1a1b853feae245433c64fdc
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
-  prism (1.4.0) sha256=dc0e3e00e93160213dc2a65519d9002a4a1e7b962db57d444cf1a71565bb703e
+  prism (1.6.0) sha256=bfc0281a81718c4872346bc858dc84abd3a60cae78336c65ad35c8fbff641c6b
   psych (5.2.3) sha256=84a54bb952d14604fea22d99938348814678782f58b12648fcdfa4d2fce859ee
-  puma (6.6.0) sha256=f25c06873eb3d5de5f0a4ebc783acc81a4ccfe580c760cfe323497798018ad87
+  puma (7.1.0) sha256=e45c10cb124f224d448c98db653a75499794edbecadc440ad616cf50f2fd49dd
   pundit (2.5.0) sha256=4fb6b8ad3fbfe6c34e4be172a1eac03dfcb36c29d6a1214574517af5a605beda
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.3) sha256=239a373da6584574f25f042d8ed4ba21e691c9799f1d2b5c8920bbbc23ca3d41
@@ -412,11 +412,11 @@ CHECKSUMS
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.2.1) sha256=46cb38dae65d7d74b6020a4ac9d48afed8eb8149c040eccf0523bec91907059d
   rdoc (6.13.1) sha256=62a0dac99493c94e8eb7a3fb44e55aefcb4cecb119f7991f25bddc5ed8d472f7
-  regexp_parser (2.10.0) sha256=cb6f0ddde88772cd64bff1dbbf68df66d376043fe2e66a9ef77fcb1b0c548c61
+  regexp_parser (2.11.3) sha256=ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
   reline (0.6.1) sha256=1afcc9d7cb1029cdbe780d72f2f09251ce46d3780050f3ec39c3ccc6b60675fb
   responders (3.1.1) sha256=92f2a87e09028347368639cfb468f5fefa745cb0dc2377ef060db1cdd79a341a
-  rubocop (1.75.3) sha256=1860a1b571fe4a15dff79d6683642ebf3ea4b3f7ae7903743ab0885b4686a1d5
-  rubocop-ast (1.44.1) sha256=e3cc04203b2ef04f6d6cf5f85fe6d643f442b18cc3b23e3ada0ce5b6521b8e92
+  rubocop (1.81.6) sha256=a7095eca1b79bbbe7d81c74c11ed2c532faa868bd9d31c2f12b7be7fbfbfef42
+  rubocop-ast (1.47.1) sha256=592682017855408b046a8190689490763aecea175238232b1b526826349d01ae
   rubocop-performance (1.25.0) sha256=6f7d03568a770054117a78d0a8e191cefeffb703b382871ca7743831b1a52ec1
   rubocop-rails (2.31.0) sha256=79476e1075299c3e60fc50549c7c32614f9ebaae719b899ed75785c6786c52bd
   rubocop-rails-omakase (1.1.0) sha256=2af73ac8ee5852de2919abbd2618af9c15c19b512c4cfc1f9a5d3b6ef009109d
@@ -429,8 +429,8 @@ CHECKSUMS
   thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
   timeout (0.4.3) sha256=9509f079b2b55fe4236d79633bd75e34c1c1e7e3fb4b56cb5fda61f80a0fe30e
   tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
-  unicode-display_width (3.1.4) sha256=8caf2af1c0f2f07ec89ef9e18c7d88c2790e217c482bfc78aaa65eadd5415ac1
-  unicode-emoji (4.0.4) sha256=2c2c4ef7f353e5809497126285a50b23056cc6e61b64433764a35eff6c36532a
+  unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
+  unicode-emoji (4.1.0) sha256=4997d2d5df1ed4252f4830a9b6e86f932e2013fbff2182a9ce9ccabda4f325a5
   uri (1.0.4) sha256=34485d137c079f8753a0ca1d883841a7ba2e5fae556e3c30c2aab0dde616344b
   useragent (0.16.11) sha256=700e6413ad4bb954bb63547fa098dddf7b0ebe75b40cc6f93b8d54255b173844
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
