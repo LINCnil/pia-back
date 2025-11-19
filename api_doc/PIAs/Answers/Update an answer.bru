@@ -1,0 +1,22 @@
+meta {
+  name: Update an answer
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/pias/:pia_id/answers/:id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}
+
+body:multipart-form {
+  answer[reference_to]: 111
+  answer[data][text]: My answer text updated
+  answer[data][gauge]: 
+}

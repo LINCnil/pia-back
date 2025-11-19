@@ -1,0 +1,25 @@
+meta {
+  name: Create (upload) an attachment
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pia/:pia_id/attachments
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}
+
+body:multipart-form {
+  attachment[reference_to]: 1.1
+  attachment[description]: Text
+  attachment[for_measure]: false
+  attachment[attached_file][pia_id]: 
+  attachment[attached_file][file]: 
+  attachment[attached_file][name]: 
+  attachment[attached_file][mime_type]: 
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Return a knowledge base
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/knowledge_bases/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

@@ -1,0 +1,15 @@
+meta {
+  name: unlock access
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/users/unlock_access/:uuid
+  body: none
+  auth: inherit
+}
+
+params:path {
+  uuid: 
+}

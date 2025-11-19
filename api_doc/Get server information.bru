@@ -1,0 +1,16 @@
+meta {
+  name: Get server information
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/info
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+}

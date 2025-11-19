@@ -1,0 +1,21 @@
+meta {
+  name: Create a measure
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias/:pia_id/measures
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}
+
+body:multipart-form {
+  measure[title]: Anonymisation
+  measure[content]: test
+  measure[placeholder]: knowledge_base.slugs.PIA_TEC_ANO.placeholder
+}

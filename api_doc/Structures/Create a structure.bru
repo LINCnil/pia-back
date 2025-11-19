@@ -1,0 +1,18 @@
+meta {
+  name: Create a structure
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/structures
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  structure[name]: 
+  structure[sector_name]: 
+  structure[data]: 
+  structure[created_at]: 
+}

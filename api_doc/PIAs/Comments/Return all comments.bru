@@ -1,0 +1,15 @@
+meta {
+  name: Return all comments
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/pias/:pia_id/comments
+  body: none
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}

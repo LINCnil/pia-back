@@ -1,0 +1,21 @@
+meta {
+  name: Update a knowledge base
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/knowledge_bases/:id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:multipart-form {
+  knowledge_base[name]: 
+  knowledge_base[author]: 
+  knowledge_base[contributors]: 
+}

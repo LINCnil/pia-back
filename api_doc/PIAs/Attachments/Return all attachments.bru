@@ -1,0 +1,15 @@
+meta {
+  name: Return all attachments
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/pia/:pia_id/attachments
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}
