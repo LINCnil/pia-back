@@ -1,0 +1,15 @@
+meta {
+  name: Return a PIA
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/pias/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

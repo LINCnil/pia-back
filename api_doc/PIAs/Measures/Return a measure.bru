@@ -1,0 +1,16 @@
+meta {
+  name: Return a measure
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/pias/:pia_id/measures/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}

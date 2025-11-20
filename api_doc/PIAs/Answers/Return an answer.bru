@@ -1,0 +1,16 @@
+meta {
+  name: Return an answer
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/pias/:pia_id/answers/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+  id: 
+}

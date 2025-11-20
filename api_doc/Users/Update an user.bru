@@ -1,0 +1,19 @@
+meta {
+  name: Update an user
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/users/:user_id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  user_id: 
+}
+
+body:multipart-form {
+  user[firstname]: Jane2
+}

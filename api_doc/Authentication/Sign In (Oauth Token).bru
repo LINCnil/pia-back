@@ -1,0 +1,26 @@
+meta {
+  name: Sign In (Oauth Token)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/oauth/token
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  email: john.doe@example.com
+  password: EiGhaehoh9thoa.n
+  grant_type: password
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+}
+
+script:post-response {
+  const response = res.getBody();
+  if (response && response.access_token) {
+    bru.setVar("token", response.access_token);
+  }
+}
