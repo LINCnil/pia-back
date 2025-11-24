@@ -1,0 +1,15 @@
+meta {
+  name: Delete a knowledge base
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/knowledge_bases/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

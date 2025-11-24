@@ -1,0 +1,15 @@
+meta {
+  name: Delete a PIA
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/pias/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create an evaluation
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias/:pia_id/evaluations
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}
+
+body:multipart-form {
+  evaluation[status]: 
+  evaluation[evaluation_comment]: comment
+  evaluation[reference_to]: 2.1.215
+}

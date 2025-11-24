@@ -1,0 +1,16 @@
+meta {
+  name: Delete an attachment
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/pia/:pia_id/attachments/:id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}

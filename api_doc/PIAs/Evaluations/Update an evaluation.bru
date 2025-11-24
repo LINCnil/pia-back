@@ -1,0 +1,22 @@
+meta {
+  name: Update an evaluation
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/pias/:pia_id/evaluations/:id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}
+
+body:multipart-form {
+  evaluation[status]: 3
+  evaluation[evaluation_comment]: comment
+  evaluation[reference_to]: 2.1.215
+}

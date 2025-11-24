@@ -1,0 +1,11 @@
+meta {
+  name: Get token info
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/oauth/token/info
+  body: none
+  auth: inherit
+}

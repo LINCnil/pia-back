@@ -1,0 +1,22 @@
+meta {
+  name: Update a measure
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/pias/:pia_id/measures/:id
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}
+
+body:multipart-form {
+  measure[title]: test
+  measure[content]: test
+  measure[placeholder]: knowledge_base.slugs.PIA_TEC_ANO.placeholder
+}

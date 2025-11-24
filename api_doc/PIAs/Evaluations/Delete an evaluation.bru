@@ -1,0 +1,16 @@
+meta {
+  name: Delete an evaluation
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/pias/:pia_id/evaluations/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Create a revision
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias/:pia_id/revisions
+  body: multipartForm
+  auth: none
+}
+
+params:path {
+  pia_id: 
+}
+
+body:multipart-form {
+  revision[export]: {}
+}

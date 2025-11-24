@@ -1,0 +1,21 @@
+meta {
+  name: Create a PIA
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  pia[name]: test name
+  pia[author_name]: test author
+  pia[evaluator_name]: test evaluator
+  pia[validator_name]: test validator
+  pia[is_example]: 0
+  pia[is_archive]: 0
+  pia[structure_id]: 
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Sign out (Revoke Token)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/oauth/revoke
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+}

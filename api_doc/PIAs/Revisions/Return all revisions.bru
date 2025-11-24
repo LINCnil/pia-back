@@ -1,0 +1,15 @@
+meta {
+  name: Return all revisions
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/pias/:pia_id/revisions
+  body: none
+  auth: none
+}
+
+params:path {
+  pia_id: 
+}

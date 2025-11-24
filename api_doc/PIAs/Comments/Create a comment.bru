@@ -1,0 +1,15 @@
+meta {
+  name: Create a comment
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias/:pia_id/comments
+  body: none
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}

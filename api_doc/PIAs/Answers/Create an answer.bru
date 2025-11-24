@@ -1,0 +1,21 @@
+meta {
+  name: Create an answer
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/pias/:pia_id/answers
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  pia_id: 
+}
+
+body:multipart-form {
+  answer[reference_to]: 
+  answer[data][text]: 
+  answer[data][gauge]: 
+}

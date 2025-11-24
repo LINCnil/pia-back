@@ -1,0 +1,17 @@
+meta {
+  name: Create a knowledge base
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/knowledge_bases
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  knowledge_base[name]: 
+  knowledge_base[author]: 
+  knowledge_base[contributors]: 
+}

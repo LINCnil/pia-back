@@ -1,0 +1,16 @@
+meta {
+  name: Return an evaluation
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/pias/:pia_id/evaluations/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+  pia_id: 
+}
