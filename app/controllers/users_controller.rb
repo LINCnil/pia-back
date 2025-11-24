@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
 
-    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+    password = SecureRandom.hex(16)
     user.password = password
     user.password_confirmation = password
 
