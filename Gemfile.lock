@@ -102,9 +102,6 @@ GEM
       rails-i18n
     devise-security (0.18.0)
       devise (>= 4.3.0)
-    devise_ldap_authenticatable (0.8.7)
-      devise (>= 3.4.1)
-      net-ldap (>= 0.16.0)
     docile (1.4.1)
     doorkeeper (5.8.2)
       railties (>= 5)
@@ -312,12 +309,12 @@ DEPENDENCIES
   devise
   devise-i18n
   devise-security
-  devise_ldap_authenticatable
   doorkeeper
   doorkeeper-i18n
   dotenv-rails
   factory_bot_rails
   mime-types (~> 3.7)
+  net-ldap
   pg
   puma
   pundit
@@ -360,7 +357,6 @@ CHECKSUMS
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
   devise-i18n (1.15.0) sha256=aff406e8a2941cd1d7614643b1619031a403b2855bb6057e391d1c7c273205cd
   devise-security (0.18.0) sha256=fc06be1624b5151044ff9c5d8e61abdfa7d56eb16bfdaec16a11235d54708513
-  devise_ldap_authenticatable (0.8.7) sha256=8af6f839661e24ca9afc5a1508a7ec7e1327e93af4516f2baabacdf511ee5a2e
   docile (1.4.1) sha256=96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
   doorkeeper (5.8.2) sha256=a73d07aeaf590b1e7e2a35390446f23131c9f37bc0561653e514d3973f4d50d3
   doorkeeper-i18n (5.2.8) sha256=e4054701df464892f3c0fd6c96507188e9b082cb52938da3aab45f4f9fdaf552

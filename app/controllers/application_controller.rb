@@ -1,8 +1,4 @@
 class ApplicationController < ActionController::API
-  rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
-    render text: exception, status: :internal_server_error
-  end
-
   include Pundit::Authorization if ENV['ENABLE_AUTHENTICATION'].present?
   before_action :doorkeeper_authorize!, except: %i[info]
   before_action :active_storage_url_options
