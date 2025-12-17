@@ -31,7 +31,7 @@ class User < ApplicationRecord
 
   def check_ldap_email
     if email.blank?
-      mail = Devise::LDAP::Adapter.get_ldap_param(login, 'mail')
+      mail = LdapAdapter.get_ldap_param(login, 'mail')
       self.email = if mail.present?
                      mail.first
                    else # No email, use login
@@ -42,7 +42,7 @@ class User < ApplicationRecord
   end
 
   def self.check_ldap_credentials(login, password)
-    Devise::LDAP::Adapter.valid_credentials?(login, password)
+    LdapAdapter.valid_credentials?(login, password)
   end
 
   # create user with ldap
