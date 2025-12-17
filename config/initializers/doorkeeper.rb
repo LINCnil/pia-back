@@ -371,11 +371,11 @@ Doorkeeper.configure do
     user = nil
 
     # LDAP IS ACTIVE
-    if ENV['DEVISE_LDAP_LOGGER'].present? && User.check_ldap_credentials(login, password) # ldap valide
+    if ActiveModel::Type::Boolean.new.cast(ENV['DEVISE_LDAP_LOGGER']) && User.check_ldap_credentials(login, password)
       user = User.find_for_authentication(login: login)
-      #  Check if user exists in database
+      #  Check if the user exists in the database
       if user.blank?
-        # Create user in database
+        # Create the user in the database
         user = User.create_with_ldap(login)
       end
     end

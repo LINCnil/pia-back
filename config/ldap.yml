@@ -1,31 +1,15 @@
-## Authorizations
-# Uncomment out the merging for each environment that you'd like to include.
-# You can also just copy and paste the tree (do not include the "authorizations") to each
-# environment if you need something different per environment.
-authorizations: &AUTHORIZATIONS
-  allow_unauthenticated_bind: false
-  group_base: ou=groups,dc=test,dc=com
-  ## Requires config.ldap_check_group_membership in devise.rb be true
-  # Can have multiple values, must match all to be authorized
-  required_groups:
-    # If only a group name is given, membership will be checked against "uniqueMember"
-    - cn=admins,ou=groups,dc=test,dc=com
-    - cn=users,ou=groups,dc=test,dc=com
-    # If an array is given, the first element will be the attribute to check against, the second the group name
-    - ["moreMembers", "cn=users,ou=groups,dc=test,dc=com"]
-  ## Requires config.ldap_check_attributes in devise.rb to be true
-  ## Can have multiple attributes and values, must match all to be authorized
-  require_attribute:
-    objectClass: inetOrgPerson
-    authorizationRole: postsAdmin
-  ## Requires config.ldap_check_attributes_presence in devise.rb to be true
-  ## Can have multiple attributes set to true or false to check presence, all must match all to be authorized
-  require_attribute_presence:
-    mail: true
-    telephoneNumber: true
-    serviceAccount: false
-
-## Environment
+# LDAP Configuration
+# This file configures LDAP authentication settings for each environment.
+# All sensitive values should be stored in Rails encrypted credentials.
+#
+# Required credentials for each environment:
+#   - ldap_host: LDAP server hostname
+#   - ldap_port: LDAP server port (typically 389 for non-SSL, 636 for SSL)
+#   - ldap_attribute: Search attribute (e.g., 'cn', 'uid', 'sAMAccountName')
+#   - ldap_base: Base DN for user searches (e.g., 'ou=people,dc=example,dc=com')
+#   - ldap_admin_user: Admin bind DN (e.g., 'cn=admin,dc=example,dc=com')
+#   - ldap_admin_user_password: Admin bind password
+#   - ldap_ssl: Encryption method ('simple_tls', 'start_tls', or false for no encryption)
 
 development:
   host: <%= Rails.application.credentials.ldap_host %>
@@ -35,24 +19,23 @@ development:
   admin_user: <%= Rails.application.credentials.ldap_admin_user %>
   admin_password: <%= Rails.application.credentials.ldap_admin_user_password %>
   ssl: <%= Rails.application.credentials.ldap_ssl %>
-  # <<: *AUTHORIZATIONS
 
 test:
-  host: localhost
-  port: 3389
-  attribute: cn
-  base: ou=people,dc=test,dc=com
-  admin_user: cn=admin,dc=test,dc=com
-  admin_password: admin_password
-  ssl: simple_tls
-  # <<: *AUTHORIZATIONS
+  # Test environment can use mock LDAP server or real server configured via credentials
+  # If using mock server, update these values accordingly
+  host: <%= Rails.application.credentials.dig(:test, :ldap_host) || 'localhost' %>
+  port: <%= Rails.application.credentials.dig(:test, :ldap_port) || 389 %>
+  attribute: <%= Rails.application.credentials.dig(:test, :ldap_attribute) || 'cn' %>
+  base: <%= Rails.application.credentials.dig(:test, :ldap_base) || 'ou=people,dc=test,dc=com' %>
+  admin_user: <%= Rails.application.credentials.dig(:test, :ldap_admin_user) || 'cn=admin,dc=test,dc=com' %>
+  admin_password: <%= Rails.application.credentials.dig(:test, :ldap_admin_user_password) || 'admin_password' %>
+  ssl: <%= Rails.application.credentials.dig(:test, :ldap_ssl) || 'simple_tls' %>
 
 production:
-  host: localhost
-  port: 636
-  attribute: cn
-  base: ou=people,dc=test,dc=com
-  admin_user: cn=admin,dc=test,dc=com
-  admin_password: admin_password
-  ssl: start_tls
-  # <<: *AUTHORIZATIONS
+  host: <%= Rails.application.credentials.ldap_host %>
+  port: <%= Rails.application.credentials.ldap_port %>
+  attribute: <%= Rails.application.credentials.ldap_attribute %>
+  base: <%= Rails.application.credentials.ldap_base %>
+  admin_user: <%= Rails.application.credentials.ldap_admin_user %>
+  admin_password: <%= Rails.application.credentials.ldap_admin_user_password %>
+  ssl: <%= Rails.application.credentials.ldap_ssl %>
