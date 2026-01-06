@@ -16,6 +16,10 @@ class UserSerializer < Blueprinter::Base
     user.access_locked?
   end
 
+  field :user_pias do |user|
+    user.user_pias.pluck(:pia_id)
+  end
+
   view :restricted do
     excludes :access_type, :user_pias, :access_locked
   end
