@@ -41,7 +41,7 @@ class SamlController < Doorkeeper::TokensController
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
-      redirect_to root_path
+      redirect_to ENV['SSO_FRONTEND_REDIRECTION'], allow_other_host: true
     end
   end
 
