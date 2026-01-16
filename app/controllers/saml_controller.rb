@@ -95,7 +95,8 @@ class SamlController < Doorkeeper::TokensController
     settings.idp_entity_id                  = ENV['IDP_ENTITY_ID']
     settings.idp_sso_target_url             = ENV['IDP_SSO_TARGET_URL']
     settings.idp_slo_target_url             = ENV['IDP_SLO_TARGET_URL']
-    settings.idp_cert                       = ENV['IDP_CERT']
+    settings.idp_cert_fingerprint           = ENV['IDP_CERT_FINGERPRINT']
+    settings.idp_cert_fingerprint_algorithm = ENV['IDP_CERT_FINGERPRINT_ALGORITHM']
     settings.name_identifier_format         = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
 
     settings
