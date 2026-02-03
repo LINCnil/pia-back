@@ -66,11 +66,14 @@ class MeasuresController < ApplicationController
   end
 
   # Only allow a trusted parameter "white list" through.
+  # Note: pia_id is permitted but overwritten by the route param for security
   def measure_params
     params.fetch(:measure, {}).permit(
       :title,
       :content,
-      :placeholder, :lock_version
-    ).merge(params.permit(:pia_id))
+      :placeholder,
+      :lock_version,
+      :pia_id
+    ).merge(pia_id: params[:pia_id])
   end
 end
