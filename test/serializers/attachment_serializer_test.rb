@@ -18,6 +18,14 @@ class AttachmentSerializerTest < ActiveSupport::TestCase
     assert_equal @attachment.updated_at, data[:updated_at]
   end
 
+  test "serializes file attributes when file is attached" do
+    data = AttachmentSerializer.render_as_hash(@attachment)
+
+    assert_not_nil data[:file]
+    assert_equal 'test_file.txt', data[:name]
+    assert_equal 'text/plain', data[:mime_type]
+  end
+
   test "serializes nil file attributes when no file is attached" do
     attachment_without_file = create(:attachment, file: nil)
     data = AttachmentSerializer.render_as_hash(attachment_without_file)
@@ -25,5 +33,12 @@ class AttachmentSerializerTest < ActiveSupport::TestCase
     assert_nil data[:file]
     assert_nil data[:name]
     assert_nil data[:mime_type]
+  end
+
+  test "serializes pia_signed when true" do
+    attachment = create(:attachment, pia_signed: true)
+    data = AttachmentSerializer.render_as_hash(attachment)
+
+    assert_equal true, data[:pia_signed]
   end
 end

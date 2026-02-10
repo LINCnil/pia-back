@@ -61,4 +61,29 @@ class PiaSerializerTest < ActiveSupport::TestCase
     assert_includes data[:user_pias][0].keys, :role
     assert_equal 'author', data[:user_pias][0][:role]
   end
+
+  test "serializes structure attributes when structure is present" do
+    structure = create(:structure, name: 'Test Structure', sector_name: 'Test Sector', data: { 'key' => 'value' })
+    pia = create(:pia, structure: structure, structure_name: structure.name, structure_sector_name: structure.sector_name, structure_data: structure.data)
+    data = PiaSerializer.render_as_hash(pia)
+
+    assert_equal structure.id, data[:structure_id]
+    assert_equal 'Test Structure', data[:structure_name]
+    assert_equal 'Test Sector', data[:structure_sector_name]
+    assert_equal({ 'key' => 'value' }, data[:structure_data])
+  end
+
+  test "serializes user_pias with restricted user view" do
+    user = create(:user)
+    create(:user_pia, user: user, pia: @pia, role: 'author')
+    data = PiaSerializer.render_as_hash(@pia.reload)
+
+    user_data = data[:user_pias][0][:user]
+    assert_includes user_data.keys, :email
+    assert_includes user_data.keys, :firstname
+    assert_includes user_data.keys, :lastname
+    refute_includes user_data.keys, :access_type
+    refute_includes user_data.keys, :user_pias
+    refute_includes user_data.keys, :access_locked
+  end
 end

@@ -24,4 +24,18 @@ class EvaluationSerializerTest < ActiveSupport::TestCase
     assert_equal @evaluation.created_at, data[:created_at]
     assert_equal @evaluation.updated_at, data[:updated_at]
   end
+
+  test "serializes evaluation_date when present" do
+    evaluation = create(:evaluation, evaluation_date: Date.today)
+    data = EvaluationSerializer.render_as_hash(evaluation)
+
+    assert_equal evaluation.evaluation_date, data[:evaluation_date]
+  end
+
+  test "serializes estimated_implementation_date when present" do
+    evaluation = create(:evaluation, estimated_implementation_date: Date.today)
+    data = EvaluationSerializer.render_as_hash(evaluation)
+
+    assert_equal evaluation.estimated_implementation_date, data[:estimated_implementation_date]
+  end
 end

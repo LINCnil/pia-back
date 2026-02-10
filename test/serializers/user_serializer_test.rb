@@ -16,14 +16,6 @@ class UserSerializerTest < ActiveSupport::TestCase
     assert_equal @user.lastname, data[:lastname]
   end
 
-  # test "serializes user_pias association" do
-  #   create(:user_pia, user: @user)
-  #   data = UserSerializer.render_as_hash(@user.reload)
-  #
-  #   # assert_includes data.keys, :user_pias
-  #   assert_equal @user.user_pias.to_a, data[:user_pias]
-  # end
-
   test "serializes access_type for technical admin only" do
     user = create(:user,
                   is_technical_admin: true,
@@ -104,5 +96,46 @@ class UserSerializerTest < ActiveSupport::TestCase
     data = UserSerializer.render_as_hash(@user)
 
     refute_includes data.keys, :uuid
+  end
+
+  test "serializes user_pias as array of pia_ids" do
+    pia1 = create(:pia)
+    pia2 = create(:pia)
+    create(:user_pia, user: @user, pia: pia1)
+    create(:user_pia, user: @user, pia: pia2)
+
+    data = UserSerializer.render_as_hash(@user.reload)
+
+    assert_includes data.keys, :user_pias
+    assert_equal 2, data[:user_pias].length
+    assert_includes data[:user_pias], pia1.id
+    assert_includes data[:user_pias], pia2.id
+  end
+
+  test "restricted view excludes access_type" do
+    data = UserSerializer.render_as_hash(@user, view: :restricted)
+
+    refute_includes data.keys, :access_type
+  end
+
+  test "restricted view excludes user_pias" do
+    data = UserSerializer.render_as_hash(@user, view: :restricted)
+
+    refute_includes data.keys, :user_pias
+  end
+
+  test "restricted view excludes access_locked" do
+    data = UserSerializer.render_as_hash(@user, view: :restricted)
+
+    refute_includes data.keys, :access_locked
+  end
+
+  test "restricted view includes basic fields" do
+    data = UserSerializer.render_as_hash(@user, view: :restricted)
+
+    assert_includes data.keys, :id
+    assert_includes data.keys, :email
+    assert_includes data.keys, :firstname
+    assert_includes data.keys, :lastname
   end
 end
