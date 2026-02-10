@@ -109,7 +109,7 @@ class UsersController < ApplicationController
     lower = ('a'..'z').to_a
     upper = ('A'..'Z').to_a
     symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '-', '_', '+', '=']
-    
+
     # Guarantee at least one of each required type
     password = [
       digits.sample,
@@ -117,11 +117,11 @@ class UsersController < ApplicationController
       upper.sample,
       symbols.sample
     ]
-    
+
     # Fill the rest with random characters from all sets
     all_chars = digits + lower + upper + symbols
     password += all_chars.sample(12)
-    
+
     # Shuffle to avoid predictable pattern
     password.shuffle.join
   end
