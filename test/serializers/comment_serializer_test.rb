@@ -19,4 +19,12 @@ class CommentSerializerTest < ActiveSupport::TestCase
     assert_equal @comment.created_at, data[:created_at]
     assert_equal @comment.updated_at, data[:updated_at]
   end
+
+  test "serializes comment with user" do
+    user = create(:user)
+    comment = create(:comment, user: user)
+    data = CommentSerializer.render_as_hash(comment)
+
+    assert_equal user, data[:user]
+  end
 end

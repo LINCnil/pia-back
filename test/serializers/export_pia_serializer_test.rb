@@ -57,4 +57,18 @@ class ExportPiaSerializerTest < ActiveSupport::TestCase
     assert_includes data.keys, :measures
     assert_equal @pia.measures.count, data[:measures].length
   end
+
+  test "does not serialize structure_id" do
+    structure = create(:structure)
+    pia = create(:pia, structure: structure)
+    data = ExportPiaSerializer.render_as_hash(pia)
+
+    refute_includes data.keys, :structure_id
+  end
+
+  test "does not serialize is_example" do
+    data = ExportPiaSerializer.render_as_hash(@pia)
+
+    refute_includes data.keys, :is_example
+  end
 end
