@@ -21,13 +21,13 @@ class UserPiaTest < ActiveSupport::TestCase
   test "should have role enum" do
     user_pia = create(:user_pia, role: :guest)
     assert_equal 'guest', user_pia.role
-    
+
     user_pia.role = :author
     assert_equal 'author', user_pia.role
-    
+
     user_pia.role = :evaluator
     assert_equal 'evaluator', user_pia.role
-    
+
     user_pia.role = :validator
     assert_equal 'validator', user_pia.role
   end
