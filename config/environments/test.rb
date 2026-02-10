@@ -38,6 +38,9 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
+  
+  # Set default from address for test emails
+  config.action_mailer.default_options = { from: 'noreply@example.com' }
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
