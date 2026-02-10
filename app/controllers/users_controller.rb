@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :doorkeeper_authorize!, except: %i[check_uuid password_forgotten change_password]
-  before_action :authorize_user, except: %i[check_uuid password_forgotten change_password]
+  before_action :authorize_user, except: %i[check_uuid password_forgotten change_password], if: -> { ENV['ENABLE_AUTHENTICATION'].present? }
 
   def index
     users = []
