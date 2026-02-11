@@ -38,6 +38,7 @@ gem 'devise_ldap_authenticatable'
 gem 'devise-security'
 
 gem 'doorkeeper'
+gem 'ostruct'
 gem 'pundit'
 
 # i18n gems
