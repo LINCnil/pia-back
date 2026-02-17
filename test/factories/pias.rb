@@ -8,6 +8,7 @@ FactoryBot.define do
     dpo_status { 0 }
     dpo_opinion { 'Hard to beat' }
     concerned_people_opinion { 'Beat too hard' }
+    concerned_people_status { 0 }
     rejection_reason { 'Lack of coherency' }
     applied_adjustments { 'Cut up method' }
     is_example { 0 }
