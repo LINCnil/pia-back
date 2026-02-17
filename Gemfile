@@ -34,8 +34,8 @@ gem 'bootsnap', '>= 1.4.5', require: false
 gem 'rack-cors', require: 'rack/cors'
 
 gem 'devise'
-gem 'devise_ldap_authenticatable'
 gem 'devise-security'
+gem 'net-ldap'
 
 gem 'doorkeeper'
 gem 'pundit'
