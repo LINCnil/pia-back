@@ -46,7 +46,7 @@ jobs:
           ruby-version: '.ruby-version'
 
       - name: Bundle binstubs
-        run: bundle install --binstubs
+        run: bundle binstubs --all
 
       - name: Security audit dependencies
         run: bin/bundler-audit --update
