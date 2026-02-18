@@ -50,9 +50,7 @@ module PiaBack
                                        fi fr hr hu it lt lv nl
                                        no pl pt ro sl sv]
 
-    tags_allowed = ENV['SANITIZED_ALLOWED_TAGS'] ? ENV['SANITIZED_ALLOWED_TAGS'].split(' ') : []
-    config.action_view.sanitized_allowed_tags = tags_allowed
-    attributes_allowed = ENV['SANITIZED_ALLOWED_ATTRIBUTES'] ? ENV['SANITIZED_ALLOWED_ATTRIBUTES'].split(' ') : []
-    config.action_view.sanitized_allowed_attributes = attributes_allowed
+    config.action_view.sanitized_allowed_tags = ENV.fetch('SANITIZED_ALLOWED_TAGS', 'strong b em i ul ol li br p a div span img h1 h2 h3 h4 h5 h6 p').split(' ')
+    config.action_view.sanitized_allowed_attributes = ENV.fetch('SANITIZED_ALLOWED_ATTRIBUTES', 'href title').split(' ')
   end
 end
