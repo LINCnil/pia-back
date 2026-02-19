@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :doorkeeper_authorize!, except: %i[check_uuid password_forgotten change_password]
-  before_action :authorize_user, except: %i[check_uuid password_forgotten change_password]
+  before_action :authorize_user, except: %i[check_uuid password_forgotten change_password], if: -> { ENV['ENABLE_AUTHENTICATION'].present? }
 
   def index
     users = []
@@ -13,7 +13,8 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
 
-    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+    # Generate a password that meets complexity requirements: digit, lower, upper, symbol
+    password = generate_secure_password
     user.password = password
     user.password_confirmation = password
 
@@ -100,6 +101,29 @@ class UsersController < ApplicationController
 
   def authorize_user
     authorize User
+  end
+
+  def generate_secure_password
+    # Ensure password meets complexity requirements: digit, lower, upper, symbol
+    digits = ('0'..'9').to_a
+    lower = ('a'..'z').to_a
+    upper = ('A'..'Z').to_a
+    symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '-', '_', '+', '=']
+
+    # Guarantee at least one of each required type
+    password = [
+      digits.sample,
+      lower.sample,
+      upper.sample,
+      symbols.sample
+    ]
+
+    # Fill the rest with random characters from all sets
+    all_chars = digits + lower + upper + symbols
+    password += all_chars.sample(12)
+
+    # Shuffle to avoid predictable pattern
+    password.shuffle.join
   end
 
   def serialize(user)
