@@ -50,7 +50,7 @@ class User < ApplicationRecord
     user = User.new
     user.login = login
 
-    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
+    password = User.random_password
     user.password = password
     user.password_confirmation = password
     user.check_ldap_email
@@ -79,5 +79,20 @@ class User < ApplicationRecord
       end
       pia.save
     end
+  end
+
+  def self.random_password
+    digits  = ('0'..'9').to_a
+    lower   = ('a'..'z').to_a
+    upper   = ('A'..'Z').to_a
+    special = ('!'..'?').to_a
+
+    [
+      digits.sample,
+      lower.sample,
+      upper.sample,
+      special.sample,
+      (digits + lower + upper + special).sample(12)
+    ].flatten.shuffle.join
   end
 end
