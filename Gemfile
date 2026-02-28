@@ -38,7 +38,7 @@ gem 'devise_ldap_authenticatable'
 gem 'devise-security'
 
 gem 'doorkeeper'
-gem 'ostruct'
+gem 'ostruct' # Required by net-ldap, will be removed from stdlib in Ruby 3.5
 gem 'pundit'
 
 # i18n gems
