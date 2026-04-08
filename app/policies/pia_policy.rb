@@ -17,8 +17,7 @@ class PiaPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present?
-    # && user.is_functional_admin?
+    user.present? && user.is_functional_admin?
   end
 
   def destroy?
