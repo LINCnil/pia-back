@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :attachment do
     pia
     pia_signed { false }
-    comment { nil }
+    comment { 'Initial comment for the attachment' }
     file { Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'files', 'test_file.txt'), 'text/plain') }
 
     trait :signed do

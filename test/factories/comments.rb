@@ -4,14 +4,10 @@ FactoryBot.define do
     description { 'Sample comment description' }
     for_measure { false }
     pia
-    user { nil }
+    user
 
     trait :for_measure do
       for_measure { true }
-    end
-
-    trait :with_user do
-      user
     end
   end
 end

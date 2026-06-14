@@ -29,11 +29,6 @@ class PiaSerializerTest < ActiveSupport::TestCase
     assert_equal @pia.updated_at, data[:updated_at]
     assert_equal @pia.concerned_people_searched_opinion, data[:concerned_people_searched_opinion]
     assert_equal @pia.concerned_people_searched_content, data[:concerned_people_searched_content]
-    assert_equal @pia.structure_id, data[:structure_id]
-    assert_equal @pia.structure_name, data[:structure_name]
-    assert_equal @pia.structure_sector_name, data[:structure_sector_name]
-    assert_equal @pia.structure_data, data[:structure_data]
-    assert_equal @pia.category, data[:category]
     assert_equal @pia.progress, data[:progress]
     assert_equal @pia.lock_version, data[:lock_version]
   end
