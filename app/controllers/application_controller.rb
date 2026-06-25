@@ -3,13 +3,13 @@ class ApplicationController < ActionController::API
     render text: exception, status: :internal_server_error
   end
 
-  include Pundit::Authorization if ENV['ENABLE_AUTHENTICATION'].present?
-  before_action :doorkeeper_authorize!, except: %i[info]
+  include Pundit::Authorization if Rails.application.config.enable_authentication
+  before_action :doorkeeper_authorize!, except: %i[info] if Rails.application.config.enable_authentication
   before_action :active_storage_url_options
 
   def info
     client_app = Doorkeeper::Application.find_by(uid: params["client_id"], secret: params["client_secret"])
-    render json: { valid: client_app.present?, auth: ENV['ENABLE_AUTHENTICATION'].present? }
+    render json: { valid: client_app.present?, auth: Rails.application.config.enable_authentication }
   end
 
   protected

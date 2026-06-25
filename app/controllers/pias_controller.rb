@@ -1,6 +1,6 @@
 class PiasController < ApplicationController
   before_action :set_pia, only: %i[show update destroy duplicate]
-  before_action :authorize_pia if ENV['ENABLE_AUTHENTICATION'].present?
+  before_action :authorize_pia if Rails.application.config.enable_authentication
 
   rescue_from ActiveRecord::StaleObjectError do |e|
     render json: {
@@ -17,7 +17,7 @@ class PiasController < ApplicationController
   def index
     res = []
     # check if user is technical else his pias
-    pias = if ENV['ENABLE_AUTHENTICATION'].blank? || current_user.is_technical_admin
+    pias = if !Rails.application.config.enable_authentication || current_user.is_technical_admin
              Pia.all
            else
              policy_scope(Pia)
@@ -55,7 +55,7 @@ class PiasController < ApplicationController
 
     @pia = Pia.new(pia_parameters)
     if @pia.save
-      if ENV['ENABLE_AUTHENTICATION'].present?
+      if Rails.application.config.enable_authentication
         # Update pia user fields and UserPia relations
         check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
         check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
@@ -83,7 +83,7 @@ class PiasController < ApplicationController
     pia_parameters.delete(:structure_data)
 
     if @pia.update(pia_parameters)
-      if ENV['ENABLE_AUTHENTICATION'].present?
+      if Rails.application.config.enable_authentication
         # Update pia user fields and UserPia relations
         check_pia_user_field(:authors, pia_params["authors"], "author_name", 1) if pia_params.key?("authors")
         check_pia_user_field(:evaluators, pia_params["evaluators"], "evaluator_name", 2) if pia_params.key?("evaluators")
