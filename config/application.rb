@@ -52,5 +52,6 @@ module PiaBack
 
     config.action_view.sanitized_allowed_tags = ENV.fetch('SANITIZED_ALLOWED_TAGS', 'strong b em i ul ol li br p a div span img h1 h2 h3 h4 h5 h6 p').split(' ')
     config.action_view.sanitized_allowed_attributes = ENV.fetch('SANITIZED_ALLOWED_ATTRIBUTES', 'href title').split(' ')
+    config.enable_authentication = ActiveModel::Type::Boolean.new.cast(ENV['ENABLE_AUTHENTICATION'])
   end
 end
