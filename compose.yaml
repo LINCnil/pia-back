@@ -1,0 +1,26 @@
+services:
+  pia-db:
+    image: postgres:16
+    container_name: pia-db
+    env_file:
+        - .env
+    volumes:
+      - pia-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  web:
+    # run with proxy_url=my-url docker compose up --build
+    build:
+        context: .
+        args:
+            proxy_url: ${proxy_url}
+    env_file:
+        - .env
+    environment:
+        - DATABASE_HOST=pia-db
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  pia-db-data:
