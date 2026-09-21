@@ -320,6 +320,7 @@ DEPENDENCIES
   doorkeeper-i18n
   dotenv-rails
   factory_bot_rails
+  json (< 3)
   mime-types (~> 3.7)
   minitest (~> 6.0)
   ostruct
