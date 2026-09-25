@@ -4,8 +4,8 @@ class Evaluation < ApplicationRecord
   validates :reference_to, presence: true
   attr_accessor :evaluation_infos
 
-  after_create :email_for_evaluation! if ENV['ENABLE_AUTHENTICATION'].present?
-  after_update :email_for_validation! if ENV['ENABLE_AUTHENTICATION'].present?
+  after_create :email_for_evaluation! if Rails.application.config.enable_authentication
+  after_update :email_for_validation! if Rails.application.config.enable_authentication
 
   after_initialize :overwrite_to_safety_values
 
