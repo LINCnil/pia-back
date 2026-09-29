@@ -106,7 +106,7 @@ GEM
     devise_ldap_authenticatable (0.8.7)
       devise (>= 3.4.1)
       net-ldap (>= 0.16.0)
-    doorkeeper (5.9.7)
+    doorkeeper (5.9.9)
       railties (>= 5)
     doorkeeper-i18n (5.2.9)
       doorkeeper (>= 5.2)
@@ -390,7 +390,7 @@ CHECKSUMS
   devise-i18n (1.16.1) sha256=66321fa28111a78de25cbd7d4b5e7edcf67d3b73a419a8df563365849f68b2ba
   devise-security (0.18.0) sha256=fc06be1624b5151044ff9c5d8e61abdfa7d56eb16bfdaec16a11235d54708513
   devise_ldap_authenticatable (0.8.7) sha256=8af6f839661e24ca9afc5a1508a7ec7e1327e93af4516f2baabacdf511ee5a2e
-  doorkeeper (5.9.7) sha256=aa27426a84a1ee0676eee54528e8c247b543a9a441f2571633720617fcb37c11
+  doorkeeper (5.9.9) sha256=691fc87815c2ea7c075518be26855c2343bb3cf6a41400a92a5782f62786ec86
   doorkeeper-i18n (5.2.9) sha256=dea73afae44ffbf3bf7f2921b24ca801ee199d931591f15e24cb07af9c45b4a4
   dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
   dotenv-rails (3.2.0) sha256=657e25554ba622ffc95d8c4f1670286510f47f2edda9f68293c3f661b303beab
