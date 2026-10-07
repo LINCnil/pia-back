@@ -42,9 +42,9 @@
 /config/credentials.yml.enc
 
 # Docker files
-.dockerignore
-docker-compose.yml
-Dockerfile
+#.dockerignore
+#docker-compose.yml
+#Dockerfile
 
 # Others
 /public/uploads/*
