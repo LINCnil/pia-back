@@ -4,7 +4,7 @@ ruby file: '.ruby-version'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'blueprinter'
-gem 'rails', '~> 8.0.2'
+gem 'rails', '~> 8.1.4'
 # Pin json < 3: Active Support's JSON encoder still passes the `quirks_mode`
 # keyword to JSON.generate, which was removed in json 3.0, causing
 # `ArgumentError: unknown keyword: quirks_mode` (e.g. during db:schema:load).
