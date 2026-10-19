@@ -9,7 +9,7 @@ gem 'rails', '~> 8.0.2'
 # keyword to JSON.generate, which was removed in json 3.0, causing
 # `ArgumentError: unknown keyword: quirks_mode` (e.g. during db:schema:load).
 # Remove this pin once Rails supports json 3.x.
-gem 'json', '< 3'
+gem 'json', '< 4'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
