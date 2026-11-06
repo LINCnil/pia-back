@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'active_support/testing/constant_stubbing'
 
 class LdapAuthenticatorTest < ActiveSupport::TestCase
+  include ActiveSupport::Testing::ConstantStubbing
+
   class FakeConnection
     Result = Struct.new(:code, :error_message)
 
@@ -79,8 +82,15 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_equal '(uid=alice)', @connection.search_options[:filter].to_s
     assert_equal %w[mail uid], @connection.search_options[:attributes]
     assert_equal 2, @connection.search_options[:size]
-    assert_equal LdapAuthenticator::CONNECT_TIMEOUT, @connection.search_options[:time]
+    assert_equal LdapAuthenticator::SEARCH_TIME_LIMIT, @connection.search_options[:time]
     assert @connection.search_options[:ignore_server_caps]
+    assert_equal LdapAuthenticator::CONNECT_TIMEOUT, @factory.options[:connect_timeout]
+  end
+
+  test 'limits a search with its own time limit rather than the connection timeout' do
+    stub_const(LdapAuthenticator, :SEARCH_TIME_LIMIT, 7) { authenticate }
+
+    assert_equal 7, @connection.search_options[:time]
     assert_equal LdapAuthenticator::CONNECT_TIMEOUT, @factory.options[:connect_timeout]
   end
 
