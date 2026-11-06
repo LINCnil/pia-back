@@ -204,24 +204,44 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
 
   test 'rejects an untrusted LDAP server certificate' do
     with_certificate do |certificate, key, _ca_file|
-      with_server(tls: :simple_tls, certificate: certificate, key: key, expect_tls_failure: true) do |server|
-        config = { host: 'localhost', ssl: 'simple_tls' }
-        error = assert_raises(LdapAuthenticator::Error) do
-          authenticator(server, config: config).authenticate('alice', LdapServer::USER_PASSWORD)
+      %i[simple_tls start_tls].each do |method|
+        with_server(tls: method, certificate: certificate, key: key, expect_tls_failure: true) do |server|
+          config = { host: 'localhost', ssl: method.to_s }
+          error = assert_raises(LdapAuthenticator::Error) do
+            authenticator(server, config: config).authenticate('alice', LdapServer::USER_PASSWORD)
+          end
+          assert_match(/certificate verify failed/i, error.cause.message)
+          assert_match(/TLS certificate verification failed.*encryption\.tls_options\.ca_file/, error.message)
         end
-        assert_match(/certificate verify failed/i, error.cause.message)
       end
     end
   end
 
   test 'rejects a trusted LDAP certificate for a different hostname' do
     with_certificate do |certificate, key, ca_file|
-      with_server(tls: :simple_tls, certificate: certificate, key: key, expect_tls_failure: true) do |server|
-        config = { encryption: { method: :simple_tls, tls_options: { ca_file: ca_file } } }
-        error = assert_raises(LdapAuthenticator::Error) do
-          authenticator(server, config: config).authenticate('alice', LdapServer::USER_PASSWORD)
+      %i[simple_tls start_tls].each do |method|
+        with_server(tls: method, certificate: certificate, key: key, expect_tls_failure: true) do |server|
+          config = { encryption: { method: method, tls_options: { ca_file: ca_file } } }
+          error = assert_raises(LdapAuthenticator::Error) do
+            authenticator(server, config: config).authenticate('alice', LdapServer::USER_PASSWORD)
+          end
+          assert_match(/hostname/i, error.cause.message)
+          assert_match(/TLS certificate verification failed/, error.message)
         end
-        assert_match(/hostname/i, error.cause.message)
+      end
+    end
+  end
+
+  test 'accepts an untrusted certificate for another hostname when verification is explicitly disabled' do
+    with_certificate do |certificate, key, _ca_file|
+      %i[simple_tls start_tls].each do |method|
+        with_server(tls: method, certificate: certificate, key: key) do |server|
+          config = { encryption: { method: method, verify_certificates: false } }
+          result = nil
+          capture_io { result = authenticator(server, config: config).authenticate('alice', LdapServer::USER_PASSWORD) }
+
+          assert_equal 'alice@example.test', result.email
+        end
       end
     end
   end

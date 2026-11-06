@@ -126,7 +126,7 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     end
   end
 
-  test 'keeps custom CA settings but does not permit disabling TLS verification' do
+  test 'keeps custom CA settings and ignores verification overrides in tls_options' do
     encryption = {
       method: 'start_tls',
       tls_options: { ca_file: '/certificates/ldap-ca.pem', verify_mode: OpenSSL::SSL::VERIFY_NONE,
@@ -139,6 +139,40 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_equal '/certificates/ldap-ca.pem', options[:tls_options][:ca_file]
     assert_equal OpenSSL::SSL::VERIFY_PEER, options[:tls_options][:verify_mode]
     assert_equal true, options[:tls_options][:verify_hostname]
+  end
+
+  test 'disables certificate and hostname verification only with verify_certificates false' do
+    encryption = { method: 'start_tls', verify_certificates: false, tls_options: { ca_file: '/certificates/ldap-ca.pem' } }
+
+    output = capture_logs { authenticate(config: @config.merge(encryption: encryption)) }
+
+    options = @factory.options[:encryption]
+    assert_equal :start_tls, options[:method]
+    assert_equal OpenSSL::SSL::VERIFY_NONE, options[:tls_options][:verify_mode]
+    assert_equal false, options[:tls_options][:verify_hostname]
+    assert_includes output, 'LDAP TLS certificate and hostname verification is disabled'
+  end
+
+  test 'keeps verification enabled and silent when verify_certificates is true or unset' do
+    [true, nil].each do |verify|
+      output = capture_logs do
+        authenticate(config: @config.merge(encryption: { method: 'simple_tls', verify_certificates: verify }))
+      end
+
+      assert_equal OpenSSL::SSL::VERIFY_PEER, @factory.options[:encryption][:tls_options][:verify_mode]
+      assert_equal true, @factory.options[:encryption][:tls_options][:verify_hostname]
+      assert_not_includes output, 'verification is disabled'
+    end
+  end
+
+  test 'rejects a verify_certificates value that is not a boolean' do
+    ['false', 'no', 0].each do |verify|
+      error = assert_raises(LdapAuthenticator::Error) do
+        authenticate(config: @config.merge(encryption: { method: 'simple_tls', verify_certificates: verify }))
+      end
+
+      assert_match 'verify_certificates must be true or false', error.message
+    end
   end
 
   test 'allows legacy plaintext configuration without silently enabling TLS' do
@@ -286,6 +320,29 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_match 'Timeout::Error', error.message
     assert_not_includes error.message, 'user-secret'
     assert_instance_of Timeout::Error, error.cause
+  end
+
+  test 'explains how to trust the server certificate when TLS verification fails' do
+    [
+      'SSL_connect returned=1 errno=0 peeraddr=10.0.0.5:636 state=error: certificate verify failed (self-signed certificate)',
+      'hostname "10.0.0.5" does not match the server certificate'
+    ].each do |message|
+      @connection.open_error = Net::LDAP::Error.new(message)
+
+      error = assert_raises(LdapAuthenticator::Error) { authenticate }
+      assert_includes error.message, 'TLS certificate verification failed'
+      assert_includes error.message, message
+      assert_includes error.message, 'encryption.tls_options.ca_file'
+      assert_not_includes error.message, 'user-secret'
+      assert_same @connection.open_error, error.cause
+    end
+  end
+
+  test 'keeps the generic message for connection failures unrelated to TLS verification' do
+    @connection.open_error = Net::LDAP::Error.new('Unable to connect to any given server')
+
+    error = assert_raises(LdapAuthenticator::Error) { authenticate }
+    assert_equal 'LDAP connection failed (Net::LDAP::Error)', error.message
   end
 
   test 'rejects missing configuration and unsupported group checks' do

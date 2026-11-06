@@ -73,6 +73,24 @@ encryption:
     ca_file: /path/to/ldap-ca.pem
 ```
 
+The previous LDAP integration did not validate the certificate chain, so a
+self-signed or private-CA certificate that used to work now fails with
+`LDAP TLS certificate verification failed` in the logs. Trusting the CA as above
+is the recommended fix. As a last resort, verification can be disabled
+explicitly:
+
+```yaml
+encryption:
+  method: start_tls
+  verify_certificates: false
+```
+
+`verify_certificates` must be a boolean and is only read from `encryption`;
+`tls_options` cannot disable verification. Setting it to `false` turns off both
+certificate and hostname verification, so anyone able to intercept the
+connection can impersonate the directory and capture passwords. A warning is
+logged on every connection.
+
 The login is searched using the configured attribute. If the search returns no
 user, or anonymous binding or searching is refused, authentication also tries
 the legacy DN format `attribute=login,base`. A successful first LDAP login
