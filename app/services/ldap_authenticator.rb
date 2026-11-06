@@ -181,11 +181,8 @@ class LdapAuthenticator
       raise Error, "LDAP #{key} must be configured" unless @config[key].is_a?(String) && @config[key].present?
     end
 
-    port = @config[:port]
-    port = port.to_i if port.is_a?(String) && port.match?(/\A\d+\z/)
     raise Error, 'LDAP port must be between 1 and 65535' unless port.is_a?(Integer) && (1..65_535).cover?(port)
 
-    @port = port
     if @use_admin && %i[admin_user admin_password].any? { |key| !@config[key].is_a?(String) || @config[key].blank? }
       raise Error, 'LDAP admin credentials must be configured'
     end
@@ -194,8 +191,14 @@ class LdapAuthenticator
     end
   end
 
+  # A numeric string is accepted too, as the port may come from an environment variable or a credentials file.
+  def port
+    value = @config[:port]
+    value.is_a?(String) && value.match?(/\A\d+\z/) ? value.to_i : value
+  end
+
   def connection_options
-    options = { host: @config[:host], port: @port, connect_timeout: CONNECT_TIMEOUT }
+    options = { host: @config[:host], port: port, connect_timeout: CONNECT_TIMEOUT }
     if @use_admin
       options[:auth] = { method: :simple, username: @config[:admin_user], password: @config[:admin_password] }
     end

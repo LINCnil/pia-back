@@ -473,6 +473,23 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_raises(LdapAuthenticator::Error) { authenticate(config: @config.merge(check_group_membership: true)) }
   end
 
+  test 'passes the port to the connection as an integer, even when it is a numeric string' do
+    authenticate(config: @config.merge(port: '3389'))
+
+    assert_equal 3389, @factory.options[:port]
+  end
+
+  test 'rejects a port that is not an integer between 1 and 65535 before connecting' do
+    [nil, 0, 65_536, -1, '0', '65536', '-1', '636abc', ' 636', 'ldaps', 636.5, [636]].each do |port|
+      error = assert_raises(LdapAuthenticator::Error, port.inspect) do
+        authenticate(config: @config.merge(port: port))
+      end
+
+      assert_equal 'LDAP port must be between 1 and 65535', error.message
+    end
+    assert_nil @factory.options
+  end
+
   private
 
   def authenticate(login: 'alice', password: 'user-secret', config: @config, use_admin: false)
