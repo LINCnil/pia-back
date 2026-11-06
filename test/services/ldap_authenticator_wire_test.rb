@@ -160,7 +160,6 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
   end
 
   test 'issues an OAuth token after a real LDAP authentication' do
-    previous_value = ENV['DEVISE_LDAP_LOGGER']
     with_server do |server|
       application = Doorkeeper::Application.create!(
         name: 'LDAP wire test client',
@@ -172,16 +171,17 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
         define_method(:initialize) { super(config: config, use_admin: false) }
       end
       session = ActionDispatch::Integration::Session.new(Rails.application)
-      ENV['DEVISE_LDAP_LOGGER'] = 'true'
 
-      stub_const(Object, :LdapAuthenticator, configured_authenticator) do
-        session.post '/oauth/token', params: {
-          grant_type: 'password',
-          email: 'alice',
-          password: LdapServer::USER_PASSWORD,
-          client_id: application.uid,
-          client_secret: application.secret
-        }
+      with_env('LDAP_ENABLED' => 'true') do
+        stub_const(Object, :LdapAuthenticator, configured_authenticator) do
+          session.post '/oauth/token', params: {
+            grant_type: 'password',
+            email: 'alice',
+            password: LdapServer::USER_PASSWORD,
+            client_id: application.uid,
+            client_secret: application.secret
+          }
+        end
       end
 
       assert_equal 200, session.response.status
@@ -189,8 +189,6 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
       assert_equal User.find_by!(login: 'alice').id, token.resource_owner_id
       assert_equal 'alice@example.test', User.find_by!(login: 'alice').email
     end
-  ensure
-    previous_value.nil? ? ENV.delete('DEVISE_LDAP_LOGGER') : ENV['DEVISE_LDAP_LOGGER'] = previous_value
   end
 
   test 'times out when the directory does not answer a search' do
