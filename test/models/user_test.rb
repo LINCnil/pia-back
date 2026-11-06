@@ -112,4 +112,34 @@ class UserTest < ActiveSupport::TestCase
       user.destroy
     end
   end
+
+  test "random_password satisfies password complexity and is not reused" do
+    passwords = Array.new(50) { User.random_password }
+
+    assert_equal passwords.size, passwords.uniq.size
+    passwords.each do |password|
+      assert_equal User::RANDOM_PASSWORD_LENGTH, password.length
+      assert_match(/\p{Lower}/, password)
+      assert_match(/\p{Upper}/, password)
+      assert_match(/\p{Digit}/, password)
+      assert_match(/\p{Punct}|\p{S}/, password)
+      assert password.chars.all? { |char| User::RANDOM_PASSWORD_CHARS.include?(char) }
+    end
+  end
+
+  test "random_password regenerates until every character class is present" do
+    candidates = ['a' * 64, 'aA1' * 21, "aA1!#{'b' * 60}"]
+    random = Object.new
+    random.define_singleton_method(:alphanumeric) { |*, **| candidates.shift }
+
+    assert_equal "aA1!#{'b' * 60}", User.random_password(random: random)
+    assert_empty candidates
+  end
+
+  test "create_with_ldap stores a valid random password" do
+    user = User.create_with_ldap('ldap-user', 'ldap-user@example.test')
+
+    assert user.persisted?
+    assert_not user.valid_password?('ldap-user')
+  end
 end

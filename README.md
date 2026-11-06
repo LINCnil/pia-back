@@ -47,6 +47,45 @@ See the [Install PostgreSQL](https://github.com/LINCnil/pia-back/wiki/Install-Po
 
 ![PIA Settings](public/pia-settings.png)
 
+## LDAP authentication
+
+Configure the LDAP server for each environment in `config/ldap.yml`. Development
+reads `ldap_host`, `ldap_port`, `ldap_attribute`, `ldap_base`, `ldap_admin_user`,
+`ldap_admin_user_password` and `ldap_ssl` from Rails credentials.
+
+- Set `DEVISE_LDAP_LOGGER` to any non-empty value to enable LDAP authentication.
+  For compatibility, even the string `false` enables it; this variable no longer
+  controls debug logging.
+- Set `DEVISE_LDAP_LOGGER_ADMIN_BIND` to use the configured admin credentials
+  for directory searches. Any defined value, including an empty string, enables
+  the admin bind. Leave the variable unset for anonymous searches.
+- Set `ssl` to `simple_tls` (or `true`) for LDAPS, or `start_tls` for StartTLS.
+  The server certificate and hostname are verified using the system trust store.
+  An unset or false `ssl` retains legacy plaintext LDAP behavior and logs a
+  warning: credentials will be transmitted without encryption.
+
+For a private CA, configure `encryption`, which takes precedence over `ssl`:
+
+```yaml
+encryption:
+  method: start_tls
+  tls_options:
+    ca_file: /path/to/ldap-ca.pem
+```
+
+The login is searched using the configured attribute. If the search returns no
+user, or anonymous binding or searching is refused, authentication also tries
+the legacy DN format `attribute=login,base`. A successful first LDAP login
+creates a local user with the LDAP `mail` attribute, or the login when no email
+is available. If LDAP rejects the credentials, existing local email/password
+authentication remains available. LDAP connection, configuration, and
+ambiguous-search errors do not fall back to local authentication.
+
+The previous LDAP group and attribute authorization checks were disabled in
+this application and are not implemented. An LDAP configuration that explicitly
+enables group checks is rejected rather than silently bypassing them. LDAP
+password changes are not performed by this application.
+
 ## How to update to the latest version in a development environment
 
 Go to the folder pia-back : `cd pia-back`

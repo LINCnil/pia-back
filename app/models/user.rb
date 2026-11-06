@@ -29,34 +29,27 @@ class User < ApplicationRecord
     errors.add(:login, :taken) if User.where(login: login).where.not(id: id).exists?
   end
 
-  def check_ldap_email
-    if email.blank?
-      mail = Devise::LDAP::Adapter.get_ldap_param(login, 'mail')
-      self.email = if mail.present?
-                     mail.first
-                   else # No email, use login
-                     login
-                   end
+  RANDOM_PASSWORD_CHARS = [*'a'..'z', *'A'..'Z', *'0'..'9', *'!@#$%^&*()-_=+[]{}<>?'.chars].freeze
+  RANDOM_PASSWORD_LENGTH = 64
+
+  # Uniformly random password; regenerated until it satisfies Devise password complexity.
+  def self.random_password(random: SecureRandom)
+    loop do
+      password = random.alphanumeric(RANDOM_PASSWORD_LENGTH, chars: RANDOM_PASSWORD_CHARS)
+      return password if password.match?(/\p{Lower}/) && password.match?(/\p{Upper}/) &&
+                         password.match?(/\p{Digit}/) && password.match?(/\p{Punct}|\p{S}/)
     end
-    self.is_user = true
   end
 
-  def self.check_ldap_credentials(login, password)
-    Devise::LDAP::Adapter.valid_credentials?(login, password)
-  end
-
-  # create user with ldap
-  def self.create_with_ldap(login)
-    user = User.new
-    user.login = login
-
-    password = [*'0'..'9', *'a'..'z', *'A'..'Z', *'!'..'?'].sample(16).join
-    user.password = password
-    user.password_confirmation = password
-    user.check_ldap_email
-    user.generate_uuid
-    user.save
-    user
+  def self.create_with_ldap(login, email)
+    password = random_password
+    create!(
+      login: login,
+      email: email.presence || login,
+      password: password,
+      password_confirmation: password,
+      is_user: true
+    )
   end
 
   def generate_uuid

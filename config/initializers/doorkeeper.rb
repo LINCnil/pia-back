@@ -368,24 +368,14 @@ Doorkeeper.configure do
   resource_owner_from_credentials do
     login = params[:email]
     password = params[:password]
-    user = nil
 
-    # LDAP IS ACTIVE
-    if ENV['DEVISE_LDAP_LOGGER'].present? && User.check_ldap_credentials(login, password) # ldap valide
-      user = User.find_for_authentication(login: login)
-      #  Check if user exists in database
-      if user.blank?
-        # Create user in database
-        user = User.create_with_ldap(login)
-      end
-    end
+    ldap_user = LdapAuthenticator.new.authenticate(login, password) if ENV['DEVISE_LDAP_LOGGER'].present?
 
-    # Normal auth
-    if user.blank?
+    if ldap_user
+      User.find_for_authentication(login: login) || User.create_with_ldap(login, ldap_user.email)
+    else
       user = User.find_for_authentication(email: login)
       user if user && user.valid_password?(password)
-    else
-      user
     end
   end
 
