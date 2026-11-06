@@ -19,6 +19,8 @@ class LdapAuthenticator
     Net::LDAP::ResultCodeInappropriateAuthentication,
     Net::LDAP::ResultCodeInsufficientAccessRights
   ].freeze
+  # net-ldap flattens TLS handshake errors into a plain Net::LDAP::Error, keeping only the message.
+  TLS_VERIFICATION_FAILURE = /certificate verify failed|does not match the server certificate/i
 
   def initialize(config: Rails.application.config_for(:ldap), use_admin: ENV.key?('DEVISE_LDAP_LOGGER_ADMIN_BIND'),
                  ldap_factory: Net::LDAP)
@@ -57,10 +59,17 @@ class LdapAuthenticator
       end
     end
   rescue Timeout::Error, Net::LDAP::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError => error
-    raise Error, "LDAP connection failed (#{error.class})", cause: error
+    raise Error, connection_failure_message(error), cause: error
   end
 
   private
+
+  def connection_failure_message(error)
+    return "LDAP connection failed (#{error.class})" unless error.message.match?(TLS_VERIFICATION_FAILURE)
+
+    "LDAP TLS certificate verification failed (#{error.message}); " \
+      'trust the server certificate authority with encryption.tls_options.ca_file'
+  end
 
   def find_entry(connection, login)
     entries = connection.search(
@@ -140,15 +149,25 @@ class LdapAuthenticator
     method = method.to_sym if method.is_a?(String)
     raise Error, 'LDAP encryption must use simple_tls or start_tls' unless %i[simple_tls start_tls].include?(method)
 
+    { method: method, tls_options: tls_options_for(options) }
+  end
+
+  # Verification can only be disabled through the explicit verify_certificates flag, never through tls_options.
+  def tls_options_for(options)
     tls_options = options.fetch(:tls_options, {})
     raise Error, 'LDAP TLS options must be a hash' unless tls_options.is_a?(Hash)
 
-    {
-      method: method,
-      tls_options: tls_options.symbolize_keys.merge(
-        verify_mode: OpenSSL::SSL::VERIFY_PEER,
-        verify_hostname: true
+    verify = options[:verify_certificates]
+    verify = true if verify.nil?
+    raise Error, 'LDAP verify_certificates must be true or false' unless [true, false].include?(verify)
+
+    if verify
+      tls_options.symbolize_keys.merge(verify_mode: OpenSSL::SSL::VERIFY_PEER, verify_hostname: true)
+    else
+      Rails.logger.warn(
+        'LDAP TLS certificate and hostname verification is disabled; the directory server identity is not checked'
       )
-    }
+      tls_options.symbolize_keys.merge(verify_mode: OpenSSL::SSL::VERIFY_NONE, verify_hostname: false)
+    end
   end
 end
