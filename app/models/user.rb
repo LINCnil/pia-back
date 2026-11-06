@@ -31,15 +31,26 @@ class User < ApplicationRecord
 
   RANDOM_PASSWORD_CHARS = [*'a'..'z', *'A'..'Z', *'0'..'9', *'!@#$%^&*()-_=+[]{}<>?'.chars].freeze
   RANDOM_PASSWORD_LENGTH = 64
+  RANDOM_PASSWORD_ATTEMPTS = 10
 
-  # Uniformly random password; regenerated until it satisfies Devise password complexity.
+  # Uniformly random password, drawn again until the model's own password rules accept it, so they are not
+  # restated here. Gives up rather than looping forever when the rules cannot be met with these characters.
   def self.random_password(random: SecureRandom)
-    loop do
+    RANDOM_PASSWORD_ATTEMPTS.times do
       password = random.alphanumeric(RANDOM_PASSWORD_LENGTH, chars: RANDOM_PASSWORD_CHARS)
-      return password if password.match?(/\p{Lower}/) && password.match?(/\p{Upper}/) &&
-                         password.match?(/\p{Digit}/) && password.match?(/\p{Punct}|\p{S}/)
+      return password if password_accepted?(password)
     end
+
+    raise 'Could not generate a random password accepted by the password rules'
   end
+
+  # Devise hashes a password as soon as it is assigned, so each candidate costs one hash.
+  def self.password_accepted?(password)
+    candidate = new(password: password, password_confirmation: password)
+    candidate.validate
+    candidate.errors[:password].empty?
+  end
+  private_class_method :password_accepted?
 
   def self.create_with_ldap(login, email)
     password = random_password
