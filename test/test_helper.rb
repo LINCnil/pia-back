@@ -27,5 +27,15 @@ module ActiveSupport
       oauth_application = Doorkeeper::Application.find_or_create_by!(name: "PIA", redirect_uri: "urn:ietf:wg:oauth:2.0:oob", scopes: %w[read write])
       Doorkeeper::AccessToken.find_or_create_by!(application: oauth_application, resource_owner_id: user.id).token
     end
+
+    def capture_logs
+      output = StringIO.new
+      previous_logger = Rails.logger
+      Rails.logger = ActiveSupport::Logger.new(output)
+      yield
+      output.string
+    ensure
+      Rails.logger = previous_logger
+    end
   end
 end
