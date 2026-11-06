@@ -19,11 +19,6 @@ class LdapAuthenticator
     Net::LDAP::ResultCodeInappropriateAuthentication,
     Net::LDAP::ResultCodeInsufficientAccessRights
   ].freeze
-  INVALID_CREDENTIALS = [
-    Net::LDAP::ResultCodeInvalidCredentials,
-    Net::LDAP::ResultCodeNoSuchObject,
-    Net::LDAP::ResultCodeInappropriateAuthentication
-  ].freeze
 
   def initialize(config: Rails.application.config_for(:ldap), use_admin: ENV.key?('DEVISE_LDAP_LOGGER_ADMIN_BIND'),
                  ldap_factory: Net::LDAP)
@@ -55,10 +50,9 @@ class LdapAuthenticator
         if connection.bind(method: :simple, username: dn, password: password)
           Result.new(email: entry&.first(:mail))
         else
-          code = connection.get_operation_result.code
-          return if INVALID_CREDENTIALS.include?(code)
-
-          raise Error, "LDAP user bind failed (result code #{code})"
+          # Servers use many codes for a refused user bind (wrong password, locked or disabled account...).
+          Rails.logger.info("LDAP user bind refused (result code #{connection.get_operation_result.code})")
+          nil
         end
       end
     end

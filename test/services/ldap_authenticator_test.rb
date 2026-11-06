@@ -218,15 +218,29 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_equal @entry.dn, @connection.bind_options[:username]
   end
 
-  test 'rejects invalid user credentials' do
+  test 'treats any refused user bind as invalid credentials' do
     [
       Net::LDAP::ResultCodeInvalidCredentials,
       Net::LDAP::ResultCodeNoSuchObject,
-      Net::LDAP::ResultCodeInappropriateAuthentication
+      Net::LDAP::ResultCodeInappropriateAuthentication,
+      Net::LDAP::ResultCodeInvalidDNSyntax,
+      Net::LDAP::ResultCodeConstraintViolation,
+      Net::LDAP::ResultCodeUnwillingToPerform,
+      Net::LDAP::ResultCodeBusy
     ].each do |code|
       @connection.bind_code = code
       assert_nil authenticate
     end
+  end
+
+  test 'logs the result code of a refused user bind without credentials' do
+    @connection.bind_code = Net::LDAP::ResultCodeConstraintViolation
+
+    output = capture_logs { assert_nil authenticate }
+
+    assert_includes output, 'LDAP user bind refused (result code 19)'
+    assert_not_includes output, 'user-secret'
+    assert_not_includes output, 'alice'
   end
 
   test 'does not treat failed admin authentication as invalid user credentials' do
@@ -237,17 +251,13 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_nil @connection.bind_options
   end
 
-  test 'surfaces directory search and user bind errors' do
+  test 'surfaces directory search errors' do
     @connection.entries = nil
     @connection.search_code = Net::LDAP::ResultCodeUnavailable
+
     error = assert_raises(LdapAuthenticator::Error) { authenticate }
     assert_match 'search failed', error.message
-
-    @connection.entries = [@entry]
-    @connection.search_code = Net::LDAP::ResultCodeSuccess
-    @connection.bind_code = Net::LDAP::ResultCodeBusy
-    error = assert_raises(LdapAuthenticator::Error) { authenticate }
-    assert_match 'user bind failed', error.message
+    assert_nil @connection.bind_options
   end
 
   test 'rejects partial and ambiguous search results' do
@@ -286,6 +296,16 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
   end
 
   private
+
+  def capture_logs
+    output = StringIO.new
+    previous_logger = Rails.logger
+    Rails.logger = ActiveSupport::Logger.new(output)
+    yield
+    output.string
+  ensure
+    Rails.logger = previous_logger
+  end
 
   def authenticate(login: 'alice', password: 'user-secret', config: @config, use_admin: false)
     LdapAuthenticator.new(config: config, use_admin: use_admin, ldap_factory: @factory).authenticate(login, password)
