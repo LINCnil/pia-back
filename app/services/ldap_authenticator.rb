@@ -1,0 +1,160 @@
+require 'net/ldap'
+require 'net/ldap/dn'
+require 'openssl'
+require 'timeout'
+
+class LdapAuthenticator
+  Error = Class.new(StandardError)
+  Result = Data.define(:email)
+
+  CONNECT_TIMEOUT = 5
+  REQUEST_TIMEOUT = 10
+  ANONYMOUS_BIND_DENIED = [
+    Net::LDAP::ResultCodeInappropriateAuthentication,
+    Net::LDAP::ResultCodeInvalidCredentials,
+    Net::LDAP::ResultCodeInsufficientAccessRights,
+    Net::LDAP::ResultCodeUnwillingToPerform
+  ].freeze
+  ANONYMOUS_SEARCH_DENIED = [
+    Net::LDAP::ResultCodeInappropriateAuthentication,
+    Net::LDAP::ResultCodeInsufficientAccessRights
+  ].freeze
+  INVALID_CREDENTIALS = [
+    Net::LDAP::ResultCodeInvalidCredentials,
+    Net::LDAP::ResultCodeNoSuchObject,
+    Net::LDAP::ResultCodeInappropriateAuthentication
+  ].freeze
+
+  def initialize(config: Rails.application.config_for(:ldap), use_admin: ENV.key?('DEVISE_LDAP_LOGGER_ADMIN_BIND'),
+                 ldap_factory: Net::LDAP)
+    @config = config.to_h.deep_symbolize_keys
+    @use_admin = use_admin
+    @ldap_factory = ldap_factory
+  end
+
+  def authenticate(login, password)
+    return unless login.is_a?(String) && login.present? && !login.include?("\0")
+    return unless password.is_a?(String) && password.present?
+
+    validate_config!
+    Timeout.timeout(REQUEST_TIMEOUT) do
+      ldap = @ldap_factory.new(connection_options)
+      ldap.open do |connection|
+        code = connection.get_operation_result.code
+        entry = if code == Net::LDAP::ResultCodeSuccess
+                  find_entry(connection, login)
+                elsif !@use_admin && ANONYMOUS_BIND_DENIED.include?(code)
+                  nil
+                else
+                  raise Error, "LDAP search bind failed (result code #{code})"
+                end
+
+        dn = entry ? entry.dn : Net::LDAP::DN.new(@config[:attribute], login, @config[:base]).to_s
+        raise Error, 'LDAP search returned an empty DN' if dn.blank?
+
+        if connection.bind(method: :simple, username: dn, password: password)
+          Result.new(email: entry&.first(:mail))
+        else
+          code = connection.get_operation_result.code
+          return if INVALID_CREDENTIALS.include?(code)
+
+          raise Error, "LDAP user bind failed (result code #{code})"
+        end
+      end
+    end
+  rescue Timeout::Error, Net::LDAP::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError => error
+    raise Error, "LDAP connection failed (#{error.class})", cause: error
+  end
+
+  private
+
+  def find_entry(connection, login)
+    entries = connection.search(
+      base: @config[:base],
+      filter: Net::LDAP::Filter.equals(@config[:attribute], login),
+      attributes: ['mail'],
+      size: 2,
+      time: CONNECT_TIMEOUT,
+      ignore_server_caps: true
+    )
+    result = connection.get_operation_result
+    code = result.code
+    raise Error, 'LDAP search returned multiple matching users' if entries && entries.size > 1
+    return entries.first if code == Net::LDAP::ResultCodeSuccess && entries
+    return if anonymous_search_denied?(result)
+
+    raise Error, "LDAP search failed (result code #{code})"
+  end
+
+  def anonymous_search_denied?(result)
+    return false if @use_admin
+    return true if ANONYMOUS_SEARCH_DENIED.include?(result.code)
+
+    # Active Directory reports this operations error when anonymous searches are disabled.
+    result.code == Net::LDAP::ResultCodeOperationsError &&
+      result.error_message.to_s.match?(/successful bind must be completed/i)
+  end
+
+  def validate_config!
+    %i[host base attribute].each do |key|
+      raise Error, "LDAP #{key} must be configured" unless @config[key].is_a?(String) && @config[key].present?
+    end
+
+    port = @config[:port]
+    port = port.to_i if port.is_a?(String) && port.match?(/\A\d+\z/)
+    raise Error, 'LDAP port must be between 1 and 65535' unless port.is_a?(Integer) && (1..65_535).cover?(port)
+
+    @port = port
+    if @use_admin && %i[admin_user admin_password].any? { |key| !@config[key].is_a?(String) || @config[key].blank? }
+      raise Error, 'LDAP admin credentials must be configured'
+    end
+    if @config[:check_group_membership] || @config[:check_group_membership_without_admin]
+      raise Error, 'LDAP group membership checks are not supported'
+    end
+  end
+
+  def connection_options
+    options = { host: @config[:host], port: @port, connect_timeout: CONNECT_TIMEOUT }
+    if @use_admin
+      options[:auth] = { method: :simple, username: @config[:admin_user], password: @config[:admin_password] }
+    end
+
+    encryption = encryption_options
+    if encryption
+      options[:encryption] = encryption
+    else
+      Rails.logger.warn('LDAP connection is unencrypted; credentials will be sent in clear text')
+    end
+    options
+  end
+
+  def encryption_options
+    setting = @config[:encryption] || @config[:ssl]
+    return if setting.nil? || setting == false || setting == ''
+
+    options = case setting
+              when true
+                { method: :simple_tls }
+              when String, Symbol
+                { method: setting.to_sym }
+              when Hash
+                setting.deep_symbolize_keys
+              else
+                raise Error, 'Invalid LDAP encryption configuration'
+              end
+    method = options[:method]
+    method = method.to_sym if method.is_a?(String)
+    raise Error, 'LDAP encryption must use simple_tls or start_tls' unless %i[simple_tls start_tls].include?(method)
+
+    tls_options = options.fetch(:tls_options, {})
+    raise Error, 'LDAP TLS options must be a hash' unless tls_options.is_a?(Hash)
+
+    {
+      method: method,
+      tls_options: tls_options.symbolize_keys.merge(
+        verify_mode: OpenSSL::SSL::VERIFY_PEER,
+        verify_hostname: true
+      )
+    }
+  end
+end
