@@ -77,9 +77,11 @@ The login is searched using the configured attribute. If the search returns no
 user, or anonymous binding or searching is refused, authentication also tries
 the legacy DN format `attribute=login,base`. A successful first LDAP login
 creates a local user with the LDAP `mail` attribute, or the login when no email
-is available. If LDAP rejects the credentials, existing local email/password
-authentication remains available. LDAP connection, configuration, and
-ambiguous-search errors do not fall back to local authentication.
+is available. If the LDAP server refuses the user bind, whatever the result code
+(wrong password, locked or disabled account, ...), the result code is logged and
+existing local email/password authentication remains available. LDAP
+connection, configuration, and ambiguous-search errors do not fall back to local
+authentication.
 
 The previous LDAP group and attribute authorization checks were disabled in
 this application and are not implemented. An LDAP configuration that explicitly
