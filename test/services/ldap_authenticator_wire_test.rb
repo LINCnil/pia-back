@@ -33,8 +33,10 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
         @tls_context.cert = certificate
         @tls_context.key = key
       end
-      @thread = Thread.new { serve }
-      @thread.report_on_exception = false
+      @thread = Thread.new do
+        Thread.current.report_on_exception = false
+        serve
+      end
     end
 
     def close
