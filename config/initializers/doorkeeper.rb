@@ -378,7 +378,11 @@ Doorkeeper.configure do
     end
 
     if ldap_user
-      User.find_for_authentication(login: login) || User.create_with_ldap(login, ldap_user.email)
+      # The directory ignores case and extra spaces: look the account up by its canonical login, then by the typed
+      # one (accounts created by the previous integration used the typed spelling) before creating it.
+      User.find_for_authentication(login: ldap_user.login) ||
+        User.find_for_authentication(login: login) ||
+        User.create_with_ldap(ldap_user.login, ldap_user.email)
     else
       user = User.find_for_authentication(email: login)
       user if user && user.valid_password?(password)

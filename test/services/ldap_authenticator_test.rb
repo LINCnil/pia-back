@@ -64,22 +64,94 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     }
     @entry = Net::LDAP::Entry.new('uid=alice,ou=people,dc=example,dc=test')
     @entry[:mail] = ['alice@example.test']
+    @entry[:uid] = ['alice']
     @connection = FakeConnection.new
     @connection.entries = [@entry]
     @factory = FakeFactory.new(@connection)
   end
 
-  test 'authenticates with the searched DN and returns the LDAP email' do
+  test 'authenticates with the searched DN and returns the LDAP email and login' do
     result = authenticate
 
     assert_equal 'alice@example.test', result.email
+    assert_equal 'alice', result.login
     assert_equal({ method: :simple, username: @entry.dn, password: 'user-secret' }, @connection.bind_options)
     assert_equal '(uid=alice)', @connection.search_options[:filter].to_s
-    assert_equal ['mail'], @connection.search_options[:attributes]
+    assert_equal %w[mail uid], @connection.search_options[:attributes]
     assert_equal 2, @connection.search_options[:size]
     assert_equal LdapAuthenticator::CONNECT_TIMEOUT, @connection.search_options[:time]
     assert @connection.search_options[:ignore_server_caps]
     assert_equal LdapAuthenticator::CONNECT_TIMEOUT, @factory.options[:connect_timeout]
+  end
+
+  test 'requests the mail attribute only once when it is also the login attribute' do
+    @config[:attribute] = 'Mail'
+    @entry[:mail] = ['alice@example.test']
+
+    result = authenticate(login: 'ALICE@example.test')
+
+    assert_equal %w[mail], @connection.search_options[:attributes]
+    assert_equal 'alice@example.test', result.login
+  end
+
+  test 'returns the login as spelled by the directory' do
+    {
+      'ALICE' => 'alice',
+      'Alice' => 'alice',
+      '  alice ' => 'alice',
+      'alice' => 'alice'
+    }.each do |typed, canonical|
+      assert_equal canonical, authenticate(login: typed).login, "typed #{typed.inspect}"
+    end
+  end
+
+  test 'ignores case and repeated spaces when picking the directory spelling' do
+    @entry[:uid] = ['alice smith']
+
+    assert_equal 'alice smith', authenticate(login: "  ALICE \t  Smith ").login
+  end
+
+  test 'prefers the exact value of a multi-valued login attribute' do
+    @entry[:uid] = %w[Alice alice asmith]
+
+    assert_equal 'alice', authenticate(login: 'alice').login
+    assert_equal 'Alice', authenticate(login: 'Alice').login
+    assert_equal 'Alice', authenticate(login: 'ALICE').login
+  end
+
+  test 'returns the matching value of a multi-valued login attribute' do
+    @entry[:uid] = %w[alice asmith]
+
+    assert_equal 'asmith', authenticate(login: 'ASmith').login
+  end
+
+  test 'falls back to the typed login when the directory returns no login attribute' do
+    @entry[:uid] = []
+
+    assert_equal 'ALICE', authenticate(login: 'ALICE').login
+
+    @entry[:uid] = ['unrelated']
+    assert_equal 'ALICE', authenticate(login: 'ALICE').login
+  end
+
+  test 'never returns a blank login' do
+    @entry[:uid] = ['', '  ']
+
+    ['alice', 'ALICE'].each do |typed|
+      assert_equal typed, authenticate(login: typed).login
+    end
+  end
+
+  test 'uses plain strings for the login' do
+    result = authenticate(login: 'ALICE')
+
+    assert_instance_of String, result.login
+  end
+
+  test 'uses the typed login when the user entry is not found' do
+    @connection.entries = []
+
+    assert_equal 'ALICE', authenticate(login: 'ALICE').login
   end
 
   test 'uses admin credentials only when admin binding is enabled' do
@@ -207,6 +279,7 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     result = authenticate(login: 'smith,dc=other')
 
     assert_nil result.email
+    assert_equal 'smith,dc=other', result.login
     assert_equal 'uid=smith\,dc=other,ou=people,dc=example,dc=test', @connection.bind_options[:username]
   end
 

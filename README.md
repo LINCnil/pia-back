@@ -95,7 +95,19 @@ The login is searched using the configured attribute. If the search returns no
 user, or anonymous binding or searching is refused, authentication also tries
 the legacy DN format `attribute=login,base`. A successful first LDAP login
 creates a local user with the LDAP `mail` attribute, or the login when no email
-is available. If the LDAP server refuses the user bind, whatever the result code
+is available.
+
+Directories usually ignore case and extra spaces when searching, so `ALICE` and
+` alice ` both find the user stored as `alice`. The local account is matched on
+the login as spelled by the directory, not on what was typed, so every spelling
+signs in to the same account. When the directory does not return the login
+attribute (for example when the legacy DN format is used), the typed login is
+used. Accounts created by the previous integration with another spelling are
+still found by the typed login when no account matches the directory spelling.
+Local logins are never matched case-insensitively, because some directories
+distinguish `Alice` from `alice`.
+
+If the LDAP server refuses the user bind, whatever the result code
 (wrong password, locked or disabled account, ...), the result code is logged and
 existing local email/password authentication remains available. The same applies
 when the LDAP check itself fails (connection or TLS error, invalid configuration,
