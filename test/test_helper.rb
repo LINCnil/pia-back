@@ -37,5 +37,20 @@ module ActiveSupport
     ensure
       Rails.logger = previous_logger
     end
+
+    # Sets (or, with nil, unsets) environment variables for the block and restores them afterwards.
+    def with_env(overrides)
+      previous = overrides.keys.index_with { |name| ENV.fetch(name, nil) }
+      assign_env(overrides)
+      yield
+    ensure
+      assign_env(previous)
+    end
+
+    private
+
+    def assign_env(values)
+      values.each { |name, value| value.nil? ? ENV.delete(name) : ENV[name] = value }
+    end
   end
 end

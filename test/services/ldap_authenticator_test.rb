@@ -169,22 +169,46 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     assert_not @factory.options.key?(:auth)
   end
 
-  test 'preserves the legacy admin environment variable semantics' do
-    previous_value = ENV.delete('DEVISE_LDAP_LOGGER_ADMIN_BIND')
-    LdapAuthenticator.new(config: @config, ldap_factory: @factory).authenticate('alice', 'user-secret')
-    assert_not @factory.options.key?(:auth)
+  test 'takes the admin bind setting from LDAP_ADMIN_BIND by default' do
+    { 'true' => true, '1' => true, 'false' => false, 'no' => false }.each do |value, admin|
+      with_env('LDAP_ADMIN_BIND' => value, 'DEVISE_LDAP_LOGGER_ADMIN_BIND' => nil) do
+        authenticate_with_default_admin_setting
 
-    ['', 'false'].each do |value|
-      ENV['DEVISE_LDAP_LOGGER_ADMIN_BIND'] = value
-      LdapAuthenticator.new(config: @config, ldap_factory: @factory).authenticate('alice', 'user-secret')
-      assert_equal @config[:admin_user], @factory.options[:auth][:username]
+        assert_equal admin, @factory.options.key?(:auth), value
+      end
     end
-  ensure
-    if previous_value.nil?
-      ENV.delete('DEVISE_LDAP_LOGGER_ADMIN_BIND')
-    else
-      ENV['DEVISE_LDAP_LOGGER_ADMIN_BIND'] = previous_value
+  end
+
+  test 'preserves the legacy admin environment variable semantics when LDAP_ADMIN_BIND is not set' do
+    with_env('LDAP_ADMIN_BIND' => nil, 'DEVISE_LDAP_LOGGER_ADMIN_BIND' => nil) do
+      authenticate_with_default_admin_setting
+      assert_not @factory.options.key?(:auth)
     end
+
+    ['', 'false', 'true'].each do |value|
+      with_env('LDAP_ADMIN_BIND' => nil, 'DEVISE_LDAP_LOGGER_ADMIN_BIND' => value) do
+        authenticate_with_default_admin_setting
+
+        assert_equal @config[:admin_user], @factory.options[:auth][:username], value.inspect
+      end
+    end
+  end
+
+  test 'LDAP_ADMIN_BIND takes precedence over the legacy admin variable' do
+    with_env('LDAP_ADMIN_BIND' => 'false', 'DEVISE_LDAP_LOGGER_ADMIN_BIND' => 'true') do
+      authenticate_with_default_admin_setting
+
+      assert_not @factory.options.key?(:auth)
+    end
+  end
+
+  test 'rejects an invalid LDAP_ADMIN_BIND before connecting' do
+    with_env('LDAP_ADMIN_BIND' => 'sometimes') do
+      error = assert_raises(LdapAuthenticator::Error) { authenticate_with_default_admin_setting }
+
+      assert_equal 'LDAP_ADMIN_BIND must be true or false', error.message
+    end
+    assert_nil @factory.options
   end
 
   test 'enforces certificate and hostname verification for both TLS modes' do
@@ -288,6 +312,20 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
 
     assert authenticate(use_admin: true)
     assert_equal @entry.dn, @connection.bind_options[:username]
+  end
+
+  test 'logs without identifying the user when it falls back to the legacy DN' do
+    @connection.entries = []
+
+    output = capture_logs { authenticate(login: 'smith') }
+
+    assert_includes output, 'LDAP search did not return the user; using the legacy DN format'
+    assert_not_includes output, 'smith'
+    assert_not_includes output, 'user-secret'
+    assert_not_includes output, 'ou=people'
+
+    @connection.entries = [@entry]
+    assert_not_includes capture_logs { authenticate }, 'legacy DN'
   end
 
   test 'uses the legacy DN when anonymous search is denied' do
@@ -429,5 +467,9 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
 
   def authenticate(login: 'alice', password: 'user-secret', config: @config, use_admin: false)
     LdapAuthenticator.new(config: config, use_admin: use_admin, ldap_factory: @factory).authenticate(login, password)
+  end
+
+  def authenticate_with_default_admin_setting
+    LdapAuthenticator.new(config: @config, ldap_factory: @factory).authenticate('alice', 'user-secret')
   end
 end

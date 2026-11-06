@@ -22,8 +22,65 @@ class LdapAuthenticator
   ].freeze
   # net-ldap flattens TLS handshake errors into a plain Net::LDAP::Error, keeping only the message.
   TLS_VERIFICATION_FAILURE = /certificate verify failed|does not match the server certificate/i
+  TRUE_VALUES = %w[true 1 yes on].freeze
+  FALSE_VALUES = %w[false 0 no off].freeze
 
-  def initialize(config: Rails.application.config_for(:ldap), use_admin: ENV.key?('DEVISE_LDAP_LOGGER_ADMIN_BIND'),
+  class << self
+    # LDAP_ENABLED wins when set. Otherwise the deprecated DEVISE_LDAP_LOGGER keeps its historical meaning:
+    # any non-empty value enables LDAP, even "false".
+    def enabled?
+      value = ENV['LDAP_ENABLED']
+      return parse_boolean('LDAP_ENABLED', value) if value.present?
+
+      legacy_enabled?
+    end
+
+    # LDAP_ADMIN_BIND wins when set. Otherwise the deprecated DEVISE_LDAP_LOGGER_ADMIN_BIND keeps its historical
+    # meaning: any defined value enables the admin bind, even an empty one or "false".
+    def admin_bind?
+      value = ENV['LDAP_ADMIN_BIND']
+      return parse_boolean('LDAP_ADMIN_BIND', value) if value.present?
+
+      legacy_admin_bind?
+    end
+
+    def warn_about_deprecated_settings
+      warn_deprecated('DEVISE_LDAP_LOGGER', 'LDAP_ENABLED', legacy_enabled?)
+      warn_deprecated('DEVISE_LDAP_LOGGER_ADMIN_BIND', 'LDAP_ADMIN_BIND', legacy_admin_bind?)
+    end
+
+    private
+
+    def legacy_enabled?
+      ENV['DEVISE_LDAP_LOGGER'].present?
+    end
+
+    def legacy_admin_bind?
+      ENV.key?('DEVISE_LDAP_LOGGER_ADMIN_BIND')
+    end
+
+    def parse_boolean(name, value)
+      normalized = value.strip.downcase
+      return true if TRUE_VALUES.include?(normalized)
+      return false if FALSE_VALUES.include?(normalized)
+
+      raise Error, "#{name} must be true or false"
+    end
+
+    def warn_deprecated(legacy, current, legacy_value)
+      return unless ENV.key?(legacy)
+
+      Rails.logger.warn(
+        if ENV[current].present?
+          "#{legacy} is deprecated and ignored because #{current} is set; remove it"
+        else
+          "#{legacy} is deprecated and currently counts as #{current}=#{legacy_value}; set #{current} instead"
+        end
+      )
+    end
+  end
+
+  def initialize(config: Rails.application.config_for(:ldap), use_admin: self.class.admin_bind?,
                  ldap_factory: Net::LDAP)
     @config = config.to_h.deep_symbolize_keys
     @use_admin = use_admin
@@ -47,7 +104,12 @@ class LdapAuthenticator
                   raise Error, "LDAP search bind failed (result code #{code})"
                 end
 
-        dn = entry ? entry.dn : Net::LDAP::DN.new(@config[:attribute], login, @config[:base]).to_s
+        dn = if entry
+               entry.dn
+             else
+               Rails.logger.info('LDAP search did not return the user; using the legacy DN format')
+               Net::LDAP::DN.new(@config[:attribute], login, @config[:base]).to_s
+             end
         raise Error, 'LDAP search returned an empty DN' if dn.blank?
 
         if connection.bind(method: :simple, username: dn, password: password)

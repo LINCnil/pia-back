@@ -5,6 +5,14 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
   include ActiveSupport::Testing::ConstantStubbing
   include FactoryBot::Syntax::Methods
 
+  UNSET_LDAP_SETTINGS = {
+    'LDAP_ENABLED' => nil,
+    'LDAP_ADMIN_BIND' => nil,
+    'DEVISE_LDAP_LOGGER' => nil,
+    'DEVISE_LDAP_LOGGER_ADMIN_BIND' => nil
+  }.freeze
+  ENABLED_LDAP = { 'LDAP_ENABLED' => 'true' }.freeze
+
   setup do
     @application = Doorkeeper::Application.create!(
       name: 'LDAP test client',
@@ -114,10 +122,58 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
   test 'falls back to existing local credentials after LDAP rejects credentials' do
     user = create(:user, email: 'local@example.test')
 
-    with_ldap(result: nil, enabled_value: 'false') { request_token(user.email, 'Password123-') }
+    with_ldap(result: nil) do |attempts|
+      request_token(user.email, 'Password123-')
+      assert_equal [[user.email, 'Password123-']], attempts
+    end
 
     assert_response :success
     assert_equal user.id, access_token.resource_owner_id
+  end
+
+  test 'LDAP_ENABLED=false keeps LDAP out of the login even when the deprecated variable is set' do
+    user = create(:user, email: 'local@example.test')
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+    settings = { 'LDAP_ENABLED' => 'false', 'DEVISE_LDAP_LOGGER' => 'true' }
+
+    assert_no_difference 'User.count' do
+      with_ldap(result: result, settings: settings) do |attempts|
+        request_token(user.email, 'Password123-')
+        assert_empty attempts
+      end
+    end
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+  end
+
+  test 'the deprecated DEVISE_LDAP_LOGGER still enables LDAP whatever its value' do
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+
+    with_ldap(result: result, settings: { 'DEVISE_LDAP_LOGGER' => 'false' }) do |attempts|
+      request_token('alice', 'ldap-secret')
+      assert_equal [['alice', 'ldap-secret']], attempts
+    end
+
+    assert_response :success
+    assert_equal User.find_by!(login: 'alice').id, access_token.resource_owner_id
+  end
+
+  test 'falls back to local credentials and logs the error when LDAP_ENABLED is invalid' do
+    user = create(:user, email: 'local@example.test')
+
+    logs = capture_logs do
+      with_ldap(result: nil, settings: { 'LDAP_ENABLED' => 'maybe' }) do |attempts|
+        request_token(user.email, 'Password123-')
+        assert_empty attempts
+      end
+    end
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+    assert_includes logs,
+                    'LDAP authentication error, falling back to local authentication: ' \
+                    'LDAP_ENABLED must be true or false'
   end
 
   test 'rejects credentials that fail both LDAP and local authentication' do
@@ -205,7 +261,7 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     Doorkeeper::AccessToken.find_by!(token: response.parsed_body.fetch('access_token'))
   end
 
-  def with_ldap(result: nil, error: nil, enabled_value: 'true')
+  def with_ldap(result: nil, error: nil, settings: ENABLED_LDAP)
     attempts = []
     authenticator = Class.new(LdapAuthenticator) do
       define_method(:initialize) { super(config: {}, use_admin: false) }
@@ -216,7 +272,7 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
         result
       end
     end
-    with_ldap_class(authenticator, enabled_value) { yield attempts }
+    with_ldap_class(authenticator, settings) { yield attempts }
   end
 
   def with_unreachable_ldap
@@ -225,22 +281,17 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     authenticator = Class.new(LdapAuthenticator) do
       define_method(:initialize) { super(config: config, use_admin: false) }
     end
-    with_ldap_class(authenticator, 'true') { yield }
+    with_ldap_class(authenticator, ENABLED_LDAP) { yield }
   end
 
   # Subclasses keep LdapAuthenticator::Error and ::Result resolvable while the constant is stubbed.
-  def with_ldap_class(authenticator, enabled_value)
-    previous_value = ENV['DEVISE_LDAP_LOGGER']
-    ENV['DEVISE_LDAP_LOGGER'] = enabled_value
-    stub_const(Object, :LdapAuthenticator, authenticator) { yield }
-  ensure
-    previous_value.nil? ? ENV.delete('DEVISE_LDAP_LOGGER') : ENV['DEVISE_LDAP_LOGGER'] = previous_value
+  def with_ldap_class(authenticator, settings)
+    with_env(UNSET_LDAP_SETTINGS.merge(settings)) do
+      stub_const(Object, :LdapAuthenticator, authenticator) { yield }
+    end
   end
 
-  def with_ldap_disabled
-    previous_value = ENV.delete('DEVISE_LDAP_LOGGER')
-    yield
-  ensure
-    previous_value.nil? ? ENV.delete('DEVISE_LDAP_LOGGER') : ENV['DEVISE_LDAP_LOGGER'] = previous_value
+  def with_ldap_disabled(&)
+    with_env(UNSET_LDAP_SETTINGS, &)
   end
 end

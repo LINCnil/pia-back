@@ -53,12 +53,21 @@ Configure the LDAP server for each environment in `config/ldap.yml`. Development
 reads `ldap_host`, `ldap_port`, `ldap_attribute`, `ldap_base`, `ldap_admin_user`,
 `ldap_admin_user_password` and `ldap_ssl` from Rails credentials.
 
-- Set `DEVISE_LDAP_LOGGER` to any non-empty value to enable LDAP authentication.
-  For compatibility, even the string `false` enables it; this variable no longer
-  controls debug logging.
-- Set `DEVISE_LDAP_LOGGER_ADMIN_BIND` to use the configured admin credentials
-  for directory searches. Any defined value, including an empty string, enables
-  the admin bind. Leave the variable unset for anonymous searches.
+- Set `LDAP_ENABLED` to `true` to enable LDAP authentication and to `false` to
+  disable it (`1`/`0`, `yes`/`no` and `on`/`off` are also accepted, ignoring
+  case). Any other value is rejected: the error is logged on each login and local
+  authentication is used instead.
+- Set `LDAP_ADMIN_BIND` to `true` to use the configured admin credentials for
+  directory searches, or `false` (the default) for anonymous searches. It accepts
+  the same values as `LDAP_ENABLED`.
+- Deprecated: `DEVISE_LDAP_LOGGER` and `DEVISE_LDAP_LOGGER_ADMIN_BIND` are read
+  only while `LDAP_ENABLED` and `LDAP_ADMIN_BIND` respectively are unset or
+  empty, and keep their historical meaning: any non-empty `DEVISE_LDAP_LOGGER`
+  enables LDAP, even the string `false`, and any defined
+  `DEVISE_LDAP_LOGGER_ADMIN_BIND`, even an empty one, enables the admin bind.
+  A warning at boot states the value each of them currently stands for, so
+  renaming one without checking can reverse the behavior. `DEVISE_LDAP_LOGGER`
+  no longer controls debug logging.
 - Set `ssl` to `simple_tls` (or `true`) for LDAPS, or `start_tls` for StartTLS.
   The server certificate and hostname are verified using the system trust store.
   An unset or false `ssl` retains legacy plaintext LDAP behavior and logs a
@@ -93,9 +102,9 @@ logged on every connection.
 
 The login is searched using the configured attribute. If the search returns no
 user, or anonymous binding or searching is refused, authentication also tries
-the legacy DN format `attribute=login,base`. A successful first LDAP login
-creates a local user with the LDAP `mail` attribute, or the login when no email
-is available.
+the legacy DN format `attribute=login,base` and logs an `info` message that does
+not identify the user. A successful first LDAP login creates a local user with
+the LDAP `mail` attribute, or the login when no email is available.
 
 Directories usually ignore case and extra spaces when searching, so `ALICE` and
 ` alice ` both find the user stored as `alice`. The local account is matched on
