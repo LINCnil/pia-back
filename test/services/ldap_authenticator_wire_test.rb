@@ -17,13 +17,14 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
       context_specific: { constructed: { 3 => :array, 4 => :array }, primitive: { 0 => :string, 7 => :string } }
     )
 
-    attr_reader :port, :binds, :filters
+    attr_reader :port, :binds, :filters, :requested_attributes
 
     def initialize(tls: nil, certificate: nil, key: nil, expect_tls_failure: false, delay_search: 0)
       @listener = TCPServer.new('127.0.0.1', 0)
       @port = @listener.addr[1]
       @binds = []
       @filters = []
+      @requested_attributes = []
       @tls = tls
       @expect_tls_failure = expect_tls_failure
       @delay_search = delay_search
@@ -92,13 +93,16 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
       write_result(id, 1, valid ? 0 : Net::LDAP::ResultCodeInvalidCredentials)
     end
 
+    # Like most directories, matches the uid ignoring case and surrounding spaces.
     def handle_search(id, request)
       filter = request[6]
       @filters << [filter.ber_identifier, *Array(filter)]
+      @requested_attributes << Array(request[7]).map(&:to_s)
       sleep @delay_search if @delay_search.positive?
-      if filter.ber_identifier == 0xa3 && filter[0] == 'uid' && filter[1] == 'alice'
+      if filter.ber_identifier == 0xa3 && filter[0] == 'uid' && filter[1].to_s.strip.casecmp?('alice')
         mail = ['mail'.to_ber, ['alice@example.test'.to_ber].to_ber_set].to_ber_sequence
-        entry = [USER_DN.to_ber, [mail].to_ber_sequence].to_ber_appsequence(4)
+        uid = ['uid'.to_ber, ['alice'.to_ber].to_ber_set].to_ber_sequence
+        entry = [USER_DN.to_ber, [mail, uid].to_ber_sequence].to_ber_appsequence(4)
         @socket.write([id.to_ber, entry].to_ber_sequence)
       end
       write_result(id, 5, 0)
@@ -115,8 +119,20 @@ class LdapAuthenticatorWireTest < ActiveSupport::TestCase
       result = authenticator(server).authenticate('alice', LdapServer::USER_PASSWORD)
 
       assert_equal 'alice@example.test', result.email
+      assert_equal 'alice', result.login
       assert_equal [['', ''], [LdapServer::USER_DN, LdapServer::USER_PASSWORD]], server.binds
       assert_equal [[0xa3, 'uid', 'alice']], server.filters
+      assert_equal [%w[mail uid]], server.requested_attributes
+    end
+  end
+
+  test 'returns the directory spelling of a login typed with another case' do
+    with_server do |server|
+      result = authenticator(server).authenticate(' ALICE ', LdapServer::USER_PASSWORD)
+
+      assert_equal 'alice', result.login
+      assert_equal [[0xa3, 'uid', ' ALICE ']], server.filters
+      assert_equal [LdapServer::USER_DN, LdapServer::USER_PASSWORD], server.binds.last
     end
   end
 

@@ -24,7 +24,7 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
 
   test 'authenticates an existing LDAP user without creating another account' do
     user = create(:user, login: 'alice', email: 'alice@example.test')
-    result = LdapAuthenticator::Result.new(email: 'new@example.test')
+    result = LdapAuthenticator::Result.new(email: 'new@example.test', login: 'alice')
 
     assert_no_difference 'User.count' do
       with_ldap(result: result) do |attempts|
@@ -38,8 +38,44 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     assert_equal 'alice@example.test', user.reload.email
   end
 
+  test 'finds the existing account by the directory login whatever the typed spelling' do
+    user = create(:user, login: 'alice', email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+
+    assert_no_difference 'User.count' do
+      with_ldap(result: result) { request_token('  ALICE ', 'ldap-secret') }
+    end
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+  end
+
+  test 'still finds an account created with the typed spelling by the previous integration' do
+    user = create(:user, login: 'ALICE', email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+
+    assert_no_difference 'User.count' do
+      with_ldap(result: result) { request_token('ALICE', 'ldap-secret') }
+    end
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+    assert_equal 'ALICE', user.reload.login
+  end
+
+  test 'prefers the account with the directory login over one with the typed spelling' do
+    create(:user, login: 'ALICE', email: 'old@example.test')
+    user = create(:user, login: 'alice', email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+
+    with_ldap(result: result) { request_token('ALICE', 'ldap-secret') }
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+  end
+
   test 'creates a local user after the first successful LDAP login' do
-    result = LdapAuthenticator::Result.new(email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
 
     assert_difference 'User.count', 1 do
       with_ldap(result: result) { request_token('alice', 'ldap-secret') }
@@ -54,8 +90,20 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     assert_not user.valid_password?('ldap-secret')
   end
 
+  test 'creates the local user with the directory login rather than the typed one' do
+    result = LdapAuthenticator::Result.new(email: 'alice@example.test', login: 'alice')
+
+    assert_difference 'User.count', 1 do
+      with_ldap(result: result) { request_token('ALICE', 'ldap-secret') }
+    end
+
+    assert_response :success
+    assert_nil User.find_by(login: 'ALICE')
+    assert_equal User.find_by!(login: 'alice').id, access_token.resource_owner_id
+  end
+
   test 'uses the login as email when LDAP does not supply one' do
-    result = LdapAuthenticator::Result.new(email: nil)
+    result = LdapAuthenticator::Result.new(email: nil, login: 'alice')
 
     with_ldap(result: result) { request_token('alice', 'ldap-secret') }
 
@@ -132,7 +180,7 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
 
   test 'does not issue a token when the LDAP user cannot be saved' do
     create(:user, email: 'taken@example.test')
-    result = LdapAuthenticator::Result.new(email: 'taken@example.test')
+    result = LdapAuthenticator::Result.new(email: 'taken@example.test', login: 'alice')
 
     assert_no_difference 'Doorkeeper::AccessToken.count' do
       with_ldap(result: result) { request_token('alice', 'ldap-secret') }

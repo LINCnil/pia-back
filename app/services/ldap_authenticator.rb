@@ -5,7 +5,8 @@ require 'timeout'
 
 class LdapAuthenticator
   Error = Class.new(StandardError)
-  Result = Data.define(:email)
+  # login is the user's login as spelled by the directory, never blank.
+  Result = Data.define(:email, :login)
 
   CONNECT_TIMEOUT = 5
   REQUEST_TIMEOUT = 10
@@ -50,7 +51,7 @@ class LdapAuthenticator
         raise Error, 'LDAP search returned an empty DN' if dn.blank?
 
         if connection.bind(method: :simple, username: dn, password: password)
-          Result.new(email: entry&.first(:mail))
+          Result.new(email: entry&.first(:mail), login: canonical_login(entry, login))
         else
           # Servers use many codes for a refused user bind (wrong password, locked or disabled account...).
           Rails.logger.info("LDAP user bind refused (result code #{connection.get_operation_result.code})")
@@ -75,7 +76,7 @@ class LdapAuthenticator
     entries = connection.search(
       base: @config[:base],
       filter: Net::LDAP::Filter.equals(@config[:attribute], login),
-      attributes: ['mail'],
+      attributes: ['mail', @config[:attribute]].uniq(&:downcase),
       size: 2,
       time: CONNECT_TIMEOUT,
       ignore_server_caps: true
@@ -87,6 +88,19 @@ class LdapAuthenticator
     return if anonymous_search_denied?(result)
 
     raise Error, "LDAP search failed (result code #{code})"
+  end
+
+  # Directories match logins case-insensitively and ignore extra spaces, so the typed login may differ from the
+  # stored one. Prefer the exact stored value, then the first one equal to the typed login once normalized.
+  def canonical_login(entry, typed_login)
+    values = entry ? entry[@config[:attribute]].map(&:to_s) : []
+    values.find { |value| value == typed_login } ||
+      values.find { |value| normalize_login(value) == normalize_login(typed_login) } ||
+      typed_login
+  end
+
+  def normalize_login(value)
+    value.strip.gsub(/\s+/, ' ').downcase
   end
 
   def anonymous_search_denied?(result)
