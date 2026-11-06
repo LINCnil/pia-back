@@ -354,16 +354,6 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
 
   private
 
-  def capture_logs
-    output = StringIO.new
-    previous_logger = Rails.logger
-    Rails.logger = ActiveSupport::Logger.new(output)
-    yield
-    output.string
-  ensure
-    Rails.logger = previous_logger
-  end
-
   def authenticate(login: 'alice', password: 'user-secret', config: @config, use_admin: false)
     LdapAuthenticator.new(config: config, use_admin: use_admin, ldap_factory: @factory).authenticate(login, password)
   end

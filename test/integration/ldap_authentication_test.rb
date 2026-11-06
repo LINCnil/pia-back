@@ -83,15 +83,51 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     assert_equal 'invalid_grant', response.parsed_body['error']
   end
 
-  test 'does not fall back to local authentication when LDAP is unavailable' do
+  test 'falls back to local credentials and logs the error when LDAP is unavailable' do
+    user = create(:user, email: 'local@example.test')
+    error = LdapAuthenticator::Error.new('LDAP connection failed (Net::LDAP::Error)')
+
+    logs = capture_logs { with_ldap(error: error) { request_token(user.email, 'Password123-') } }
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+    assert_includes logs,
+                    'LDAP authentication error, falling back to local authentication: ' \
+                    'LDAP connection failed (Net::LDAP::Error)'
+  end
+
+  test 'rejects wrong local credentials when LDAP is unavailable' do
     user = create(:user, email: 'local@example.test')
     error = LdapAuthenticator::Error.new('LDAP unavailable')
 
     assert_no_difference 'Doorkeeper::AccessToken.count' do
-      with_ldap(error: error) do
-        assert_raises(error.class) { request_token(user.email, 'Password123-') }
-      end
+      with_ldap(error: error) { request_token(user.email, 'wrong-password') }
     end
+
+    assert_response :bad_request
+    assert_equal 'invalid_grant', response.parsed_body['error']
+  end
+
+  test 'does not accept the LDAP password of a provisioned user when LDAP is unavailable' do
+    User.create_with_ldap('alice', 'alice@example.test')
+    error = LdapAuthenticator::Error.new('LDAP unavailable')
+
+    assert_no_difference 'Doorkeeper::AccessToken.count' do
+      with_ldap(error: error) { request_token('alice@example.test', 'ldap-secret') }
+    end
+
+    assert_response :bad_request
+    assert_equal 'invalid_grant', response.parsed_body['error']
+  end
+
+  test 'falls back to local credentials when the directory refuses the connection' do
+    user = create(:user, email: 'local@example.test')
+
+    logs = capture_logs { with_unreachable_ldap { request_token(user.email, 'Password123-') } }
+
+    assert_response :success
+    assert_equal user.id, access_token.resource_owner_id
+    assert_match(/falling back to local authentication: LDAP connection failed \(/, logs)
   end
 
   test 'does not issue a token when the LDAP user cannot be saved' do
@@ -122,10 +158,9 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
   end
 
   def with_ldap(result: nil, error: nil, enabled_value: 'true')
-    previous_value = ENV['DEVISE_LDAP_LOGGER']
-    ENV['DEVISE_LDAP_LOGGER'] = enabled_value
     attempts = []
-    authenticator = Class.new do
+    authenticator = Class.new(LdapAuthenticator) do
+      define_method(:initialize) { super(config: {}, use_admin: false) }
       define_method(:authenticate) do |login, password|
         attempts << [login, password]
         raise error if error
@@ -133,8 +168,23 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
         result
       end
     end
-    LdapAuthenticator
-    stub_const(Object, :LdapAuthenticator, authenticator) { yield attempts }
+    with_ldap_class(authenticator, enabled_value) { yield attempts }
+  end
+
+  def with_unreachable_ldap
+    port = TCPServer.open('127.0.0.1', 0) { |server| server.addr[1] }
+    config = { host: '127.0.0.1', port: port, base: 'ou=people,dc=example,dc=test', attribute: 'uid', ssl: false }
+    authenticator = Class.new(LdapAuthenticator) do
+      define_method(:initialize) { super(config: config, use_admin: false) }
+    end
+    with_ldap_class(authenticator, 'true') { yield }
+  end
+
+  # Subclasses keep LdapAuthenticator::Error and ::Result resolvable while the constant is stubbed.
+  def with_ldap_class(authenticator, enabled_value)
+    previous_value = ENV['DEVISE_LDAP_LOGGER']
+    ENV['DEVISE_LDAP_LOGGER'] = enabled_value
+    stub_const(Object, :LdapAuthenticator, authenticator) { yield }
   ensure
     previous_value.nil? ? ENV.delete('DEVISE_LDAP_LOGGER') : ENV['DEVISE_LDAP_LOGGER'] = previous_value
   end

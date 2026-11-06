@@ -97,9 +97,14 @@ the legacy DN format `attribute=login,base`. A successful first LDAP login
 creates a local user with the LDAP `mail` attribute, or the login when no email
 is available. If the LDAP server refuses the user bind, whatever the result code
 (wrong password, locked or disabled account, ...), the result code is logged and
-existing local email/password authentication remains available. LDAP
-connection, configuration, and ambiguous-search errors do not fall back to local
-authentication.
+existing local email/password authentication remains available. The same applies
+when the LDAP check itself fails (connection or TLS error, invalid configuration,
+ambiguous search result): the error is logged at `error` level and the login falls
+back to local authentication, so local administrator accounts keep working during
+an LDAP outage. Users created by a first LDAP login have a random local password,
+so they cannot sign in with their LDAP password until the directory is available
+again. A hanging directory delays each login by up to 10 seconds before the
+fallback.
 
 The previous LDAP group and attribute authorization checks were disabled in
 this application and are not implemented. An LDAP configuration that explicitly

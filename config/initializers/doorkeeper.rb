@@ -369,7 +369,13 @@ Doorkeeper.configure do
     login = params[:email]
     password = params[:password]
 
-    ldap_user = LdapAuthenticator.new.authenticate(login, password) if ENV['DEVISE_LDAP_LOGGER'].present?
+    # An LDAP failure must not lock out local accounts (e.g. administrators) while the directory is down.
+    ldap_user = begin
+      LdapAuthenticator.new.authenticate(login, password) if ENV['DEVISE_LDAP_LOGGER'].present?
+    rescue LdapAuthenticator::Error => error
+      Rails.logger.error("LDAP authentication error, falling back to local authentication: #{error.message}")
+      nil
+    end
 
     if ldap_user
       User.find_for_authentication(login: login) || User.create_with_ldap(login, ldap_user.email)
