@@ -9,6 +9,8 @@ class LdapAuthenticator
   Result = Data.define(:email, :login)
 
   CONNECT_TIMEOUT = 5
+  # Time limit asked of the directory server for a search; REQUEST_TIMEOUT bounds the whole exchange on our side.
+  SEARCH_TIME_LIMIT = 5
   REQUEST_TIMEOUT = 10
   ANONYMOUS_BIND_DENIED = [
     Net::LDAP::ResultCodeInappropriateAuthentication,
@@ -140,7 +142,7 @@ class LdapAuthenticator
       filter: Net::LDAP::Filter.equals(@config[:attribute], login),
       attributes: ['mail', @config[:attribute]].uniq(&:downcase),
       size: 2,
-      time: CONNECT_TIMEOUT,
+      time: SEARCH_TIME_LIMIT,
       ignore_server_caps: true
     )
     result = connection.get_operation_result
