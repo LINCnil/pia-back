@@ -107,6 +107,23 @@ still found by the typed login when no account matches the directory spelling.
 Local logins are never matched case-insensitively, because some directories
 distinguish `Alice` from `alice`.
 
+A first LDAP login never links itself to an existing local account by email: the
+directory `mail` attribute is not proof that the person owns that account. When
+the LDAP email (or the login, if the directory returns no `mail`) already
+belongs to a local account with another `login`, no account is created and the
+token request fails with a 422 error; the logs show `Validation failed: Email
+has already been taken`. To let that user sign in with LDAP, set the `login` of
+the existing local account to the LDAP login, for example from a Rails console:
+
+```ruby
+User.find_by!(email: 'alice@example.test').update!(login: 'alice')
+```
+
+Alternatively, give one of the two accounts another email. The `users` API does
+not accept a `login`. Two simultaneous first logins of the same user can make one
+of the requests fail, because the other one creates the account; signing in
+again succeeds.
+
 If the LDAP server refuses the user bind, whatever the result code
 (wrong password, locked or disabled account, ...), the result code is logged and
 existing local email/password authentication remains available. The same applies
