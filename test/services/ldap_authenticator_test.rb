@@ -4,6 +4,8 @@ require 'active_support/testing/constant_stubbing'
 class LdapAuthenticatorTest < ActiveSupport::TestCase
   include ActiveSupport::Testing::ConstantStubbing
 
+  UNENCRYPTED_WARNING = 'LDAP connection is unencrypted; credentials will be sent in clear text'.freeze
+
   class FakeConnection
     Result = Struct.new(:code, :error_message)
 
@@ -285,6 +287,24 @@ class LdapAuthenticatorTest < ActiveSupport::TestCase
     authenticate(config: @config.merge(ssl: false))
 
     assert_not @factory.options.key?(:encryption)
+  end
+
+  test 'warns once per connection that an unencrypted LDAP connection sends credentials in clear text' do
+    [@config.except(:ssl), @config.merge(ssl: nil), @config.merge(ssl: false), @config.merge(ssl: '')].each do |config|
+      output = capture_logs { authenticate(config: config, use_admin: true) }
+
+      assert_equal 1, output.scan(UNENCRYPTED_WARNING).size
+      assert_not_includes output, 'user-secret'
+      assert_not_includes output, 'admin-secret'
+    end
+  end
+
+  test 'does not warn about an unencrypted connection when TLS is configured' do
+    [@config.merge(ssl: true), @config.merge(ssl: 'start_tls'), @config.merge(encryption: { method: 'start_tls' })].each do |config|
+      output = capture_logs { authenticate(config: config) }
+
+      assert_not_includes output, UNENCRYPTED_WARNING
+    end
   end
 
   test 'rejects invalid TLS configuration' do
