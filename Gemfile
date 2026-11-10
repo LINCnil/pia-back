@@ -51,7 +51,7 @@ gem 'devise-i18n'
 gem 'doorkeeper-i18n'
 gem 'rails-i18n'
 
-gem 'minitest', '~> 6.0'
+gem 'minitest', '~> 6.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
