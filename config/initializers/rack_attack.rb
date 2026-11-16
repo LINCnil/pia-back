@@ -1,6 +1,6 @@
 class Rack::Attack
-  # Throttle OAuth token requests (login) - 5 requests per 15 minutes per IP
-  throttle("oauth/token/ip", limit: 5, period: 15.minutes) do |req|
+  # Throttle OAuth token requests - 100 requests per 15 minutes per IP
+  throttle("oauth/token/ip", limit: 100, period: 15.minutes) do |req|
     req.ip if req.path == "/oauth/token" && req.post?
   end
 
@@ -21,8 +21,8 @@ class Rack::Attack
     req.ip if req.path == "/users/change-password" && req.put?
   end
 
-  # Global throttle - 300 requests per 5 minutes per IP
-  throttle("req/ip", limit: 300, period: 5.minutes, &:ip)
+  # Global throttle - 3,000 requests per 5 minutes per IP
+  throttle("req/ip", limit: 3_000, period: 5.minutes, &:ip)
 
   # Return 429 Too Many Requests with JSON body
   self.throttled_responder = lambda do |request|
