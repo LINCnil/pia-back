@@ -25,13 +25,14 @@ class Rack::Attack
   throttle("req/ip", limit: 300, period: 5.minutes, &:ip)
 
   # Return 429 Too Many Requests with JSON body
-  self.throttled_responder = lambda do |matched, period, limit, request|
-    now = Time.now.utc
-    retry_after = (period - (now.to_i % period)).to_s
+  self.throttled_responder = lambda do |request|
+    match_data = request.env.fetch("rack.attack.match_data")
+    period = match_data.fetch(:period)
+    retry_after = (period - (match_data.fetch(:epoch_time) % period)).to_s
 
     headers = {
-      "Content-Type" => "application/json",
-      "Retry-After" => retry_after
+      "content-type" => "application/json",
+      "retry-after" => retry_after
     }
 
     body = { error: "Rate limit exceeded. Try again in #{retry_after} seconds." }.to_json
