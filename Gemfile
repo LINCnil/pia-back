@@ -4,7 +4,12 @@ ruby file: '.ruby-version'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'blueprinter'
-gem 'rails', '~> 8.0.2'
+gem 'rails', '~> 8.1.4'
+# Pin json < 3: Active Support's JSON encoder still passes the `quirks_mode`
+# keyword to JSON.generate, which was removed in json 3.0, causing
+# `ArgumentError: unknown keyword: quirks_mode` (e.g. during db:schema:load).
+# Remove this pin once Rails supports json 3.x.
+gem 'json', '< 3'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
@@ -18,7 +23,7 @@ gem 'dotenv-rails'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.21'
+gem 'bcrypt', '~> 3.1.22'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -34,9 +39,9 @@ gem 'bootsnap', '>= 1.4.5', require: false
 gem 'rack-attack'
 gem 'rack-cors', require: 'rack/cors'
 
-gem 'devise'
-gem 'devise_ldap_authenticatable'
+gem 'devise', '>= 5.0.3'
 gem 'devise-security'
+gem 'net-ldap', '>= 0.21.0'
 
 gem 'doorkeeper'
 gem 'ostruct'
@@ -46,6 +51,8 @@ gem 'pundit'
 gem 'devise-i18n'
 gem 'doorkeeper-i18n'
 gem 'rails-i18n'
+
+gem 'minitest', '~> 6.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

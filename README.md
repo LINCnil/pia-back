@@ -47,6 +47,108 @@ See the [Install PostgreSQL](https://github.com/LINCnil/pia-back/wiki/Install-Po
 
 ![PIA Settings](public/pia-settings.png)
 
+## LDAP authentication
+
+Configure the LDAP server for each environment in `config/ldap.yml`. Development
+reads `ldap_host`, `ldap_port`, `ldap_attribute`, `ldap_base`, `ldap_admin_user`,
+`ldap_admin_user_password` and `ldap_ssl` from Rails credentials.
+
+- Set `LDAP_ENABLED` to `true` to enable LDAP authentication and to `false` to
+  disable it (`1`/`0`, `yes`/`no` and `on`/`off` are also accepted, ignoring
+  case). Any other value is rejected: the error is logged on each login and local
+  authentication is used instead.
+- Set `LDAP_ADMIN_BIND` to `true` to use the configured admin credentials for
+  directory searches, or `false` (the default) for anonymous searches. It accepts
+  the same values as `LDAP_ENABLED`.
+- Deprecated: `DEVISE_LDAP_LOGGER` and `DEVISE_LDAP_LOGGER_ADMIN_BIND` are read
+  only while `LDAP_ENABLED` and `LDAP_ADMIN_BIND` respectively are unset or
+  empty, and keep their historical meaning: any non-empty `DEVISE_LDAP_LOGGER`
+  enables LDAP, even the string `false`, and any defined
+  `DEVISE_LDAP_LOGGER_ADMIN_BIND`, even an empty one, enables the admin bind.
+  A warning at boot states the value each of them currently stands for, so
+  renaming one without checking can reverse the behavior. `DEVISE_LDAP_LOGGER`
+  no longer controls debug logging.
+- Set `ssl` to `simple_tls` (or `true`) for LDAPS, or `start_tls` for StartTLS.
+  The server certificate and hostname are verified using the system trust store.
+  An unset or false `ssl` retains legacy plaintext LDAP behavior and logs a
+  warning: credentials will be transmitted without encryption.
+
+For a private CA, configure `encryption`, which takes precedence over `ssl`:
+
+```yaml
+encryption:
+  method: start_tls
+  tls_options:
+    ca_file: /path/to/ldap-ca.pem
+```
+
+The previous LDAP integration did not validate the certificate chain, so a
+self-signed or private-CA certificate that used to work now fails with
+`LDAP TLS certificate verification failed` in the logs. Trusting the CA as above
+is the recommended fix. As a last resort, verification can be disabled
+explicitly:
+
+```yaml
+encryption:
+  method: start_tls
+  verify_certificates: false
+```
+
+`verify_certificates` must be a boolean and is only read from `encryption`;
+`tls_options` cannot disable verification. Setting it to `false` turns off both
+certificate and hostname verification, so anyone able to intercept the
+connection can impersonate the directory and capture passwords. A warning is
+logged on every connection.
+
+The login is searched using the configured attribute. If the search returns no
+user, or anonymous binding or searching is refused, authentication also tries
+the legacy DN format `attribute=login,base` and logs an `info` message that does
+not identify the user. A successful first LDAP login creates a local user with
+the LDAP `mail` attribute, or the login when no email is available.
+
+Directories usually ignore case and extra spaces when searching, so `ALICE` and
+` alice ` both find the user stored as `alice`. The local account is matched on
+the login as spelled by the directory, not on what was typed, so every spelling
+signs in to the same account. When the directory does not return the login
+attribute (for example when the legacy DN format is used), the typed login is
+used. Accounts created by the previous integration with another spelling are
+still found by the typed login when no account matches the directory spelling.
+Local logins are never matched case-insensitively, because some directories
+distinguish `Alice` from `alice`.
+
+A first LDAP login never links itself to an existing local account by email: the
+directory `mail` attribute is not proof that the person owns that account. When
+the LDAP email (or the login, if the directory returns no `mail`) already
+belongs to a local account with another `login`, no account is created and the
+token request fails with a 422 error; the logs show `Validation failed: Email
+has already been taken`. To let that user sign in with LDAP, set the `login` of
+the existing local account to the LDAP login, for example from a Rails console:
+
+```ruby
+User.find_by!(email: 'alice@example.test').update!(login: 'alice')
+```
+
+Alternatively, give one of the two accounts another email. The `users` API does
+not accept a `login`. Two simultaneous first logins of the same user can make one
+of the requests fail, because the other one creates the account; signing in
+again succeeds.
+
+If the LDAP server refuses the user bind, whatever the result code
+(wrong password, locked or disabled account, ...), the result code is logged and
+existing local email/password authentication remains available. The same applies
+when the LDAP check itself fails (connection or TLS error, invalid configuration,
+ambiguous search result): the error is logged at `error` level and the login falls
+back to local authentication, so local administrator accounts keep working during
+an LDAP outage. Users created by a first LDAP login have a random local password,
+so they cannot sign in with their LDAP password until the directory is available
+again. A hanging directory delays each login by up to 10 seconds before the
+fallback.
+
+The previous LDAP group and attribute authorization checks were disabled in
+this application and are not implemented. An LDAP configuration that explicitly
+enables group checks is rejected rather than silently bypassing them. LDAP
+password changes are not performed by this application.
+
 ## How to update to the latest version in a development environment
 
 Go to the folder pia-back : `cd pia-back`

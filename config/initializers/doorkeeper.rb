@@ -368,24 +368,24 @@ Doorkeeper.configure do
   resource_owner_from_credentials do
     login = params[:email]
     password = params[:password]
-    user = nil
 
-    # LDAP IS ACTIVE
-    if ENV['DEVISE_LDAP_LOGGER'].present? && User.check_ldap_credentials(login, password) # ldap valide
-      user = User.find_for_authentication(login: login)
-      #  Check if user exists in database
-      if user.blank?
-        # Create user in database
-        user = User.create_with_ldap(login)
-      end
+    # An LDAP failure must not lock out local accounts (e.g. administrators) while the directory is down.
+    ldap_user = begin
+      LdapAuthenticator.new.authenticate(login, password) if LdapAuthenticator.enabled?
+    rescue LdapAuthenticator::Error => error
+      Rails.logger.error("LDAP authentication error, falling back to local authentication: #{error.message}")
+      nil
     end
 
-    # Normal auth
-    if user.blank?
+    if ldap_user
+      # The directory ignores case and extra spaces: look the account up by its canonical login, then by the typed
+      # one (accounts created by the previous integration used the typed spelling) before creating it.
+      User.find_for_authentication(login: ldap_user.login) ||
+        User.find_for_authentication(login: login) ||
+        User.create_with_ldap(ldap_user.login, ldap_user.email)
+    else
       user = User.find_for_authentication(email: login)
       user if user && user.valid_password?(password)
-    else
-      user
     end
   end
 
