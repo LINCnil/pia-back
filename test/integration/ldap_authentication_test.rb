@@ -30,6 +30,109 @@ class LdapAuthenticationTest < ActionDispatch::IntegrationTest
     assert_equal user.id, access_token.resource_owner_id
   end
 
+  test 'locks local users after failed attempts and allows login after the lock expires' do
+    user = create(:user, email: 'local@example.test')
+
+    with_ldap_disabled do
+      User.maximum_attempts.times do |attempt|
+        request_token(user.email, 'wrong-password')
+        assert_response :bad_request
+        assert_equal attempt + 1, user.reload.failed_attempts
+      end
+
+      assert user.access_locked?
+      assert_no_difference 'Doorkeeper::AccessToken.count' do
+        request_token(user.email, 'Password123-')
+        assert_response :bad_request
+      end
+
+      travel_to(User.unlock_in.from_now + 1.second) do
+        request_token(user.email, 'Password123-')
+        assert_response :success
+        assert_not user.reload.access_locked?
+        assert_equal 0, user.failed_attempts
+      end
+    end
+  end
+
+  test 'successful local authentication resets failed attempts' do
+    user = create(:user, email: 'local@example.test')
+
+    with_ldap_disabled do
+      request_token(user.email, 'wrong-password')
+      assert_equal 1, user.reload.failed_attempts
+      request_token(user.email, 'Password123-')
+    end
+
+    assert_response :success
+    assert_equal 0, user.reload.failed_attempts
+  end
+
+  test 'rejects valid LDAP credentials for a locked account' do
+    user = create(:user, login: 'alice', email: 'alice@example.test')
+    user.lock_access!
+    result = LdapAuthenticator::Result.new(email: user.email, login: user.login)
+
+    assert_no_difference 'Doorkeeper::AccessToken.count' do
+      with_ldap(result: result) { request_token('alice', 'ldap-secret') }
+    end
+
+    assert_response :bad_request
+    assert user.reload.access_locked?
+  end
+
+  test 'failed LDAP credentials lock the matching account despite different case and whitespace' do
+    user = create(:user, login: 'alice smith', email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: user.email, login: user.login)
+
+    with_ldap(result: nil) do
+      User.maximum_attempts.times do
+        request_token(" ALICE \t SMITH ", 'wrong-password')
+        assert_response :bad_request
+      end
+    end
+
+    assert user.reload.access_locked?
+    assert_equal User.maximum_attempts, user.failed_attempts
+    assert_no_difference 'Doorkeeper::AccessToken.count' do
+      with_ldap(result: result) { request_token('alice smith', 'ldap-secret') }
+    end
+    assert_response :bad_request
+  end
+
+  test 'failed LDAP credentials do not lock an ambiguous case-insensitive login' do
+    first = create(:user, login: 'alice', email: 'alice@example.test')
+    second = create(:user, login: 'ALICE', email: 'other@example.test')
+
+    with_ldap(result: nil) { request_token(' Alice ', 'wrong-password') }
+
+    assert_response :bad_request
+    assert_equal 0, first.reload.failed_attempts
+    assert_equal 0, second.reload.failed_attempts
+  end
+
+  test 'successful LDAP authentication resets failed attempts' do
+    user = create(:user, login: 'alice', email: 'alice@example.test')
+    result = LdapAuthenticator::Result.new(email: user.email, login: user.login)
+
+    with_ldap(result: nil) { request_token('alice', 'wrong-password') }
+    assert_equal 1, user.reload.failed_attempts
+    with_ldap(result: result) { request_token('alice', 'ldap-secret') }
+
+    assert_response :success
+    assert_equal 0, user.reload.failed_attempts
+  end
+
+  test 'LDAP outages do not count as failed LDAP credentials' do
+    user = create(:user, login: 'alice', email: 'alice@example.test')
+    error = LdapAuthenticator::Error.new('LDAP unavailable')
+
+    with_ldap(error: error) { request_token('alice', 'ldap-secret') }
+
+    assert_response :bad_request
+    assert_equal 0, user.reload.failed_attempts
+  end
+
   test 'authenticates an existing LDAP user without creating another account' do
     user = create(:user, login: 'alice', email: 'alice@example.test')
     result = LdapAuthenticator::Result.new(email: 'new@example.test', login: 'alice')
