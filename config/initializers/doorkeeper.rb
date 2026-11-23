@@ -370,22 +370,47 @@ Doorkeeper.configure do
     password = params[:password]
 
     # An LDAP failure must not lock out local accounts (e.g. administrators) while the directory is down.
+    ldap_rejected = false
     ldap_user = begin
-      LdapAuthenticator.new.authenticate(login, password) if LdapAuthenticator.enabled?
+      if LdapAuthenticator.enabled?
+        result = LdapAuthenticator.new.authenticate(login, password)
+        ldap_rejected = result.nil?
+        result
+      end
     rescue LdapAuthenticator::Error => error
       Rails.logger.error("LDAP authentication error, falling back to local authentication: #{error.message}")
       nil
     end
 
-    if ldap_user
-      # The directory ignores case and extra spaces: look the account up by its canonical login, then by the typed
-      # one (accounts created by the previous integration used the typed spelling) before creating it.
-      User.find_for_authentication(login: ldap_user.login) ||
-        User.find_for_authentication(login: login) ||
-        User.create_with_ldap(ldap_user.login, ldap_user.email)
-    else
-      user = User.find_for_authentication(email: login)
-      user if user && user.valid_password?(password)
+    authenticated = if ldap_user
+                      # The directory ignores case and extra spaces: look the account up by its canonical login, then by
+                      # the typed one (accounts created by the previous integration used the typed spelling).
+                      user = User.find_for_authentication(login: ldap_user.login) ||
+                             User.find_for_authentication(login: login) ||
+                             User.create_with_ldap(ldap_user.login, ldap_user.email)
+                      user.valid_for_authentication? { true }
+                    else
+                      user = User.find_for_authentication(email: login)
+                      if user
+                        user.valid_for_authentication? { password.present? && user.valid_password?(password) }
+                      elsif ldap_rejected && login.is_a?(String)
+                        # A failed bind has no canonical login; avoid locking an ambiguous normalized match.
+                        ldap_account = User.find_for_authentication(login: login)
+                        unless ldap_account
+                          normalized_login = login.strip.gsub(/\s+/, ' ').downcase
+                          matches = User.where(
+                            "LOWER(TRIM(REGEXP_REPLACE(login, '[[:space:]]+', ' ', 'g'))) = ?", normalized_login
+                          ).limit(2).to_a
+                          ldap_account = matches.first if matches.one?
+                        end
+                        ldap_account.valid_for_authentication? { false } if ldap_account
+                        false
+                      end
+                    end
+
+    if authenticated && user.active_for_authentication?
+      user.reset_failed_attempts!
+      user
     end
   end
 

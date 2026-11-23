@@ -229,8 +229,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_121930) do
     t.string "uuid"
     t.datetime "locked_at", precision: nil
     t.string "login"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "users_pias", force: :cascade do |t|

@@ -149,6 +149,14 @@ this application and are not implemented. An LDAP configuration that explicitly
 enables group checks is rejected rather than silently bypassing them. LDAP
 password changes are not performed by this application.
 
+## Request limits
+
+Rack::Attack limits each IP to 100 OAuth token requests per 15 minutes and
+3,000 total requests per 5 minutes. These limits count successful and failed
+requests and are shared by users behind the same IP. Requests above a limit
+receive HTTP 429 with a `Retry-After` header. Individual accounts also lock
+after repeated failed authentication attempts.
+
 ## How to update to the latest version in a development environment
 
 Go to the folder pia-back : `cd pia-back`
